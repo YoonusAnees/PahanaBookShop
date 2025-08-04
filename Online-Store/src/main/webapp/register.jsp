@@ -3,7 +3,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Login</title>
+  <title>Register</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -15,7 +15,7 @@
       margin: 0;
     }
 
-    .login-container {
+    .register-container {
       background-color: white;
       padding: 2rem;
       border-radius: 10px;
@@ -29,7 +29,8 @@
     }
 
     input[type="text"],
-    input[type="password"] {
+    input[type="password"],
+    input[type="email"] {
       width: 90%;
       padding: 10px;
       margin: 0.5rem 0;
@@ -59,25 +60,27 @@
   </style>
 </head>
 <body>
-  <div class="login-container">
-    <h2>Hello ! Please Login</h2>
+  <div class="register-container">
+    <h2>Create Your Account</h2>
 
-    <form action="LoginServlet" method="post" onsubmit="return showSuccess()">
+    <form action="RegisterServlet" method="post" onsubmit="return showRegisterMessage()">
       <input type="text" name="username" placeholder="Enter Username" required /><br/>
+      <input type="email" name="email" placeholder="Enter Email" required /><br/>
       <input type="password" name="password" placeholder="Enter Password" required /><br/>
-      <button type="submit">Login</button>
+      <input type="password" name="confirmPassword" placeholder="Confirm Password" required /><br/>
+      <button type="submit">Register</button>
     </form>
     
-<a href="register.jsp">Don't have an account? Register here</a>
+    <p style="margin-top: 1rem;">Already have an account? <a href="index.jsp">Login here</a></p>
 
-    <div class="message" id="successMsg" style="display: none;">
-      Logging in... ⚽️🔥
+    <div class="message" id="registerMsg" style="display: none;">
+      Registering... 📝🚀
     </div>
   </div>
 
   <script>
-    function showSuccess() {
-      document.getElementById("successMsg").style.display = "block";
+    function showRegisterMessage() {
+      document.getElementById("registerMsg").style.display = "block";
       return true; // Let form submit
     }
   </script>
