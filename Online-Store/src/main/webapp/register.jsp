@@ -89,6 +89,11 @@
     a:hover {
       text-decoration: underline;
     }
+
+    .customer-fields {
+      margin-top: 1rem;
+      display: none; /* hidden by default */
+    }
   </style>
 </head>
 <body>
@@ -100,11 +105,21 @@
       <input type="email" name="email" placeholder="Email" required /><br />
       <input type="password" name="password" id="password" placeholder="Password" required /><br />
       <input type="password" id="confirmPassword" placeholder="Confirm Password" required /><br />
-      <select name="role" required>
+
+      <select name="role" id="roleSelect" required>
         <option value="">-- Select Role --</option>
         <option value="customer">Customer</option>
         <option value="admin">Admin</option>
       </select><br />
+
+      <!-- Customer-specific fields -->
+      <div class="customer-fields" id="customerFields">
+        <input type="text" name="accountNumber" placeholder="Account Number" /><br />
+        <input type="text" name="name" placeholder="Full Name" /><br />
+        <input type="text" name="address" placeholder="Address" /><br />
+        <input type="text" name="telephone" placeholder="Telephone" /><br />
+      </div>
+
       <input type="submit" value="Register" />
     </form>
 
@@ -132,6 +147,18 @@
       document.getElementById("registerMsg").style.display = "block";
       return true;
     }
+
+    // Show customer fields only if "customer" is selected
+    const roleSelect = document.getElementById("roleSelect");
+    const customerFields = document.getElementById("customerFields");
+
+    roleSelect.addEventListener("change", function () {
+      if (this.value === "customer") {
+        customerFields.style.display = "block";
+      } else {
+        customerFields.style.display = "none";
+      }
+    });
   </script>
 </body>
 </html>

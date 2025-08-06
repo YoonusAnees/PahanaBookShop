@@ -90,7 +90,7 @@
     <div class="dashboard-container">
         <ul class="menu">
             <li><a href="AddBook.jsp"> Add Book</a></li>
-            <li><a href="manageBooks.jsp"> Manage Books (Update/Delete)</a></li>
+            <li><a href="Book?action=list"> Manage Books (Update/Delete)</a></li>
             <li><a href="${pageContext.request.contextPath}/User?action=list" class="btn btn-primary">Manage Users</a>
             </li>
         </ul>

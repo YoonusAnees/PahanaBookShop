@@ -1,8 +1,9 @@
 <%@ page import="com.pahana.bookshop.model.User" %>
+<%@ page import="com.pahana.bookshop.model.Customer" %>
 <%
     User user = (User) request.getAttribute("user");
+    Customer customer = (Customer) request.getAttribute("customer"); // Might be null if role != customer
 %>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -74,6 +75,10 @@
         input[type="submit"]:hover {
             background-color: #0056b3;
         }
+
+        #customerFields {
+            display: <%= "customer".equals(user.getRole()) ? "block" : "none" %>;
+        }
     </style>
 </head>
 
@@ -94,13 +99,32 @@
             <input type="text" id="password" name="password" value="<%= user.getPassword() %>" required />
 
             <label for="role">Role:</label>
-            <select id="role" name="role" required>
+            <select id="role" name="role" required onchange="toggleCustomerFields(this.value)">
                 <option value="admin" <%= "admin".equals(user.getRole()) ? "selected" : "" %>>Admin</option>
                 <option value="customer" <%= "customer".equals(user.getRole()) ? "selected" : "" %>>Customer</option>
             </select>
 
+            <!-- Customer-specific fields -->
+            <div id="customerFields">
+                <label for="accountNumber">Account Number:</label>
+                <input type="text" id="accountNumber" name="accountNumber" value="<%= customer != null ? customer.getAccountNumber() : "" %>" />
+
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" value="<%= customer != null ? customer.getAddress() : "" %>" />
+
+                <label for="telephone">Telephone:</label>
+                <input type="text" id="telephone" name="telephone" value="<%= customer != null ? customer.getTelephone() : "" %>" />
+            </div>
+
             <input type="submit" value="Update" />
         </form>
     </div>
+
+    <script>
+        function toggleCustomerFields(role) {
+            const fields = document.getElementById("customerFields");
+            fields.style.display = (role === "customer") ? "block" : "none";
+        }
+    </script>
 </body>
 </html>

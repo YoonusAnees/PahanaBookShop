@@ -47,6 +47,30 @@ public class BookDAO {
         }
         return book;
     }
+    
+    public Book selectBookById(int id) throws SQLException {
+        String sql = "SELECT * FROM books WHERE id = ?";
+        try (Connection conn = DBConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Book book = new Book();
+                    book.setId(rs.getInt("id"));
+                    book.setTitle(rs.getString("title"));
+                    book.setAuthor(rs.getString("author"));
+                    book.setCategory(rs.getString("category"));
+                    book.setPrice(rs.getDouble("price"));
+                    book.setQuantity(rs.getInt("quantity"));
+                    book.setImage(rs.getString("image"));
+                    return book;
+                }
+            }
+        }
+        return null;
+    }
+
+    
 
     public List<Book> selectAllBooks() throws SQLException {
         List<Book> books = new ArrayList<>();

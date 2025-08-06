@@ -10,6 +10,14 @@ public class Customer {
 	    private int userId; // FK to User
 	    
 	    
+	    
+	    
+	    
+		public Customer() {
+		
+		}
+
+
 		public Customer(int id, String accountNumber, String name, String address, String telephone, int userId) {
 			super();
 			this.id = id;

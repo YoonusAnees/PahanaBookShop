@@ -1,6 +1,8 @@
 package com.pahana.bookshop.controller;
 
+import com.pahana.bookshop.DAO.CustomerDAO;
 import com.pahana.bookshop.DAO.UserDAO;
+import com.pahana.bookshop.model.Customer;
 import com.pahana.bookshop.model.User;
 
 import javax.servlet.RequestDispatcher;
@@ -71,31 +73,54 @@ public class UserController extends HttpServlet {
         }
     }
 
+   
+    
+    
     private void insertUser(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         String username = request.getParameter("username");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String role = request.getParameter("role");
 
-        User user = new User();
-        user.setUsername(username);
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setRole(role == null || role.isEmpty() ? "customer" : role);
+        // Customer-specific fields
+        String accountNumber = request.getParameter("accountNumber");
+        String name = request.getParameter("name");
+        String address = request.getParameter("address");
+        String telephone = request.getParameter("telephone");
 
-        boolean inserted = userDAO.insertUser(user);
+        User user = new User(username, email, password, role == null || role.isEmpty() ? "customer" : role);
 
-        if (inserted) {
+        int userId = userDAO.insertUserAndReturnId(user);
+
+        if (userId > 0) {
+            // If role is customer, insert into customer table
+            if (user.getRole().equalsIgnoreCase("customer")) {
+                Customer customer = new Customer(0, accountNumber, name, address, telephone, userId);
+                CustomerDAO customerDAO = new CustomerDAO();
+                boolean inserted = customerDAO.insertCustomer(customer);
+
+                if (!inserted) {
+                    request.setAttribute("error", "Customer registration failed.");
+                    request.getRequestDispatcher("register.jsp").forward(request, response);
+                    return;
+                }
+            }
+
             request.setAttribute("message", "Registration successful. Please login.");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
-            dispatcher.forward(request, response);
+            request.getRequestDispatcher("index.jsp").forward(request, response);
         } else {
-            request.setAttribute("error", "Registration failed. Try again.");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("register.jsp");
-            dispatcher.forward(request, response);
+            request.setAttribute("error", "User registration failed.");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
         }
     }
+
+    
+    
+    
+    
+    
 
     private void loginUser(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -110,7 +135,7 @@ public class UserController extends HttpServlet {
             if ("admin".equalsIgnoreCase(user.getRole())) {
                 response.sendRedirect(request.getContextPath() + "/admin/dashboard.jsp");
             } else {
-                response.sendRedirect(request.getContextPath() + "/customer/dashboard.jsp");
+                response.sendRedirect(request.getContextPath() + "/customer/dashboard");
             }
         } else {
             request.setAttribute("error", "Invalid username or password");
@@ -141,20 +166,64 @@ public class UserController extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         User existingUser = userDAO.getUserById(id);
         request.setAttribute("user", existingUser);
+
+        if ("customer".equalsIgnoreCase(existingUser.getRole())) {
+            CustomerDAO customerDAO = new CustomerDAO();
+            Customer customer = customerDAO.getCustomerByUserId(existingUser.getId());
+            request.setAttribute("customer", customer);
+        }
+
         RequestDispatcher dispatcher = request.getRequestDispatcher("admin/editUser.jsp");
         dispatcher.forward(request, response);
     }
 
+
     private void updateUser(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        String username = request.getParameter("username");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        String role = request.getParameter("role");
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            String username = request.getParameter("username");
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
+            String role = request.getParameter("role");
 
-        User user = new User(id, username, email, password, role);
-        userDAO.updateUser(user);
-        response.sendRedirect("User?action=list");
+            // Create User object and update it
+            User user = new User(id, username, email, password, role);
+            userDAO.updateUser(user); // Update user in the users table
+
+            // If the user is a customer, also update the customer-specific data
+            if ("customer".equalsIgnoreCase(role)) {
+                String accountNumber = request.getParameter("accountNumber");
+                String address = request.getParameter("address");
+                String telephone = request.getParameter("telephone");
+
+                Customer customer = new Customer();
+                customer.setUserId(id);
+                customer.setAccountNumber(accountNumber);
+                customer.setAddress(address);
+                customer.setTelephone(telephone);
+
+                CustomerDAO customerDAO = new CustomerDAO();
+                boolean updated = customerDAO.updateCustomerByUserId(customer);
+
+                if (!updated) {
+                    // Optionally, you can set an error message in request scope and redirect
+                    System.err.println("Failed to update customer details.");
+                    // You can also forward to an error page if needed
+                }
+            }
+
+            // Redirect back to user list page
+            response.sendRedirect("User?action=list");
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid user ID");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Something went wrong");
+        }
     }
+
+
 }

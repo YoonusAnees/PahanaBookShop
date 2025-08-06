@@ -26,6 +26,38 @@ public class UserDAO {
 	            return false;
 	        }
 	    }
+	   
+	   
+	   public int insertUserAndReturnId(User user) {
+		    String sql = "INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)";
+		    try (Connection conn = DBConnectionFactory.getConnection();
+		         PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+		        stmt.setString(1, user.getUsername());
+		        stmt.setString(2, user.getEmail());
+		        stmt.setString(3, user.getPassword());
+		        stmt.setString(4, user.getRole());
+
+		        int affectedRows = stmt.executeUpdate();
+
+		        if (affectedRows == 0) {
+		            throw new SQLException("Creating user failed, no rows affected.");
+		        }
+
+		        try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+		            if (generatedKeys.next()) {
+		                return generatedKeys.getInt(1);
+		            } else {
+		                throw new SQLException("Creating user failed, no ID obtained.");
+		            }
+		        }
+
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        return -1;
+		    }
+		}
+
 
 
     // Retrieve all users

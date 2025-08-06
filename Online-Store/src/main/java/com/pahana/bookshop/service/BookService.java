@@ -21,6 +21,15 @@ public class BookService {
     public List<Book> getAllBooks() throws SQLException {
         return bookDAO.selectAllBooks();
     }
+    
+    public List<Book> getAllBookss() {
+        try {
+            return bookDAO.selectAllBooks();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public void updateBook(Book book) throws SQLException {
         bookDAO.updateBook(book);

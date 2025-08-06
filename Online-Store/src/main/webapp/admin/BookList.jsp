@@ -53,7 +53,7 @@
 <body>
 <div class="container">
     <h2>Book List</h2>
-    <a href="Book?action=addForm" class="add-btn">+ Add New Book</a>
+    <a href="AddBook.jsp" class="add-btn">+ Add New Book</a>
     <table>
         <thead>
         <tr>
