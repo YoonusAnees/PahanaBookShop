@@ -50,6 +50,22 @@ public class CustomerDAO {
 
         return null;
     }
+    
+    public int getCustomerIdByUserId(int userId) {
+        String sql = "SELECT id FROM customers WHERE userId = ?";
+        try (Connection conn = DBConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;  // or throw exception if customer not found
+    }
+
 
     
     public boolean updateCustomerByUserId(Customer customer) {
