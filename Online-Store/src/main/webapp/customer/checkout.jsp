@@ -12,44 +12,70 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Checkout</title>
+    <title>Checkout - PahanaBook</title>
     <style>
-        /* Reset & base */
-        * {
-            box-sizing: border-box;
-        }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f4f1fa;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
             margin: 0;
             padding: 0;
             color: #333;
         }
 
-        .checkout-container {
+        nav {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #f1c40f;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .logo:hover {
+            color: #e67e22;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: #f1c40f;
+            text-decoration: underline;
+        }
+
+        .container {
             max-width: 480px;
             margin: 50px auto;
-            background: #fff;
+            background: white;
             padding: 30px 40px;
             border-radius: 12px;
-            box-shadow: 0 12px 25px rgba(90, 42, 131, 0.15);
-            transition: box-shadow 0.3s ease;
-        }
-        .checkout-container:hover {
-            box-shadow: 0 16px 40px rgba(90, 42, 131, 0.25);
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
         }
 
         h2 {
+            text-align: center;
             color: #5a2a83;
             margin-bottom: 25px;
-            text-align: center;
             font-weight: 700;
             letter-spacing: 1.1px;
         }
 
         .summary-box {
             background: #ede7f6;
-            border: 2px solid #7e57c2;
+            border: 2px solid #7b3fe4;
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 30px;
@@ -88,8 +114,8 @@
         }
         input[type="text"]:focus,
         input[type="email"]:focus {
-            border-color: #7e57c2;
-            box-shadow: 0 0 8px rgba(126, 87, 194, 0.6);
+            border-color: #7b3fe4;
+            box-shadow: 0 0 8px rgba(123, 63, 228, 0.6);
         }
 
         input[type="text"]:invalid,
@@ -98,7 +124,7 @@
         }
 
         .btn {
-            background-color: #7e57c2;
+            background-color: #7b3fe4;
             color: white;
             font-weight: 700;
             padding: 14px 0;
@@ -110,12 +136,12 @@
         }
 
         .btn:hover {
-            background-color: #5a2a83;
-            box-shadow: 0 8px 16px rgba(90, 42, 131, 0.4);
+            background-color: #5e2db3;
+            box-shadow: 0 8px 16px rgba(94, 45, 179, 0.4);
         }
 
         @media (max-width: 520px) {
-            .checkout-container {
+            .container {
                 margin: 20px;
                 padding: 25px 20px;
             }
@@ -132,7 +158,17 @@
     </style>
 </head>
 <body>
-<div class="checkout-container">
+
+<nav>
+    <a href="<%= request.getContextPath() %>/customer/dashboard" class="logo">PahanaBook</a>
+    <div class="nav-links">
+        <a href="<%= request.getContextPath() %>/customer/dashboard">Books</a>
+        <a href="<%= request.getContextPath() %>/CartController?action=view">Cart</a>
+        <a href="<%= request.getContextPath() %>/LogoutController">Logout</a>
+    </div>
+</nav>
+
+<div class="container">
     <h2>Checkout</h2>
     <div class="summary-box">
         <p><strong>Total Items:</strong> ${totalItems}</p>
@@ -163,5 +199,6 @@
         <button class="btn" type="submit">Confirm Order</button>
     </form>
 </div>
+
 </body>
 </html>

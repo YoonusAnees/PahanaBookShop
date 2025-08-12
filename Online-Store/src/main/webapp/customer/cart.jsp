@@ -8,55 +8,76 @@
         response.sendRedirect(request.getContextPath() + "/index.jsp");
         return;
     }
-
 %>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Shopping Cart</title>
+    <meta charset="UTF-8" />
+    <title>Shopping Cart - PahanaBook</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        /* Reset and base */
+        * {
+            box-sizing: border-box;
+        }
+        html, body {
+            height: 100%;
             margin: 0;
             padding: 0;
-            background-color: #f5f7fa;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
             color: #333;
         }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
 
-        .navbar {
-            background-color: #5a2a83; /* deep purple */
+        /* Navbar Styles */
+        nav {
+            background-color: #2c3e50;
             color: white;
-            padding: 15px 25px;
+            padding: 15px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 8px rgba(90, 42, 131, 0.3);
             position: sticky;
             top: 0;
-            z-index: 1000;
+            z-index: 10;
         }
-
-        .navbar a {
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #f1c40f;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .logo:hover {
+            color: #e67e22;
+        }
+        .nav-links a {
             color: white;
             text-decoration: none;
             margin-left: 20px;
-            font-weight: 600;
+            font-weight: bold;
             transition: color 0.3s ease;
         }
-
-        .navbar a:hover {
-            color: #d8b4fe; /* lighter purple */
+        .nav-links a:hover {
+            color: #f1c40f;
+            text-decoration: underline;
         }
 
+        /* Main content area - flexible and pushes footer down */
         .container {
-            max-width: 900px;
-            margin: 50px auto;
+            flex: 1 0 auto; /* grow and shrink but take minimum space */
+            width: 900px;
+            margin: 40px auto 60px; /* bottom margin for footer space */
             background: white;
             padding: 30px 40px;
             border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(90, 42, 131, 0.1);
+            box-shadow: 0 0 10px #ccc;
         }
 
         h2 {
@@ -78,7 +99,7 @@
         }
 
         th {
-            background-color: #7e57c2; /* medium purple */
+            background-color: #7b3fe4; /* Pahana purple */
             color: white;
             padding: 15px;
             text-transform: uppercase;
@@ -100,7 +121,7 @@
         .btn {
             padding: 8px 18px;
             border-radius: 8px;
-            background-color: #7e57c2;
+            background-color: #7b3fe4;
             color: white;
             font-weight: 600;
             text-decoration: none;
@@ -109,8 +130,8 @@
         }
 
         .btn:hover {
-            background-color: #673ab7;
-            box-shadow: 0 4px 12px rgba(103, 58, 183, 0.4);
+            background-color: #5e2db3;
+            box-shadow: 0 4px 12px rgba(94, 45, 179, 0.4);
         }
 
         .btn-danger {
@@ -121,10 +142,26 @@
             background-color: #b71c1c;
             box-shadow: 0 4px 12px rgba(183, 28, 28, 0.4);
         }
+        
+        /* Footer fixed at bottom */
+        footer {
+            flex-shrink: 0; /* don’t shrink */
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
+            font-size: 0.9rem;
+            z-index: 100;
+        }
 
+        /* Responsive */
         @media (max-width: 700px) {
             .container {
-                margin: 20px;
+                margin: 40px 20px 80px; /* extra bottom space for footer */
                 padding: 20px;
             }
             table, thead, tbody, th, td, tr {
@@ -166,21 +203,23 @@
 </head>
 <body>
 
-<div class="navbar">
-    <div><strong>📚 Pahana Bookshop</strong></div>
-    <div>
+<!-- Navbar -->
+<nav>
+    <a href="<%= request.getContextPath() %>/customer/dashboard" class="logo">PahanaBook</a>
+    <div class="nav-links">
         <a href="<%= request.getContextPath() %>/customer/dashboard">Books</a>
-<a href="${pageContext.request.contextPath}/CartController?action=view">Cart</a>
+        <a href="${pageContext.request.contextPath}/CartController?action=view">Cart</a>
         <a href="<%= request.getContextPath() %>/LogoutController">Logout</a>
     </div>
-</div>
+</nav>
 
+<!-- Main Content -->
 <div class="container">
     <h2>Your Shopping Cart</h2>
 
     <c:choose>
         <c:when test="${empty cartItems}">
-            <p>Your cart is empty.</p>
+            <p style="text-align: center;">Your cart is empty.</p>
         </c:when>
         <c:otherwise>
             <table>
@@ -209,7 +248,7 @@
                 </tbody>
             </table>
 
-            <br>
+            <br />
             <div style="text-align:center">
                 <a class="btn" href="${pageContext.request.contextPath}/CartController?action=checkout&customerId=${customerId}">
                     Proceed to Checkout
@@ -218,6 +257,11 @@
         </c:otherwise>
     </c:choose>
 </div>
+
+<!-- Footer -->
+<footer>
+    &copy; <%= java.time.Year.now() %> PahanaBook. All rights reserved.
+</footer>
 
 </body>
 </html>

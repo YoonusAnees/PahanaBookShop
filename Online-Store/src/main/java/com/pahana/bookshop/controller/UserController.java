@@ -29,7 +29,7 @@ public class UserController extends HttpServlet {
         String action = request.getParameter("action");
 
         if (action == null) {
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("/index.jsp");
             return;
         }
 
@@ -54,7 +54,7 @@ public class UserController extends HttpServlet {
         String action = request.getParameter("action");
 
         if (action == null) {
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("/index.jsp");
             return;
         }
 
@@ -69,7 +69,7 @@ public class UserController extends HttpServlet {
                 showEditForm(request, response);
                 break;
             default:
-                response.sendRedirect("index.jsp");
+                response.sendRedirect("/index.jsp");
         }
     }
 
@@ -139,7 +139,7 @@ public class UserController extends HttpServlet {
             }
         } else {
             request.setAttribute("error", "Invalid username or password");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
             dispatcher.forward(request, response);
         }
     }

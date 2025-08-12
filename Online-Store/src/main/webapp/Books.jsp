@@ -1,21 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.pahana.bookshop.model.Book" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.pahana.bookshop.model.User" %>
-<%
-    User user = (User) session.getAttribute("user");
-    if (user == null || !"customer".equalsIgnoreCase(user.getRole())) {
-        response.sendRedirect(request.getContextPath() + "/login.jsp");
-        return;
-    }
 
+<%
     List<Book> bookList = (List<Book>) request.getAttribute("bookList");
 %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Customer Dashboard - PahanaBook</title>
+    <title>PahanaBook - Home</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -48,17 +43,22 @@
         .logo:hover {
             color: #e67e22;
         }
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            margin-left: 20px;
-            font-weight: bold;
-            transition: color 0.3s ease;
-        }
-        .nav-links a:hover {
-            color: #f1c40f;
-            text-decoration: underline;
-        }
+           .nav-links a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #f1c40f;
+}
+
+.nav-links a.active {
+    color: #f1c40f;
+    font-weight: bold;
+}
 
         /* Container */
         .container {
@@ -101,8 +101,7 @@
             color: #555;
             font-size: 0.95rem;
         }
-        .book-card button,
-        .book-card form button {
+        .book-card button {
             margin-top: auto;
             padding: 10px 0;
             background: #7b3fe4;
@@ -112,10 +111,8 @@
             font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            width: 100%;
         }
-        .book-card button:hover,
-        .book-card form button:hover {
+        .book-card button:hover {
             background: #5e2db3;
         }
         .message {
@@ -125,7 +122,8 @@
             padding: 40px 0;
         }
         
-              /* Footer */
+        
+        /* Footer */
         footer {
             flex-shrink: 0; /* don’t shrink */
             background: #2c3e50;
@@ -145,17 +143,25 @@
 
 <!-- Navbar -->
 <nav>
-    <a class="logo" href="<%= request.getContextPath() %>/customer/dashboard">PahanaBook</a>
+    <a class="logo" href="<%= request.getContextPath() %>/home.jsp">PahanaBook</a>
     <div class="nav-links">
-        <a href="<%= request.getContextPath() %>/customer/dashboard">Home</a>
-        <a href="<%= request.getContextPath() %>/CartController?action=view&customerId=<%= user.getId() %>">Cart</a>
-        <a href="<%= request.getContextPath() %>/LogoutController">Logout</a>
+    
+    
+         <a href="<%= request.getContextPath() %>/">Home</a>
+         <a href="<%= request.getContextPath() %>/Home" class="active">Book</a>
+         <a href="<%= request.getContextPath() %>/Stationary.jsp">Stationary</a>
+         <a href="<%= request.getContextPath() %>/AboutUs.jsp">About Us</a>
+          <a href="<%= request.getContextPath() %>/ContactUs.jsp">Contact Us</a>
+         
+        <a href="<%= request.getContextPath() %>/login.jsp">Login</a>
+        <a href="<%= request.getContextPath() %>/register.jsp">Register</a>
+        
     </div>
 </nav>
 
 <!-- Main Content -->
 <div class="container">
-    <h1>Welcome, <%= user.getUsername() %>!</h1>
+    <h1>Welcome to PahanaBook Online Store</h1>
 
     <div class="book-grid">
         <% if (bookList == null) { %>
@@ -170,12 +176,7 @@
                     <p>Author: <%= book.getAuthor() %></p>
                     <p>Price: Rs. <%= book.getPrice() %></p>
                     <p>Category: <%= book.getCategory() %></p>
-
-                    <form method="post" action="<%= request.getContextPath() %>/CartController">
-                        <input type="hidden" name="action" value="add" />
-                        <input type="hidden" name="bookId" value="<%= book.getId() %>" />
-                        <button type="submit">Add to Cart</button>
-                    </form>
+                    <button onclick="window.location.href='<%= request.getContextPath() %>/login.jsp'">Add to Cart</button>
                 </div>
         <%  }
         } %>
@@ -184,7 +185,7 @@
 
 <!-- Footer -->
 <footer>
-    &copy; <%= java.time.Year.now() %> PahanaBook. All rights reserved.
+    &copy; <%= java.time.Year.now() %> PahanaBook. All rights reserved Designed and Developed by Yoonus Anees.
 </footer>
 
 </body>

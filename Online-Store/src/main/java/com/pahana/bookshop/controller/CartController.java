@@ -19,7 +19,7 @@ public class CartController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
         if (action == null) {
-            response.sendRedirect("home.jsp");
+            response.sendRedirect("/login.jsp");
             return;
         }
 
@@ -34,7 +34,7 @@ public class CartController extends HttpServlet {
                 checkout(request, response);
                 break;
             default:
-                response.sendRedirect("home.jsp");
+                response.sendRedirect("/");
         }
     }
 
@@ -55,7 +55,7 @@ public class CartController extends HttpServlet {
         CustomerDAO customerDAO = new CustomerDAO();
         Customer customer = customerDAO.getCustomerByUserId(user.getId());
         if (customer == null) {
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("/login.jsp");
             return;
         }
         int customerId = customer.getId();

@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Register - PahanaBook</title>
+  <title>Login - PahanaBook</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -42,8 +42,7 @@
     .logo:hover {
       color: #e67e22;
     }
-    
-       .nav-links {
+    .nav-links {
       display: flex;
       align-items: center;
       gap: 22px;
@@ -65,7 +64,7 @@
     color: #f1c40f;
     font-weight: bold;
 }
-    /* Responsive navbar */
+    /* Responsive: stack links on small screens */
     @media (max-width: 600px) {
       nav {
         flex-wrap: wrap;
@@ -79,21 +78,16 @@
       }
     }
 
-    /* Register container */
-    .register-container {
+    /* Main container */
+    .login-container {
       background-color: white;
       padding: 2.5rem 2rem;
       border-radius: 12px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-      width: 360px;
+      width: 350px;
       margin: 80px auto 40px;
       text-align: center;
       flex-grow: 1;
-      transition: transform 0.3s ease;
-    }
-    .register-container:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
     }
 
     h2 {
@@ -103,9 +97,7 @@
     }
 
     input[type="text"],
-    input[type="password"],
-    input[type="email"],
-    select {
+    input[type="password"] {
       width: 100%;
       padding: 12px;
       margin: 0.6rem 0;
@@ -116,8 +108,7 @@
       font-size: 1rem;
     }
 
-    input:focus,
-    select:focus {
+    input:focus {
       border-color: #0072ff;
       box-shadow: 0 0 8px rgba(0, 114, 255, 0.5);
       outline: none;
@@ -127,19 +118,18 @@
       background-color: #0072ff;
       color: white;
       padding: 12px;
-      margin-top: 1.5rem;
+      margin-top: 1rem;
       border: none;
       border-radius: 8px;
-      cursor: pointer;
       width: 100%;
       font-size: 1rem;
+      cursor: pointer;
       font-weight: 700;
-      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      transition: background-color 0.3s ease;
     }
 
     input[type="submit"]:hover {
       background-color: #0057cc;
-      box-shadow: 0 4px 15px rgba(0, 87, 204, 0.6);
     }
 
     .message {
@@ -155,29 +145,26 @@
     }
 
     a {
-      display: inline-block;
+      display: block;
       margin-top: 1rem;
       color: #0072ff;
       text-decoration: none;
       font-weight: 600;
-      transition: color 0.3s ease;
     }
 
     a:hover {
       text-decoration: underline;
-      color: #0057cc;
     }
 
-    /* Customer fields section */
-    .customer-fields {
-      margin-top: 1rem;
-      display: none;
-      text-align: left;
+    /* Footer */
+    footer {
+      background: #2c3e50;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: auto;
+      user-select: none;
     }
-    .customer-fields input {
-      margin-top: 10px;
-    }
-
   </style>
 </head>
 <body>
@@ -191,91 +178,43 @@
     <a href="<%= request.getContextPath() %>/Stationary.jsp">Stationary</a>
     <a href="<%= request.getContextPath() %>/AboutUs.jsp">About Us</a>
     <a href="<%= request.getContextPath() %>/ContactUs.jsp">Contact Us</a>
-    <a href="<%= request.getContextPath() %>/login.jsp">Login</a>
-    <a href="<%= request.getContextPath() %>/register.jsp" class="active">Register</a>
+    <a href="<%= request.getContextPath() %>/login.jsp" class="active">Login</a>
+    <a href="<%= request.getContextPath() %>/register.jsp">Register</a>
   </div>
 </nav>
 
-<!-- Register form -->
-<div class="register-container">
-  <h2>Create Your Account</h2>
+<!-- Login form -->
+<div class="login-container">
+  <h2>Welcome Back! Please Login</h2>
 
-  <form action="User?action=register" method="post" onsubmit="return validatePasswords();">
+  <form action="User?action=login" method="post" onsubmit="return showSuccess();">
     <input type="text" name="username" placeholder="Username" required /><br />
-    <input type="email" name="email" placeholder="Email" required /><br />
-    <input type="password" name="password" id="password" placeholder="Password" required /><br />
-    <input type="password" id="confirmPassword" placeholder="Confirm Password" required /><br />
-
-    <select name="role" id="roleSelect" required>
-      <option value="">-- Select Role --</option>
-      <option value="customer">Customer</option>
-      <option value="admin">Admin</option>
-    </select><br />
-
-    <!-- Customer-specific fields -->
-    <div class="customer-fields" id="customerFields">
-      <input type="text" name="accountNumber" placeholder="Account Number" /><br />
-      <input type="text" name="name" placeholder="Full Name" /><br />
-      <input type="text" name="address" placeholder="Address" /><br />
-      <input type="text" name="telephone" placeholder="Telephone" /><br />
-    </div>
-
-    <input type="submit" value="Register" />
+    <input type="password" name="password" placeholder="Password" required /><br />
+    <input type="submit" value="Login" />
   </form>
 
-  <c:if test="${not empty errorMessage}">
-    <div class="error-message">${errorMessage}</div>
+  <c:if test="${not empty error}">
+    <div class="error-message">${error}</div>
   </c:if>
 
-  <p>Already have an account? <a href="index.jsp">Login here</a></p>
+  <a href="register.jsp">Don't have an account? Register here</a>
 
-  <div class="message" id="registerMsg" style="display: none;">
-    Registering... 📝🚀
+  <div class="message" id="successMsg" style="display: none;">
+    Logging in... ⚽️🔥
   </div>
 </div>
 
 <!-- Footer -->
-<footer style="
-    background: #2c3e50; 
-    color: white; 
-    text-align: center; 
-    padding: 15px 20px; 
-    font-size: 0.9rem;
-    margin-top: auto;
-    box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
-">
+<footer>
   &copy; <%= java.time.Year.now() %> PahanaBook. All rights reserved.
 </footer>
 
-
 <script>
-  function validatePasswords() {
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
-
-    if (password !== confirmPassword) {
-      alert("Passwords do not match!");
-      return false;
-    }
-
-    document.getElementById("registerMsg").style.display = "block";
+  function showSuccess() {
+    document.getElementById("successMsg").style.display = "block";
     return true;
   }
-
-  // Show customer fields only if "customer" is selected
-  const roleSelect = document.getElementById("roleSelect");
-  const customerFields = document.getElementById("customerFields");
-
-  roleSelect.addEventListener("change", function () {
-    if (this.value === "customer") {
-      customerFields.style.display = "block";
-    } else {
-      customerFields.style.display = "none";
-    }
-  });
 </script>
-
-
 
 </body>
 </html>

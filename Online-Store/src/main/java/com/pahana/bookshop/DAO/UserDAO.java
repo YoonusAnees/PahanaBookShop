@@ -83,7 +83,7 @@ public class UserDAO {
 		    } catch (SQLException e) {
 		        e.printStackTrace();
 		    }
-		    System.out.println("Users loaded: " + users.size());
+//		    System.out.println("Users loaded: " + users.size());
 
 
 		    return users;
