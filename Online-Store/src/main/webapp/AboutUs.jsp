@@ -91,7 +91,7 @@
     <div class="nav-links">
         <a href="<%= request.getContextPath() %>/index.jsp">Home</a>
         <a href="<%= request.getContextPath() %>/Books">Books</a>
-        <a href="<%= request.getContextPath() %>/Stationary.jsp">Stationary</a>
+<a href="<%= request.getContextPath() %>/stationery">Stationery</a>
         <a href="<%= request.getContextPath() %>/AboutUs.jsp" class="active">About Us</a>
         <a href="<%= request.getContextPath() %>/ContactUs.jsp">Contact Us</a>
         <a href="<%= request.getContextPath() %>/login.jsp">Login</a>

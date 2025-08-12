@@ -4,37 +4,33 @@ public class CartItem {
     private int id;
     private int customerId;
     private Book book;
+    private Stationery stationery;
     private int quantity;
-    
-    private int bookId;
+    private Integer bookId;      // nullable
+    private Integer stationeryId; // nullable
 
-    public int getBookId() {
-        return bookId;
-    }
-
-    public void setBookId(int bookId) {
-        this.bookId = bookId;
-    }
-
-
+    // Constructors
     public CartItem() {}
 
+    // For books
     public CartItem(int id, int customerId, Book book, int quantity) {
         this.id = id;
         this.customerId = customerId;
         this.book = book;
         this.quantity = quantity;
+        this.bookId = book != null ? book.getId() : null;
     }
-    
-    public CartItem(int id, int customerId, int bookId, Book book, int quantity) {
+
+    // For stationery
+    public CartItem(int id, int customerId, Stationery stationery, int quantity) {
         this.id = id;
         this.customerId = customerId;
-        this.bookId = bookId;
-        this.book = book;
+        this.stationery = stationery;
         this.quantity = quantity;
+        this.stationeryId = stationery != null ? stationery.getId() : null;
     }
 
-
+    // Getters and setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -42,8 +38,23 @@ public class CartItem {
     public void setCustomerId(int customerId) { this.customerId = customerId; }
 
     public Book getBook() { return book; }
-    public void setBook(Book book) { this.book = book; }
+    public void setBook(Book book) { 
+        this.book = book;
+        this.bookId = book != null ? book.getId() : null;
+    }
+
+    public Stationery getStationery() { return stationery; }
+    public void setStationery(Stationery stationery) { 
+        this.stationery = stationery;
+        this.stationeryId = stationery != null ? stationery.getId() : null;
+    }
 
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) { this.quantity = quantity; }
+
+    public Integer getBookId() { return bookId; }
+    public void setBookId(Integer bookId) { this.bookId = bookId; }
+
+    public Integer getStationeryId() { return stationeryId; }
+    public void setStationeryId(Integer stationeryId) { this.stationeryId = stationeryId; }
 }

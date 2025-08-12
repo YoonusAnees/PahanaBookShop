@@ -1,9 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" isELIgnored="false"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page import="com.pahana.bookshop.model.User" %>
 <%
     User user = (User) session.getAttribute("user");
     if (user == null || !"admin".equals(user.getRole())) {
-        response.sendRedirect(request.getContextPath() + "/");
+        response.sendRedirect(request.getContextPath() + "/index.jsp");
         return;
     }
 %>
@@ -11,9 +11,11 @@
 <html>
 <head>
     <meta charset="ISO-8859-1">
-    <title>Add New Book</title>
+    <title>Add Stationery</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        /* Reset */
+        /* Sidebar and layout styles from admin theme */
         * {
             box-sizing: border-box;
         }
@@ -24,8 +26,6 @@
             background: #f7f9fc;
             color: #333;
         }
-
-        /* Sidebar styles */
         .sidebar {
             position: fixed;
             top: 0;
@@ -37,7 +37,6 @@
             box-shadow: 3px 0 12px rgba(0,0,0,0.15);
             overflow-y: auto;
         }
-
         .sidebar h2 {
             color: #ecf0f1;
             text-align: center;
@@ -48,13 +47,11 @@
             border-bottom: 1px solid rgba(236, 240, 241, 0.15);
             padding-bottom: 12px;
         }
-
         .sidebar ul {
             list-style: none;
             padding: 0;
             margin: 0;
         }
-
         .sidebar ul li a {
             display: block;
             padding: 16px 24px;
@@ -65,7 +62,6 @@
             transition: all 0.3s ease;
             font-size: 17px;
         }
-
         .sidebar ul li a:hover,
         .sidebar ul li a.active {
             color: #ecf0f1;
@@ -73,8 +69,6 @@
             border-left: 5px solid #f39c12;
             font-weight: 700;
         }
-
-        /* Main content */
         .main-content {
             margin-left: 220px;
             padding: 120px 40px 40px;
@@ -84,8 +78,6 @@
             justify-content: center;
             align-items: start;
         }
-
-        /* Top header */
         .top-header {
             position: fixed;
             left: 220px;
@@ -103,7 +95,6 @@
             font-weight: 600;
             z-index: 1000;
         }
-
         .logout-btn {
             background-color: #e74c3c;
             color: white;
@@ -114,13 +105,10 @@
             box-shadow: 0 4px 12px rgba(231, 76, 60, 0.6);
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
-
         .logout-btn:hover {
             background-color: #c0392b;
             box-shadow: 0 6px 15px rgba(192, 57, 43, 0.7);
         }
-
-        /* Form styles */
         .form-container {
             background: white;
             padding: 30px 40px;
@@ -130,47 +118,16 @@
             max-width: 480px;
             transition: box-shadow 0.3s ease;
         }
-
         .form-container:hover {
             box-shadow: 0 15px 40px rgba(0,0,0,0.15);
         }
-
         h2 {
             font-weight: 700;
             margin-bottom: 30px;
             color: #2c3e50;
-            text-align: center;
         }
-
-        label {
-            display: block;
-            margin-top: 15px;
-            font-weight: 600;
-            color: #34495e;
-        }
-
-        input[type="text"],
-        input[type="number"],
-        input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            margin-top: 8px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-
-        input[type="text"]:focus,
-        input[type="number"]:focus,
-        input[type="file"]:focus {
-            outline: none;
-            border-color: #f39c12;
-            box-shadow: 0 0 5px #f39c12;
-        }
-
-        input[type="submit"] {
-            margin-top: 30px;
+        .btn-primary {
+         margin-top: 30px;
             width: 100%;
             background-color: #2980b9;
             color: white;
@@ -182,14 +139,10 @@
             font-size: 1.1rem;
             transition: background-color 0.3s ease;
         }
-        
-        
-       
-
-        input[type="submit"]:hover {
+        .btn-primary:hover {
             background-color: #1c5980;
+            border-color: #1c5980;
         }
-
         /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
@@ -205,14 +158,11 @@
                 left: 180px;
                 height: 50px;
                 padding: 0 20px;
+                font-size: 16px;
             }
-            .logout-btn {
-                padding: 8px 14px;
+            .sidebar ul li a {
                 font-size: 14px;
-            }
-            .form-container {
-                max-width: 100%;
-                padding: 20px;
+                padding: 12px 16px;
             }
         }
         @media (max-width: 600px) {
@@ -236,10 +186,10 @@
     <nav class="sidebar">
         <h2>Admin Panel</h2>
         <ul>
-            <li><a href="AddBook.jsp" class="active">Add Book</a></li>
+            <li><a href="AddBook.jsp">Add Book</a></li>
             <li><a href="Book?action=list">Manage Books</a></li>
             <li><a href="${pageContext.request.contextPath}/User?action=list">Manage Users</a></li>
-            <li><a href="AddStationery.jsp">Add Stationery</a></li>
+            <li><a href="AddStationery.jsp" class="active">Add Stationery</a></li>
             <li><a href="Stationery?action=list">Manage Stationery</a></li>
         </ul>
     </nav>
@@ -250,30 +200,34 @@
         <a class="logout-btn" href="<%= request.getContextPath() %>/LogoutController">Logout</a>
     </header>
 
-    <!-- Main content -->
+    <!-- Main content area -->
     <main class="main-content">
         <div class="form-container">
-            <h2>Add New Book</h2>
-            <form action="Book?action=add" method="post" enctype="multipart/form-data">
-                <label for="title">Title:</label>
-                <input type="text" id="title" name="title" placeholder="Book Title" required />
+            <h2>Add Stationery</h2>
+            <form action="Stationery" method="post">
+                <input type="hidden" name="action" value="add" />
 
-                <label for="author">Author:</label>
-                <input type="text" id="author" name="author" placeholder="Author Name" required />
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" placeholder="Stationery name" required class="form-control" />
+                </div>
 
-                <label for="category">Category:</label>
-                <input type="text" id="category" name="category" placeholder="Category" required />
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <input type="text" id="description" name="description" placeholder="Description" required class="form-control" />
+                </div>
 
-                <label for="price">Price:</label>
-                <input type="number" id="price" name="price" step="0.01" placeholder="Price" required />
+                <div class="form-group">
+                    <label for="price">Price:</label>
+                    <input type="number" id="price" name="price" step="0.01" placeholder="Price" required class="form-control" />
+                </div>
 
-                <label for="quantity">Quantity:</label>
-                <input type="number" id="quantity" name="quantity" placeholder="Quantity" required />
+                <div class="form-group">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity" min="0" placeholder="Quantity" required class="form-control" />
+                </div>
 
-                <label for="image">Book Image:</label>
-                <input type="file" id="image" name="image" accept="image/*" required />
-
-                <input type="submit" value="Add Book" />
+                <input type="submit" value="Add Stationery" class="btn btn-primary btn-block" />
             </form>
         </div>
     </main>

@@ -1,22 +1,19 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.pahana.bookshop.model.Book" %>
+<%@ page import="com.pahana.bookshop.model.Stationery" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.pahana.bookshop.model.User" %>
 <%
-    User user = (User) session.getAttribute("user");
-    if (user == null || !"customer".equalsIgnoreCase(user.getRole())) {
-        response.sendRedirect(request.getContextPath() + "/login.jsp");
-        return;
-    }
+  
 
-    List<Book> bookList = (List<Book>) request.getAttribute("bookList");
+    List<Stationery> stationeryList = (List<Stationery>) request.getAttribute("stationeryList");
 %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Customer Dashboard - PahanaBook</title>
-    <style>
+    <title>Customer Stationery - PahanaBook</title>
+     <style>
+        /* (You can reuse styles from dashboard.jsp for navbar and container) */
         body {
             font-family: Arial, sans-serif;
             background: #f5f5f5;
@@ -24,8 +21,6 @@
             padding: 0;
             color: #333;
         }
-
-        /* Navbar Styles */
         nav {
             background-color: #2c3e50;
             color: white;
@@ -57,23 +52,18 @@
         }
         .nav-links a:hover {
             color: #f1c40f;
-            text-decoration: underline;
         }
-
-        /* Container */
         .container {
             max-width: 1200px;
             margin: 30px auto;
             padding: 20px;
         }
-
-        /* Book Grid */
-        .book-grid {
+        .stationery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 25px;
         }
-        .book-card {
+        .stationery-card {
             background: white;
             border-radius: 12px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
@@ -82,24 +72,17 @@
             display: flex;
             flex-direction: column;
         }
-        .book-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
-        .book-card h3 {
+        .stationery-card h3 {
             color: #34495e;
             margin: 0 0 10px 0;
         }
-        .book-card p {
+        .stationery-card p {
             margin: 6px 0;
             color: #555;
             font-size: 0.95rem;
         }
-        .book-card button,
-        .book-card form button {
+        .stationery-card button,
+        .stationery-card form button {
             margin-top: auto;
             padding: 10px 0;
             background: #7b3fe4;
@@ -111,8 +94,8 @@
             transition: background-color 0.3s ease;
             width: 100%;
         }
-        .book-card button:hover,
-        .book-card form button:hover {
+        .stationery-card button:hover,
+        .stationery-card form button:hover {
             background: #5e2db3;
         }
         .message {
@@ -121,10 +104,8 @@
             font-size: 1.2rem;
             padding: 40px 0;
         }
-        
-              /* Footer */
         footer {
-            flex-shrink: 0; /* don’t shrink */
+            flex-shrink: 0;
             background: #2c3e50;
             color: white;
             text-align: center;
@@ -139,46 +120,40 @@
     </style>
 </head>
 <body>
-
 <!-- Navbar -->
 <nav>
     <a class="logo" href="<%= request.getContextPath() %>/customer/dashboard">PahanaBook</a>
     <div class="nav-links">
-        <span>Welcome, <%= user.getUsername() %>!</span>
-        <a href="<%= request.getContextPath() %>/customer/dashboard">Home</a>
-                <a href="<%= request.getContextPath() %>/customer/dashboard">Books</a>
-        
-<a href="<%= request.getContextPath() %>/customer/stationery">Stationery</a>
-        
-        <a href="<%= request.getContextPath() %>/CartController?action=view&customerId=<%= user.getId() %>">Cart</a>
-        <a href="<%= request.getContextPath() %>/LogoutController">Logout</a>
+    
+     <a href="<%= request.getContextPath() %>/index.jsp" >Home</a>
+        <a href="<%= request.getContextPath() %>/Books">Books</a>
+<a href="<%= request.getContextPath() %>/stationery" class="active">Stationery</a>
+        <a href="<%= request.getContextPath() %>/AboutUs.jsp">About Us</a>
+        <a href="<%= request.getContextPath() %>/ContactUs.jsp">Contact Us</a>
+        <a href="<%= request.getContextPath() %>/login.jsp">Login</a>
+        <a href="<%= request.getContextPath() %>/register.jsp">Register</a>
     </div>
 </nav>
 
 <!-- Main Content -->
 <div class="container">
-
-    <div class="book-grid">
-        <% if (bookList == null) { %>
-            <p class="message">Book list is not available.</p>
-        <% } else if (bookList.isEmpty()) { %>
-            <p class="message">No books available.</p>
+    <div class="stationery-grid">
+        <% if (stationeryList == null) { %>
+            <p class="message">Stationery list is not available.</p>
+        <% } else if (stationeryList.isEmpty()) { %>
+            <p class="message">No stationery items available.</p>
         <% } else {
-            for (Book book : bookList) { %>
-                <div class="book-card" title="<%= book.getTitle() %> by <%= book.getAuthor() %>">
-                    <img src="<%= request.getContextPath() + book.getImage() %>" alt="Book Image" />
-                    <h3><%= book.getTitle() %></h3>
-                    <p>Author: <%= book.getAuthor() %></p>
-                    <p>Price: Rs. <%= book.getPrice() %></p>
-                    <p>Category: <%= book.getCategory() %></p>
-                                        <p>Category: <%= book.getQuantity() %></p>
+            for (Stationery s : stationeryList) { %>
+                <div class="stationery-card" title="<%= s.getName() %>">
+                    <h3><%= s.getName() %></h3>
+                    <p>Description: <%= s.getDescription() %></p>
+                    <p>Price: Rs. <%= s.getPrice() %></p>
+                    <p>Quantity <%= s.getQuantity() %></p>
+                    
+           <button onclick="window.location.href='<%= request.getContextPath() %>/login.jsp'">Add to Cart</button>
                     
 
-                    <form method="post" action="<%= request.getContextPath() %>/CartController">
-                        <input type="hidden" name="action" value="add" />
-                        <input type="hidden" name="bookId" value="<%= book.getId() %>" />
-                        <button type="submit">Add to Cart</button>
-                    </form>
+                    
                 </div>
         <%  }
         } %>
@@ -189,6 +164,5 @@
 <footer>
     &copy; <%= java.time.Year.now() %> PahanaBook. All rights reserved.
 </footer>
-
 </body>
 </html>

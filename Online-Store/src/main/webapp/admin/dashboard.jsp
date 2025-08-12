@@ -150,6 +150,8 @@
             <li><a href="Book?action=list">Manage Books</a></li>
             <li><a href="${pageContext.request.contextPath}/User?action=list">Manage Users</a>
             <li><a href="AddStationery.jsp">Add Stationery</a></li>
+              <li><a href="Stationery?action=list">Manage Stationery</a></li>
+            <li><a href="AddStationery.jsp">Add Stationery</a></li>
             <!-- Add Manage Stationery link here if you have -->
         </ul>
     </nav>

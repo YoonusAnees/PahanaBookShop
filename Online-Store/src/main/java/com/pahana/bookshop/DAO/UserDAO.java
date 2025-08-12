@@ -7,7 +7,6 @@ import java.util.List;
 
 public class UserDAO {
 
-    // Add a new user
 	   public boolean insertUser(User user) {
 	        String sql = "INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)";
 	        try (Connection conn = DBConnectionFactory.getConnection();

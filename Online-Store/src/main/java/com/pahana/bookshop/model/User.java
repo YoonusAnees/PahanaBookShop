@@ -3,7 +3,7 @@ package com.pahana.bookshop.model;
 public class User {
     private int id;
     private String username;
-    private String email;      // new field
+    private String email;      
     private String password;
     private String role;
     

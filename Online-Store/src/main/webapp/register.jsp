@@ -21,7 +21,7 @@
     nav {
       background-color: #2c3e50;
       color: white;
-      padding: 15px 30px;
+      padding: 10px 30px; /* increased padding for taller navbar */
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -41,35 +41,36 @@
     }
     .logo:hover {
       color: #e67e22;
+            text-decoration: none;
+      
     }
     
-       .nav-links {
+    .nav-links {
       display: flex;
       align-items: center;
       gap: 22px;
     }
-            .nav-links a {
-    color: white;
-    text-decoration: none;
-    margin-left: 20px;
-    font-weight: bold;
-    transition: color 0.3s ease;
-}
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    .nav-links a:hover {
+      color: #f1c40f;
+      text-decoration: none;
+    }
+    .nav-links a.active {
+      color: #f1c40f;
+      font-weight: bold;
+    }
 
-.nav-links a:hover {
-    color: #f1c40f;
-    text-decoration: none;
-}
-
-.nav-links a.active {
-    color: #f1c40f;
-    font-weight: bold;
-}
     /* Responsive navbar */
     @media (max-width: 600px) {
       nav {
         flex-wrap: wrap;
-        padding: 15px 20px;
+        padding: 25px 20px; /* keep it taller on mobile too */
       }
       .nav-links {
         width: 100%;
@@ -83,17 +84,17 @@
     .register-container {
       background-color: white;
       padding: 2.5rem 2rem;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
       width: 360px;
-      margin: 80px auto 40px;
+      margin: 80px auto 80px;
       text-align: center;
       flex-grow: 1;
       transition: transform 0.3s ease;
     }
     .register-container:hover {
       transform: translateY(-5px);
-      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
     }
 
     h2 {
@@ -110,7 +111,7 @@
       padding: 12px;
       margin: 0.6rem 0;
       border: 1px solid #ccc;
-      border-radius: 8px;
+      border-radius: 6px;
       box-sizing: border-box;
       transition: all 0.3s ease;
       font-size: 1rem;
@@ -118,18 +119,18 @@
 
     input:focus,
     select:focus {
-      border-color: #0072ff;
-      box-shadow: 0 0 8px rgba(0, 114, 255, 0.5);
+      border-color: #f1c40f;
+      box-shadow: 0 0 8px rgba(241, 196, 15, 0.5);
       outline: none;
     }
 
     input[type="submit"] {
-      background-color: #0072ff;
-      color: white;
+      background-color: #f1c40f;
+      color: #2c3e50;
       padding: 12px;
       margin-top: 1.5rem;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
       width: 100%;
       font-size: 1rem;
@@ -138,8 +139,9 @@
     }
 
     input[type="submit"]:hover {
-      background-color: #0057cc;
-      box-shadow: 0 4px 15px rgba(0, 87, 204, 0.6);
+      background-color: #e67e22;
+      color: white;
+      box-shadow: 0 4px 15px rgba(230, 126, 34, 0.7);
     }
 
     .message {
@@ -157,15 +159,16 @@
     a {
       display: inline-block;
       margin-top: 1rem;
-      color: #0072ff;
+      color: #f1c40f;
       text-decoration: none;
       font-weight: 600;
       transition: color 0.3s ease;
+      user-select: none;
     }
 
     a:hover {
       text-decoration: underline;
-      color: #0057cc;
+      color: #e67e22;
     }
 
     /* Customer fields section */
@@ -176,6 +179,22 @@
     }
     .customer-fields input {
       margin-top: 10px;
+    }
+    
+       /* Footer */
+    footer {
+      background: #2c3e50;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      margin-top: auto;
+      user-select: none;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
+      font-size: 0.9rem;
+      z-index: 100;
     }
 
   </style>
@@ -188,7 +207,7 @@
   <div class="nav-links">
     <a href="<%= request.getContextPath() %>/index.jsp">Home</a>
     <a href="<%= request.getContextPath() %>/Books">Books</a>
-    <a href="<%= request.getContextPath() %>/Stationary.jsp">Stationary</a>
+    <a href="<%= request.getContextPath() %>/stationery">Stationery</a>
     <a href="<%= request.getContextPath() %>/AboutUs.jsp">About Us</a>
     <a href="<%= request.getContextPath() %>/ContactUs.jsp">Contact Us</a>
     <a href="<%= request.getContextPath() %>/login.jsp">Login</a>
@@ -235,18 +254,9 @@
 </div>
 
 <!-- Footer -->
-<footer style="
-    background: #2c3e50; 
-    color: white; 
-    text-align: center; 
-    padding: 15px 20px; 
-    font-size: 0.9rem;
-    margin-top: auto;
-    box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
-">
+<footer>
   &copy; <%= java.time.Year.now() %> PahanaBook. All rights reserved.
 </footer>
-
 
 <script>
   function validatePasswords() {
@@ -274,8 +284,6 @@
     }
   });
 </script>
-
-
 
 </body>
 </html>

@@ -66,7 +66,6 @@ public class CartController extends HttpServlet {
         request.getRequestDispatcher("customer/cart.jsp").forward(request, response);
     }
 
-
     private void addToCart(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
@@ -74,8 +73,8 @@ public class CartController extends HttpServlet {
             return;
         }
 
-        com.pahana.bookshop.model.User user = (com.pahana.bookshop.model.User) session.getAttribute("user");
-        com.pahana.bookshop.DAO.CustomerDAO customerDAO = new com.pahana.bookshop.DAO.CustomerDAO();
+        User user = (User) session.getAttribute("user");
+        CustomerDAO customerDAO = new CustomerDAO();
         int customerId = customerDAO.getCustomerIdByUserId(user.getId());
 
         if (customerId == -1) {
@@ -83,11 +82,20 @@ public class CartController extends HttpServlet {
             return;
         }
 
-        int bookId = Integer.parseInt(request.getParameter("bookId"));
+        Integer bookId = null;
+        Integer stationeryId = null;
         int quantity = 1;
-        cartService.addToCart(customerId, bookId, quantity);
+
+        if (request.getParameter("bookId") != null) {
+            bookId = Integer.parseInt(request.getParameter("bookId"));
+        } else if (request.getParameter("stationeryId") != null) {
+            stationeryId = Integer.parseInt(request.getParameter("stationeryId"));
+        }
+
+        cartService.addToCart(customerId, bookId, stationeryId, quantity);
         response.sendRedirect("CartController?action=view&customerId=" + customerId);
     }
+
 
     private void removeItem(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int cartId = Integer.parseInt(request.getParameter("cartId"));
@@ -117,8 +125,13 @@ public class CartController extends HttpServlet {
         double totalPrice = 0.0;
         for (CartItem item : cartItems) {
             totalItems += item.getQuantity();
-            totalPrice += item.getQuantity() * item.getBook().getPrice();
+            if (item.getBook() != null) {
+                totalPrice += item.getQuantity() * item.getBook().getPrice();
+            } else if (item.getStationery() != null) {
+                totalPrice += item.getQuantity() * item.getStationery().getPrice();
+            }
         }
+
 
         request.setAttribute("totalItems", totalItems);
         request.setAttribute("totalPrice", totalPrice);
@@ -126,4 +139,4 @@ public class CartController extends HttpServlet {
         request.getRequestDispatcher("customer/checkout.jsp").forward(request, response);
     }
 
-}
+} 

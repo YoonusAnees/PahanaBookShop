@@ -2,7 +2,6 @@ package com.pahana.bookshop.DAO;
 
 import com.pahana.bookshop.model.Order;
 import com.pahana.bookshop.model.OrderItem;
-
 import java.sql.*;
 import java.util.List;
 
@@ -26,15 +25,22 @@ public class OrderDAO {
             if (rs.next()) {
                 int orderId = rs.getInt(1);
 
-                String itemSql = "INSERT INTO order_items (orderId, bookId, quantity, price, customer_id) VALUES (?, ?, ?, ?, ?)";
+                String itemSql = "INSERT INTO order_items (orderId, bookId, stationeryId, quantity, price, customer_id) " +
+                                "VALUES (?, ?, ?, ?, ?, ?)";
                 try (PreparedStatement itemStmt = conn.prepareStatement(itemSql)) {
                     List<OrderItem> items = order.getItems();
                     for (OrderItem item : items) {
                         itemStmt.setInt(1, orderId);
-                        itemStmt.setInt(2, item.getBookId());
-                        itemStmt.setInt(3, item.getQuantity());
-                        itemStmt.setDouble(4, item.getPrice());
-                        itemStmt.setInt(5, order.getCustomerId());  // add customerId here
+                        if (item.getBookId() != null) {
+                            itemStmt.setInt(2, item.getBookId());
+                            itemStmt.setNull(3, Types.INTEGER);
+                        } else {
+                            itemStmt.setNull(2, Types.INTEGER);
+                            itemStmt.setInt(3, item.getStationeryId());
+                        }
+                        itemStmt.setInt(4, item.getQuantity());
+                        itemStmt.setDouble(5, item.getPrice());
+                        itemStmt.setInt(6, order.getCustomerId());
 
                         itemStmt.addBatch();
                     }

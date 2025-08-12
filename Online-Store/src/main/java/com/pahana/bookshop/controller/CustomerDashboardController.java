@@ -1,7 +1,10 @@
 package com.pahana.bookshop.controller;
+
 import com.pahana.bookshop.model.Book;
-import com.pahana.bookshop.service.BookService;
+import com.pahana.bookshop.model.Stationery;
 import com.pahana.bookshop.model.User;
+import com.pahana.bookshop.service.BookService;
+import com.pahana.bookshop.service.StationeryService;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -12,17 +15,19 @@ import java.util.List;
 
 @WebServlet("/customer/dashboard")
 @MultipartConfig(
-	    fileSizeThreshold = 1024 * 1024 * 1,  // 1 MB
-	    maxFileSize = 1024 * 1024 * 10,       // 10 MB
-	    maxRequestSize = 1024 * 1024 * 15     // 15 MB
-	)
+    fileSizeThreshold = 1024 * 1024 * 1,  // 1 MB
+    maxFileSize = 1024 * 1024 * 10,       // 10 MB
+    maxRequestSize = 1024 * 1024 * 15     // 15 MB
+)
 public class CustomerDashboardController extends HttpServlet {
 
     private BookService bookService;
+    private StationeryService stationeryService;
 
     @Override
     public void init() throws ServletException {
         bookService = new BookService();
+        stationeryService = new StationeryService();
     }
 
     @Override
@@ -30,15 +35,18 @@ public class CustomerDashboardController extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute("user");
+        User user = (User) (session != null ? session.getAttribute("user") : null);
 
-        if (user == null || !"customer".equals(user.getRole())) {
+        if (user == null || !"customer".equalsIgnoreCase(user.getRole())) {
             response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
         }
 
-        List<Book> bookList = bookService.getAllBookss();
+        List<Book> bookList = bookService.getAllBookss();  // Fetch all books
+        List<Stationery> stationeryList = stationeryService.getAllStationerySafe();  // Fetch all stationery
+
         request.setAttribute("bookList", bookList);
+        request.setAttribute("stationeryList", stationeryList);
         request.setAttribute("username", user.getUsername());
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/customer/dashboard.jsp");

@@ -5,20 +5,19 @@ import com.pahana.bookshop.DAO.DBConnectionFactory;
 import com.pahana.bookshop.model.*;
 import com.pahana.bookshop.service.CartService;
 import com.pahana.bookshop.service.OrderService;
-
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.Connection;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet("/OrderController")
 public class OrderController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Show checkout form
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         if (user == null) {
@@ -30,7 +29,6 @@ public class OrderController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Place order
         String action = request.getParameter("action");
         if ("placeOrder".equals(action)) {
             placeOrder(request, response);
@@ -69,11 +67,25 @@ public class OrderController extends HttpServlet {
 
         List<OrderItem> orderItems = new ArrayList<>();
         for (CartItem cartItem : cart) {
-            OrderItem orderItem = new OrderItem(
-                cartItem.getBook().getId(),
-                cartItem.getQuantity(),
-                cartItem.getBook().getPrice()
-            );
+            OrderItem orderItem = null;
+            if (cartItem.getBook() != null) {
+                orderItem = new OrderItem(
+                    cartItem.getBook().getId(),
+                    cartItem.getQuantity(),
+                    cartItem.getBook().getPrice()
+                );
+            } else if (cartItem.getStationery() != null) {
+                orderItem = new OrderItem(
+                    cartItem.getStationery().getId(),
+                    cartItem.getQuantity(),
+                    cartItem.getStationery().getPrice(),
+                    true
+                );
+            } else {
+                // Invalid cart item (neither book nor stationery)
+                // You can skip or log this
+                continue;
+            }
             orderItems.add(orderItem);
         }
 

@@ -1,20 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" isELIgnored="false"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="com.pahana.bookshop.model.User" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="com.pahana.bookshop.model.Stationery" %>
 <%
     User user = (User) session.getAttribute("user");
     if (user == null || !"admin".equals(user.getRole())) {
-        response.sendRedirect(request.getContextPath() + "/");
+        response.sendRedirect(request.getContextPath() + "/index.jsp");
         return;
     }
 %>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="ISO-8859-1" />
-    <title>Book List</title>
+    <meta charset="ISO-8859-1">
+    <title>Manage Stationery</title>
     <style>
-      /* Reset and base */
+        /* Reset and base */
         * {
             box-sizing: border-box;
         }
@@ -22,7 +23,6 @@
             margin: 0;
             height: 100%;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f7f9fc;
             color: #333;
         }
 
@@ -106,10 +106,17 @@
             margin-left: 220px;
             padding: 100px 40px 40px;
             min-height: 100vh;
-            background: linear-gradient(135deg, #f7f9fc, #e3eaf2);
             display: flex;
             justify-content: center;
         }
+
+        /* Container for table */
+        .table-container {
+            width: 100%;
+            max-width: 1060px;
+            padding: 30px 40px;
+        }
+     
 
         /* Table styling */
         table {
@@ -117,48 +124,36 @@
             border-collapse: collapse;
             font-size: 15px;
             background: white;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
             border-radius: 12px;
             overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
         }
-
         thead {
             background-color: #2980b9;
             color: #fff;
             user-select: none;
         }
-
         thead th {
             padding: 14px 18px;
             text-align: left;
             font-weight: 700;
             letter-spacing: 0.07em;
         }
-
         tbody tr {
             border-bottom: 1px solid #ddd;
             transition: background-color 0.3s ease;
         }
-
         tbody tr:hover {
             background-color: #f0f8ff;
         }
-
         tbody td {
             padding: 14px 18px;
             vertical-align: middle;
             color: #333;
         }
 
-        .book-image {
-            width: 60px;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-        }
-
         /* Buttons */
-        .button {
+        .btn {
             padding: 7px 14px;
             border-radius: 6px;
             font-weight: 600;
@@ -167,71 +162,67 @@
             user-select: none;
             display: inline-block;
             transition: background-color 0.3s ease;
+            border: none;
         }
-
-        .edit-btn {
+        .btn-edit {
             background-color: #27ae60;
             color: white;
-            border: none;
         }
-
-        .edit-btn:hover {
+        .btn-edit:hover {
             background-color: #1e8449;
         }
-
-        .delete-btn {
+        .btn-delete {
             background-color: #e74c3c;
             color: white;
-            border: none;
             margin-left: 8px;
         }
-
-        .delete-btn:hover {
+        .btn-delete:hover {
             background-color: #b83127;
         }
 
-        /* Responsive - make table scroll horizontally on small screens */
-        @media (max-width: 768px) {
-            table, thead, tbody, th, td, tr {
-                display: block;
+        /* Responsive */
+        @media (max-width: 900px) {
+            .sidebar {
+                width: 180px;
+                padding-top: 50px;
             }
-            thead tr {
-                position: absolute;
-                top: -9999px;
-                left: -9999px;
+            .main-content {
+                margin-left: 180px;
+                padding: 60px 20px 20px;
             }
-            tbody tr {
-                margin-bottom: 15px;
-                border-bottom: 2px solid #2980b9;
-                padding-bottom: 15px;
+            .top-header {
+                left: 180px;
+                height: 50px;
+                padding: 0 20px;
+                font-size: 16px;
             }
-            tbody td {
-                padding-left: 50%;
-                position: relative;
-                text-align: left;
-                border: none;
-                border-bottom: 1px solid #eee;
+            .sidebar ul li a {
+                font-size: 14px;
+                padding: 12px 16px;
             }
-            tbody td::before {
-                position: absolute;
-                top: 14px;
-                left: 18px;
-                width: 45%;
-                padding-right: 10px;
-                white-space: nowrap;
-                font-weight: 700;
-                color: #2980b9;
-                content: attr(data-label);
+            .table-container {
+                max-width: 100%;
+                padding: 25px 30px;
+                border-radius: 12px;
             }
-            .book-image {
-                width: 50px;
+        }
+        @media (max-width: 600px) {
+            .sidebar {
+                display: none;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 80px 15px 15px;
+            }
+            .top-header {
+                left: 0; right: 0;
             }
         }
     </style>
     <script>
-        function confirmDelete(title, id) {
-            if (confirm('Are you sure you want to delete "' + title + '"?')) {
-                window.location.href = 'Book?action=delete&id=' + id;
+        function confirmDelete(name, id) {
+            if (confirm('Are you sure you want to delete "' + name + '"?')) {
+                window.location.href = 'Stationery?action=delete&id=' + id;
             }
         }
     </script>
@@ -243,10 +234,10 @@
         <h2>Admin Panel</h2>
         <ul>
             <li><a href="AddBook.jsp">Add Book</a></li>
-            <li><a href="Book?action=list" class="active">Manage Books</a></li>
+            <li><a href="Book?action=list">Manage Books</a></li>
             <li><a href="${pageContext.request.contextPath}/User?action=list">Manage Users</a></li>
-            <li><a href="AddStationery.jsp">Add Stationery</a></li>
-            <li><a href="Stationery?action=list">Manage Stationery</a></li>
+            <li><a href="AddStationery.jsp" >Add Stationery</a></li>
+            <li><a href="Stationery?action=list" class="active">Manage Stationery</a></li>
         </ul>
     </nav>
 
@@ -258,42 +249,39 @@
 
     <!-- Main content area -->
     <main class="main-content">
-        <div class="container">
-            <h2>Book List</h2>
-            <a href="AddBook.jsp" class="button edit-btn" style="margin-bottom: 15px; display: inline-block;">+ Add New Book</a>
+        <div class="table-container">
+            <h2>Manage Stationery</h2>
+            <a href="AddStationery.jsp" class="btn btn-edit" style="margin-bottom: 15px; display: inline-block;">+ Add New Stationery</a>
+
             <table>
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Image</th>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Category</th>
-                        <th>Price ($)</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Price (USD)</th>
                         <th>Quantity</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach var="book" items="${bookList}">
-                   <tr>
-                      <td data-label="ID">${book.id}</td>
-                      <td data-label="Image">
-                        <img src="${pageContext.request.contextPath}/${book.image}" alt="${book.title}" class="book-image" />
-                      </td>
-                      <td data-label="Title">${book.title}</td>
-                      <td data-label="Author">${book.author}</td>
-                      <td data-label="Category">${book.category}</td>
-                      <td data-label="Price ($)">${book.price}</td>
-                      <td data-label="Quantity">${book.quantity}</td>
-                      <td data-label="Actions">
-                        <a class="button edit-btn" href="Book?action=edit&id=${book.id}">Edit</a>
-                        <a href="javascript:void(0);" class="button delete-btn" onclick="confirmDelete('${book.title}', ${book.id})">Delete</a>
-                      </td>
-                    </tr>
+                    <c:forEach var="s" items="${stationeryList}">
+                        <tr>
+                            <td data-label="ID">${s.id}</td>
+                            <td data-label="Name">${s.name}</td>
+                            <td data-label="Description">${s.description}</td>
+                            <td data-label="Price (USD)">${s.price}</td>
+                            <td data-label="Quantity">${s.quantity}</td>
+                            <td data-label="Actions">
+                                <a href="EditStationery.jsp?id=${s.id}" class="btn btn-edit">Edit</a>
+                                <a href="javascript:void(0);" class="btn btn-delete" onclick="confirmDelete('${s.name}', ${s.id})">Delete</a>
+                            </td>
+                        </tr>
                     </c:forEach>
-                    <c:if test="${empty bookList}">
-                        <tr><td colspan="8">No books found.</td></tr>
+                    <c:if test="${empty stationeryList}">
+                        <tr>
+                            <td colspan="6" style="text-align:center;">No stationery items found.</td>
+                        </tr>
                     </c:if>
                 </tbody>
             </table>

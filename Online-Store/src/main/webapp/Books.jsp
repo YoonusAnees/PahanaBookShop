@@ -64,10 +64,8 @@
         .container {
             max-width: 1200px;
             margin: 30px auto;
-            background: white;
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 0 10px #ccc;
         }
 
         /* Book Grid */
@@ -149,7 +147,7 @@
     
          <a href="<%= request.getContextPath() %>/">Home</a>
          <a href="<%= request.getContextPath() %>/Home" class="active">Book</a>
-         <a href="<%= request.getContextPath() %>/Stationary.jsp">Stationary</a>
+<a href="<%= request.getContextPath() %>/stationery">Stationery</a>
          <a href="<%= request.getContextPath() %>/AboutUs.jsp">About Us</a>
           <a href="<%= request.getContextPath() %>/ContactUs.jsp">Contact Us</a>
          
@@ -161,7 +159,6 @@
 
 <!-- Main Content -->
 <div class="container">
-    <h1>Welcome to PahanaBook Online Store</h1>
 
     <div class="book-grid">
         <% if (bookList == null) { %>
@@ -175,6 +172,8 @@
                     <h3><%= book.getTitle() %></h3>
                     <p>Author: <%= book.getAuthor() %></p>
                     <p>Price: Rs. <%= book.getPrice() %></p>
+                    <p>Quantity <%= book.getQuantity() %></p>
+                    
                     <p>Category: <%= book.getCategory() %></p>
                     <button onclick="window.location.href='<%= request.getContextPath() %>/login.jsp'">Add to Cart</button>
                 </div>

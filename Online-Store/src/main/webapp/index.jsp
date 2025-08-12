@@ -170,7 +170,7 @@
     <div class="nav-links">
         <a href="<%= request.getContextPath() %>/index.jsp" class="active">Home</a>
         <a href="<%= request.getContextPath() %>/Books">Books</a>
-        <a href="<%= request.getContextPath() %>/Stationary.jsp">Stationary</a>
+<a href="<%= request.getContextPath() %>/stationery">Stationery</a>
         <a href="<%= request.getContextPath() %>/AboutUs.jsp">About Us</a>
         <a href="<%= request.getContextPath() %>/ContactUs.jsp">Contact Us</a>
         <a href="<%= request.getContextPath() %>/login.jsp">Login</a>
@@ -183,6 +183,10 @@
     <h1>Welcome to PahanaBook</h1>
     <p>Your one-stop destination for books, stationery, and more.</p>
     <a href="<%= request.getContextPath() %>/Books">Browse Books</a>
+    <a href="<%= request.getContextPath() %>/stationery">Browse Stationery</a>
+    
+    
+    
 </div>
 
 <!-- Featured Books -->

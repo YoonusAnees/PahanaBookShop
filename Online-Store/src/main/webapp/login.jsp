@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,7 +22,7 @@
     nav {
       background-color: #2c3e50;
       color: white;
-      padding: 15px 30px;
+      padding: 10px 30px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -41,30 +42,31 @@
     }
     .logo:hover {
       color: #e67e22;
+            text-decoration: none;
+      
     }
     .nav-links {
       display: flex;
       align-items: center;
       gap: 22px;
     }
-            .nav-links a {
-    color: white;
-    text-decoration: none;
-    margin-left: 20px;
-    font-weight: bold;
-    transition: color 0.3s ease;
-}
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    .nav-links a:hover {
+      color: #f1c40f;
+      text-decoration: none;
+    }
+    .nav-links a.active {
+      color: #f1c40f;
+      font-weight: bold;
+    }
 
-.nav-links a:hover {
-    color: #f1c40f;
-    text-decoration: none;
-}
-
-.nav-links a.active {
-    color: #f1c40f;
-    font-weight: bold;
-}
-    /* Responsive: stack links on small screens */
+    /* Responsive navbar */
     @media (max-width: 600px) {
       nav {
         flex-wrap: wrap;
@@ -79,20 +81,20 @@
     }
 
     /* Main container */
-    .login-container {
-      background-color: white;
-      padding: 2.5rem 2rem;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-      width: 350px;
-      margin: 80px auto 40px;
-      text-align: center;
+    .container {
+      max-width: 400px;
+      margin: 70px auto 80px;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       flex-grow: 1;
+      text-align: center;
     }
 
     h2 {
-      margin-bottom: 1.5rem;
       color: #2c3e50;
+      margin-bottom: 1.5rem;
       font-weight: 700;
     }
 
@@ -102,34 +104,35 @@
       padding: 12px;
       margin: 0.6rem 0;
       border: 1px solid #ccc;
-      border-radius: 8px;
+      border-radius: 6px;
+      font-size: 1rem;
       box-sizing: border-box;
       transition: all 0.3s ease;
-      font-size: 1rem;
     }
 
     input:focus {
-      border-color: #0072ff;
-      box-shadow: 0 0 8px rgba(0, 114, 255, 0.5);
+      border-color: #f1c40f;
+      box-shadow: 0 0 8px rgba(241, 196, 15, 0.5);
       outline: none;
     }
 
     input[type="submit"] {
-      background-color: #0072ff;
-      color: white;
+      background-color: #f1c40f;
+      color: #2c3e50;
+      border: none;
       padding: 12px;
       margin-top: 1rem;
-      border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       width: 100%;
       font-size: 1rem;
-      cursor: pointer;
       font-weight: 700;
+      cursor: pointer;
       transition: background-color 0.3s ease;
     }
 
     input[type="submit"]:hover {
-      background-color: #0057cc;
+      background-color: #e67e22;
+      color: white;
     }
 
     .message {
@@ -147,9 +150,10 @@
     a {
       display: block;
       margin-top: 1rem;
-      color: #0072ff;
+      color: #f1c40f;
       text-decoration: none;
       font-weight: 600;
+      user-select: none;
     }
 
     a:hover {
@@ -164,6 +168,12 @@
       padding: 15px;
       margin-top: auto;
       user-select: none;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
+      font-size: 0.9rem;
+      z-index: 100;
     }
   </style>
 </head>
@@ -175,7 +185,7 @@
   <div class="nav-links">
     <a href="<%= request.getContextPath() %>/index.jsp">Home</a>
     <a href="<%= request.getContextPath() %>/Books">Books</a>
-    <a href="<%= request.getContextPath() %>/Stationary.jsp">Stationary</a>
+    <a href="<%= request.getContextPath() %>/stationery">Stationery</a>
     <a href="<%= request.getContextPath() %>/AboutUs.jsp">About Us</a>
     <a href="<%= request.getContextPath() %>/ContactUs.jsp">Contact Us</a>
     <a href="<%= request.getContextPath() %>/login.jsp" class="active">Login</a>
@@ -183,13 +193,13 @@
   </div>
 </nav>
 
-<!-- Login form -->
-<div class="login-container">
+<!-- Login form container -->
+<div class="container">
   <h2>Welcome Back! Please Login</h2>
 
   <form action="User?action=login" method="post" onsubmit="return showSuccess();">
-    <input type="text" name="username" placeholder="Username" required /><br />
-    <input type="password" name="password" placeholder="Password" required /><br />
+    <input type="text" name="username" placeholder="Username" required />
+    <input type="password" name="password" placeholder="Password" required />
     <input type="submit" value="Login" />
   </form>
 
