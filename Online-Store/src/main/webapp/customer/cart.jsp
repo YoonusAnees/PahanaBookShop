@@ -58,6 +58,10 @@
     nav .logo:hover {
         color: #e67e22;
     }
+    
+          .nav-links .logout:hover {
+               color: red;
+            text-decoration: none;}
     nav .nav-links {
         display: flex;
         align-items: center;
@@ -111,7 +115,7 @@
         vertical-align: middle;
     }
     th {
-        background-color: #7b3fe4;
+        background-color: #2c3e50;
         color: white;
         text-transform: uppercase;
         letter-spacing: 1px;
@@ -128,7 +132,7 @@
         display: inline-block;
         padding: 10px 22px;
         border-radius: 10px;
-        background-color: #7b3fe4;
+        background-color: #f4d162;
         color: white;
         font-weight: 700;
         font-size: 1rem;
@@ -138,7 +142,7 @@
         transition: background-color 0.3s ease;
     }
     .btn:hover {
-        background-color: #5e2db3;
+        background-color: #f1c41f;
     }
     .btn-danger {
         background-color: #e53935;
@@ -208,12 +212,12 @@
         <a href="<%= request.getContextPath() %>/customer/dashboard">Books</a>
         <a href="<%= request.getContextPath() %>/customer/stationery">Stationery</a>
         <a href="<%= request.getContextPath() %>/CartController?action=view&customerId=<%= user.getId() %>">Cart</a>
-        <a href="<%= request.getContextPath() %>/LogoutController">Logout</a>
+        <a class="logout" href="<%= request.getContextPath() %>/LogoutController">Logout</a>
     </div>
 </nav>
 
 <div class="container">
-    <h2>Your Shopping Cart</h2>
+    <h2 style="color: #f1c40f">Your Shopping Cart</h2>
 
     <c:choose>
         <c:when test="${empty cartItems}">
@@ -234,7 +238,7 @@
 
             <!-- Books Table -->
             <c:if test="${hasBooks}">
-                <h3>Books</h3>
+                <h3 style="color: #f1c40f">Books</h3>
                 <table>
                     <thead>
                         <tr>
@@ -253,8 +257,8 @@
                                     <td>${item.book.title}</td>
                                     <td>${item.book.author}</td>
                                     <td>${item.quantity}</td>
-                                    <td>$${item.book.price}</td>
-                                    <td>$${item.book.price * item.quantity}</td>
+                                    <td>Rs.${item.book.price}</td>
+                                    <td>Rs.${item.book.price * item.quantity}</td>
                                     <td>
                                         <a class="btn btn-danger" href="${pageContext.request.contextPath}/CartController?action=remove&cartId=${item.id}&customerId=${user.id}">
                                             Remove
@@ -269,7 +273,7 @@
 
             <!-- Stationery Table -->
             <c:if test="${hasStationery}">
-                <h3>Stationery</h3>
+                <h3 style="color: #f1c40f">Stationery</h3>
                 <table>
                     <thead>
                         <tr>
@@ -286,8 +290,8 @@
                                 <tr>
                                     <td>${item.stationery.name}</td>
                                     <td>${item.quantity}</td>
-                                    <td>$${item.stationery.price}</td>
-                                    <td>$${item.stationery.price * item.quantity}</td>
+                                    <td>Rs.${item.stationery.price}</td>
+                                    <td>Rs.${item.stationery.price * item.quantity}</td>
                                     <td>
                                         <a class="btn btn-danger" href="${pageContext.request.contextPath}/CartController?action=remove&cartId=${item.id}&customerId=${user.id}">
                                             Remove

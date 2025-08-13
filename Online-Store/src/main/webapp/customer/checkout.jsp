@@ -53,8 +53,11 @@
         }
         .nav-links a:hover {
             color: #f1c40f;
-            text-decoration: underline;
         }
+        
+           .nav-links .logout:hover {
+               color: red;
+            text-decoration: none;}
 
         .container {
             max-width: 480px;
@@ -162,9 +165,13 @@
 <nav>
     <a href="<%= request.getContextPath() %>/customer/dashboard" class="logo">PahanaBook</a>
     <div class="nav-links">
+              <span>Welcome, <%= user.getUsername() %>!</span>
+                <a href="<%= request.getContextPath() %>/customer/dashboard">Home</a>
+        
         <a href="<%= request.getContextPath() %>/customer/dashboard">Books</a>
+        <a href="<%= request.getContextPath() %>/customer/stationery">Stationery</a>
         <a href="<%= request.getContextPath() %>/CartController?action=view">Cart</a>
-        <a href="<%= request.getContextPath() %>/LogoutController">Logout</a>
+        <a class="logout" href="<%= request.getContextPath() %>/LogoutController">Logout</a>
     </div>
 </nav>
 

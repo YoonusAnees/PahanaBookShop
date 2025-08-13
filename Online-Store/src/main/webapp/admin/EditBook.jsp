@@ -233,7 +233,7 @@
                 <input type="number" id="quantity" name="quantity" value="${book.quantity}" required>
 
                 <label>Current Image:</label>
-                <img class="book-image" src="${pageContext.request.contextPath}/${book.image}" alt="Book Image" />
+                    <img src="${pageContext.request.contextPath}/uploads${book.image}" />
 
                 <label for="image">Change Image (optional):</label>
                 <input type="file" id="image" name="image" accept="image/*">

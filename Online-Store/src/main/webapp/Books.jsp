@@ -168,7 +168,7 @@
         <% } else {
             for (Book book : bookList) { %>
                 <div class="book-card" title="<%= book.getTitle() %> by <%= book.getAuthor() %>">
-                    <img src="<%= request.getContextPath() + book.getImage() %>" alt="Book Image" />
+<img src="${pageContext.request.contextPath}/${book.imagePath}" alt="Book Image" />
                     <h3><%= book.getTitle() %></h3>
                     <p>Author: <%= book.getAuthor() %></p>
                     <p>Price: Rs. <%= book.getPrice() %></p>

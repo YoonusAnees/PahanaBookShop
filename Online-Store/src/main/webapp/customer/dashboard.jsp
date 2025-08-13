@@ -57,8 +57,12 @@
         }
         .nav-links a:hover {
             color: #f1c40f;
-            text-decoration: underline;
+            text-decoration: none;
         }
+        
+        .nav-links .logout:hover {
+               color: red;
+            text-decoration: none;}
 
         /* Container */
         .container {
@@ -102,7 +106,7 @@
         .book-card form button {
             margin-top: auto;
             padding: 10px 0;
-            background: #7b3fe4;
+            background: #f4d162;
             color: white;
             border: none;
             border-radius: 8px;
@@ -113,7 +117,7 @@
         }
         .book-card button:hover,
         .book-card form button:hover {
-            background: #5e2db3;
+            background: #f1c41f;
         }
         .message {
             text-align: center;
@@ -151,7 +155,7 @@
 <a href="<%= request.getContextPath() %>/customer/stationery">Stationery</a>
         
         <a href="<%= request.getContextPath() %>/CartController?action=view&customerId=<%= user.getId() %>">Cart</a>
-        <a href="<%= request.getContextPath() %>/LogoutController">Logout</a>
+        <a class="logout" href="<%= request.getContextPath() %>/LogoutController">Logout</a>
     </div>
 </nav>
 
@@ -166,12 +170,13 @@
         <% } else {
             for (Book book : bookList) { %>
                 <div class="book-card" title="<%= book.getTitle() %> by <%= book.getAuthor() %>">
-                    <img src="<%= request.getContextPath() + book.getImage() %>" alt="Book Image" />
+                    <img src="${pageContext.request.contextPath}/${book.image}" />
                     <h3><%= book.getTitle() %></h3>
                     <p>Author: <%= book.getAuthor() %></p>
                     <p>Price: Rs. <%= book.getPrice() %></p>
                     <p>Category: <%= book.getCategory() %></p>
-                                        <p>Category: <%= book.getQuantity() %></p>
+                    <p>Quantity: <%= book.getQuantity() %></p>
+                    
                     
 
                     <form method="post" action="<%= request.getContextPath() %>/CartController">

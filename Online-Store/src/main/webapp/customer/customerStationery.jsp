@@ -54,9 +54,15 @@
             font-weight: bold;
             transition: color 0.3s ease;
         }
+        
+        
         .nav-links a:hover {
             color: #f1c40f;
         }
+        
+              .nav-links .logout:hover {
+               color: red;
+            text-decoration: none;}
         .container {
             max-width: 1200px;
             margin: 30px auto;
@@ -89,7 +95,7 @@
         .stationery-card form button {
             margin-top: auto;
             padding: 10px 0;
-            background: #7b3fe4;
+            background: #f4d162;
             color: white;
             border: none;
             border-radius: 8px;
@@ -100,7 +106,7 @@
         }
         .stationery-card button:hover,
         .stationery-card form button:hover {
-            background: #5e2db3;
+            background: #f1c41f;
         }
         .message {
             text-align: center;
@@ -131,9 +137,11 @@
         <span>Welcome, <%= user.getUsername() %>!</span>
     
         <a href="<%= request.getContextPath() %>/customer/dashboard">Home</a>
+                        <a href="<%= request.getContextPath() %>/customer/dashboard">Books</a>
+        
         <a href="<%= request.getContextPath() %>/customer/stationery">Stationery</a>
         <a href="<%= request.getContextPath() %>/CartController?action=view&customerId=<%= user.getId() %>">Cart</a>
-        <a href="<%= request.getContextPath() %>/LogoutController">Logout</a>
+        <a class="logout" href="<%= request.getContextPath() %>/LogoutController">Logout</a>
     </div>
 </nav>
 

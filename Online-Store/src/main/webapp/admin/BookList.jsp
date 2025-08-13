@@ -25,6 +25,29 @@
             background: #f7f9fc;
             color: #333;
         }
+        
+           .logo {
+            font-weight: 500;
+            font-size: 28px;
+            letter-spacing: 2px;
+            color: #f1c40f;
+            margin: 0 0 12px 20px;
+            cursor: default;
+            transition: color 0.3s ease;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            text-decoration: none;
+            
+         
+        }
+        
+           .logo:hover {
+            color: #e67e22;
+            text-decoration: none;
+                        cursor: pointer;
+            
+      
+    }
 
         /* Sidebar */
         .sidebar {
@@ -240,6 +263,8 @@
 
     <!-- Sidebar Navigation -->
     <nav class="sidebar">
+            <a class="logo" href="<%= request.getContextPath() %>/admin/dashboard.jsp" class="logo">PahanaBook</a>
+    
         <h2>Admin Panel</h2>
         <ul>
             <li><a href="AddBook.jsp">Add Book</a></li>
@@ -279,7 +304,7 @@
                    <tr>
                       <td data-label="ID">${book.id}</td>
                       <td data-label="Image">
-                        <img src="${pageContext.request.contextPath}/${book.image}" alt="${book.title}" class="book-image" />
+                    <img src="${pageContext.request.contextPath}/uploads${book.image}" />
                       </td>
                       <td data-label="Title">${book.title}</td>
                       <td data-label="Author">${book.author}</td>

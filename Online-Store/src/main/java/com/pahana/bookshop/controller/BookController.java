@@ -97,13 +97,13 @@ public class BookController extends HttpServlet {
 
         String uniqueFileName = UUID.randomUUID().toString() + "_" + fileName;
 
-        String uploadPath = getServletContext().getRealPath("") + File.separator + "uploads";
+        String uploadPath = getServletContext().getRealPath("/uploads");
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) uploadDir.mkdir();
 
         imagePart.write(uploadPath + File.separator + uniqueFileName);
 
-        String imagePath = "/uploads/" + uniqueFileName; // always start with slash
+        String imagePath = "uploads/" + uniqueFileName;
 
         Book book = new Book(title, author, category, price, quantity, imagePath);
         bookService.addBook(book);
@@ -135,7 +135,7 @@ public class BookController extends HttpServlet {
 
             imagePart.write(uploadPath + File.separator + uniqueFileName);
 
-            imagePath = "/uploads/" + uniqueFileName; // fixed: always starts with slash
+            imagePath = "uploads/" + uniqueFileName; // fixed: always starts with slash
         }
 
         Book book = new Book(id, title, author, category, price, quantity, imagePath);
