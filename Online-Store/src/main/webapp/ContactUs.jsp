@@ -1,138 +1,187 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>Contact Us - PahanaBook</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
+<meta charset="UTF-8" />
+<title>Contact Us - PahanaBook</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+        margin: 0;
+        padding: 0;
+        color: #333;
+    }
 
-        /* Navbar */
-        nav {
-            background-color: #2c3e50;
-            color: white;
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            letter-spacing: 1px;
-            color: #f1c40f;
-            text-decoration: none;
-        }
-           .nav-links a {
-    color: white;
-    text-decoration: none;
-    margin-left: 20px;
-    font-weight: bold;
-    transition: color 0.3s ease;
-}
-
+    /* Navbar */
+    nav {
+        background-color: #2c3e50;
+        color: white;
+        padding: 15px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+    }
+    .logo {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #f1c40f;
+        text-decoration: none;
+    }
     .nav-links a {
-    color: white;
-    text-decoration: none;
-    margin-left: 20px;
-    font-weight: bold;
-    transition: color 0.3s ease;
-}
+        color: white;
+        text-decoration: none;
+        margin-left: 20px;
+        font-weight: bold;
+        transition: color 0.3s ease;
+    }
+    .nav-links a:hover, .nav-links a.active {
+        color: #f1c40f;
+    }
+    .search-form {
+        display: flex;
+        align-items: center;
+        margin-left: 550px;
+    }
+    .search-form input {
+        padding: 6px 10px;
+        border-radius: 4px;
+        border: none;
+        font-size: 1rem;
+    }
+    .search-form button {
+        padding: 6px 12px;
+        margin-left: 5px;
+        border: none;
+        border-radius: 4px;
+        background-color: #f1c40f;
+        color: #2c3e50;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .search-form button:hover {
+        background-color: #e67e22;
+        color: white;
+    }
 
-.nav-links a:hover {
-    color: #f1c40f;
-}
+    /* Hero Banner */
+    .hero {
+        background: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f') center/cover no-repeat;
+        height: 190px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        font-size: 2.5rem;
+        font-weight: bold;
+    }
 
-.nav-links a.active {
-    color: #f1c40f;
-    font-weight: bold;
-}
+    /* Contact Section */
+    .contact-container {
+        max-width: 900px;
+        margin: 40px auto 100px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        display: flex;
+        gap: 30px;
+        flex-wrap: wrap;
+    }
+    .contact-info {
+        flex: 1;
+        min-width: 250px;
+    }
+    .contact-info h2 {
+        color: #2c3e50;
+        margin-bottom: 15px;
+    }
+    .info-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    .info-item span {
+        font-size: 1.5rem;
+        margin-right: 10px;
+        color: #f1c40f;
+    }
 
-        /* Main Content */
-        .container {
-            max-width: 900px;
-            margin: 50px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        h1, h2 {
-            color: #2c3e50;
-        }
-        p {
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        label {
-            margin: 10px 0 5px;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-        input, textarea {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 1rem;
-            resize: vertical;
-        }
-        textarea {
-            min-height: 120px;
-        }
-        button {
-            margin-top: 20px;
-            background-color: #f1c40f;
-            border: none;
-            padding: 12px;
-            font-weight: bold;
-            color: #2c3e50;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #e67e22;
-        }
+    /* Contact Form */
+    .contact-form {
+        flex: 1.5;
+        min-width: 300px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    .contact-form label {
+        font-weight: bold;
+    }
+    .contact-form input, .contact-form textarea {
+        padding: 10px 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border 0.3s ease, box-shadow 0.3s ease;
+    }
+    .contact-form input:focus, .contact-form textarea:focus {
+        border-color: #f1c40f;
+        box-shadow: 0 0 5px rgba(241,196,15,0.5);
+        outline: none;
+    }
+    .contact-form textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+    .contact-form button {
+        background-color: #f1c40f;
+        color: #2c3e50;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        padding: 12px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .contact-form button:hover {
+        background-color: #e67e22;
+        color: white;
+        transform: translateY(-2px);
+    }
 
-      /* Footer */
-        footer {
-            flex-shrink: 0; /* don’t shrink */
-            background: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 15px 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
-            font-size: 0.9rem;
-            z-index: 100;
-        }
-    </style>
+    /* Footer */
+    footer {
+        background: #2c3e50;
+        color: white;
+        text-align: center;
+        padding: 15px 0;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        font-size: 0.9rem;
+        box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
+    }
+</style>
 </head>
 <body>
 
 <!-- Navbar -->
 <nav>
     <a class="logo" href="<%= request.getContextPath() %>/index.jsp">PahanaBook</a>
+    <form class="search-form" method="get" action="<%= request.getContextPath() %>/Search">
+        <input type="text" name="query" placeholder="Search books or stationery..." required />
+        <button type="submit">Search</button>
+    </form>
     <div class="nav-links">
         <a href="<%= request.getContextPath() %>/index.jsp">Home</a>
         <a href="<%= request.getContextPath() %>/Books">Books</a>
-<a href="<%= request.getContextPath() %>/stationery">Stationery</a>
+        <a href="<%= request.getContextPath() %>/stationery">Stationery</a>
         <a href="<%= request.getContextPath() %>/AboutUs.jsp">About Us</a>
         <a href="<%= request.getContextPath() %>/ContactUs.jsp" class="active">Contact Us</a>
         <a href="<%= request.getContextPath() %>/login.jsp">Login</a>
@@ -140,13 +189,19 @@
     </div>
 </nav>
 
-<!-- Main Content -->
-<div class="container">
-    <h1>Contact Us</h1>
-    <h2>We’d love to hear from you</h2>
-    <p>If you have any questions, feedback, or need assistance, please use the form below to get in touch with us.</p>
+<!-- Hero Section -->
+<div class="hero">Contact Us</div>
 
-    <form action="SendContactMessage" method="post">
+<!-- Contact Section -->
+<div class="contact-container">
+    <div class="contact-info">
+        <h2>Get in Touch</h2>
+        <div class="info-item"><span>📍</span> 123 Pahana Street, Colombo, Sri Lanka</div>
+        <div class="info-item"><span>📞</span> +94 76 131 0771 </div>
+        <div class="info-item"><span>✉️</span> support@pahanabook.com</div>
+    </div>
+
+    <form class="contact-form" action="SendContactMessage" method="post">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required />
 
@@ -162,7 +217,7 @@
 
 <!-- Footer -->
 <footer>
-    &copy; <%= java.time.Year.now() %> PahanaBook. All rights reserved Designed and Developed by Yoonus Anees.
+    &copy; <%= java.time.Year.now() %> PahanaBook. All rights reserved. Designed and Developed by Yoonus Anees.
 </footer>
 
 </body>

@@ -129,7 +129,6 @@
             margin-left: 220px;
             padding: 100px 40px 40px;
             min-height: 100vh;
-            background: linear-gradient(135deg, #f7f9fc, #e3eaf2);
             display: flex;
             justify-content: center;
         }
@@ -138,14 +137,10 @@
         .table-container {
             width: 100%;
             max-width: 960px;
-            background: white;
             padding: 30px 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             transition: box-shadow 0.3s ease;
         }
         .table-container:hover {
-            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
         }
 
         /* Table styling */
@@ -224,6 +219,29 @@
             background-color: #b83127;
             color: white;
         }
+        
+        
+        /* Buttons */
+        .button {
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            user-select: none;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+
+        .edit-btn {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+        }
+
+        .edit-btn:hover {
+            background-color: #1e8449;
+        }
 
         /* Responsive - make table scroll horizontally on small screens */
         @media (max-width: 768px) {
@@ -268,6 +286,7 @@
                 <a class="logo" href="<%= request.getContextPath() %>/admin/dashboard.jsp" class="logo">PahanaBook</a>
     
         <h2>Admin Panel</h2>
+        
         <ul>
             <li><a href="admin/AddBook.jsp">Add Book</a></li>
             <li><a href="admin/Book?action=list">Manage Books</a></li>
@@ -286,7 +305,10 @@
     <!-- Main content area -->
     <main class="main-content">
         <div class="table-container">
+        
             <h2 style="margin-bottom: 20px;">Manage Users</h2>
+                                        <a href="AddBook.jsp" class="button edit-btn" style="margin-bottom: 15px; display: inline-block;">+ Add New User</a>
+            
             <table>
                 <thead>
                     <tr>

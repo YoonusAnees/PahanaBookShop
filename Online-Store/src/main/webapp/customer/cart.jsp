@@ -32,6 +32,34 @@
         position: relative;
         padding-bottom: 70px; /* space for fixed footer */
     }
+    
+          /* Search Form */
+        .search-form {
+            display: flex;
+            align-items: center;
+            margin-left: 550px;
+        }
+        .search-form input[type="text"] {
+            padding: 6px 10px;
+            border-radius: 4px;
+            border: none;
+            font-size: 1rem;
+        }
+        .search-form button {
+            padding: 6px 12px;
+            margin-left: 5px;
+            border: none;
+            border-radius: 4px;
+            background-color: #f1c40f;
+            color: #2c3e50;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .search-form button:hover {
+            background-color: #e67e22;
+            color: white;
+        }
+        
 
     /* Navbar */
       nav {
@@ -205,6 +233,11 @@
 
 <nav>
     <a href="<%= request.getContextPath() %>/customer/dashboard" class="logo">PahanaBook</a>
+      <!-- Search Form -->
+        <form class="search-form" method="get" action="<%= request.getContextPath() %>/Search">
+            <input type="text" name="query" placeholder="Search books or stationery..." required />
+            <button type="submit">Search</button>
+        </form>
     <div class="nav-links">
         <span>Welcome, <%= user.getUsername() %>!</span>
                 <a href="<%= request.getContextPath() %>/customer/dashboard">Home</a>

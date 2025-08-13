@@ -70,15 +70,15 @@
 
         h2 {
             text-align: center;
-            color: #5a2a83;
+            color: #f4d162;
             margin-bottom: 25px;
             font-weight: 700;
             letter-spacing: 1.1px;
         }
 
         .summary-box {
-            background: #ede7f6;
-            border: 2px solid #7b3fe4;
+            background: white;
+            border: 2px solid #f4d162;
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 30px;
@@ -102,7 +102,7 @@
         label {
             font-weight: 600;
             margin-bottom: 8px;
-            color: #5a2a83;
+            color: #f4d162;
             letter-spacing: 0.03em;
         }
 
@@ -117,8 +117,7 @@
         }
         input[type="text"]:focus,
         input[type="email"]:focus {
-            border-color: #7b3fe4;
-            box-shadow: 0 0 8px rgba(123, 63, 228, 0.6);
+            border-color: #f4d162;
         }
 
         input[type="text"]:invalid,
@@ -127,7 +126,7 @@
         }
 
         .btn {
-            background-color: #7b3fe4;
+        background-color: #f4d162;
             color: white;
             font-weight: 700;
             padding: 14px 0;
@@ -139,7 +138,7 @@
         }
 
         .btn:hover {
-            background-color: #5e2db3;
+        background-color: #f1c41f;
             box-shadow: 0 8px 16px rgba(94, 45, 179, 0.4);
         }
 
@@ -157,6 +156,12 @@
                 font-size: 1rem;
                 padding: 12px 0;
             }
+            
+            
+       
+            
+            
+            
         }
     </style>
 </head>
@@ -176,10 +181,10 @@
 </nav>
 
 <div class="container">
-    <h2>Checkout</h2>
+    <h2 style="color: #f4d162">Checkout</h2>
     <div class="summary-box">
-        <p><strong>Total Items:</strong> ${totalItems}</p>
-        <p><strong>Total Price:</strong> Rs. ${totalPrice}</p>
+        <p style="color: black;"><strong>Total Items:</strong> ${totalItems}</p>
+        <p style="color: black;"><strong>Total Price:</strong> Rs. ${totalPrice}</p>
     </div>
 
     <form action="${pageContext.request.contextPath}/OrderController" method="post" novalidate>
@@ -207,5 +212,20 @@
     </form>
 </div>
 
+
+<!-- Footer -->
+<footer style="  flex-shrink: 0; /* don’t shrink */
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
+            font-size: 0.9rem;
+            z-index: 100;">
+    &copy; <%= java.time.Year.now() %> PahanaBook. All rights reserved Designed and Developed by Yoonus Anees.
+</footer>
 </body>
 </html>

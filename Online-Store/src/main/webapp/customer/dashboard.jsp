@@ -20,12 +20,12 @@
         body {
             font-family: Arial, sans-serif;
             background: #f5f5f5;
-            margin: 0; 
+            margin: 0;
             padding: 0;
             color: #333;
         }
 
-        /* Navbar Styles */
+        /* Navbar */
         nav {
             background-color: #2c3e50;
             color: white;
@@ -37,32 +37,50 @@
             top: 0;
             z-index: 10;
         }
+        
+         /* Search Form */
+        .search-form {
+            display: flex;
+            align-items: center;
+            margin-left: 550px;
+        }
+        .search-form input[type="text"] {
+            padding: 6px 10px;
+            border-radius: 4px;
+            border: none;
+            font-size: 1rem;
+        }
+        .search-form button {
+            padding: 6px 12px;
+            margin-left: 5px;
+            border: none;
+            border-radius: 4px;
+            background-color: #f1c40f;
+            color: #2c3e50;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .search-form button:hover {
+            background-color: #e67e22;
+            color: white;
+        }
+        
         .logo {
             font-size: 1.5rem;
             font-weight: bold;
-            letter-spacing: 1px;
             color: #f1c40f;
             text-decoration: none;
-            transition: color 0.3s ease;
         }
-        .logo:hover {
-            color: #e67e22;
-        }
+        .logo:hover { color: #e67e22; }
         .nav-links a {
             color: white;
-            text-decoration: none;
             margin-left: 20px;
-            font-weight: bold;
-            transition: color 0.3s ease;
-        }
-        .nav-links a:hover {
-            color: #f1c40f;
             text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
         }
-        
-        .nav-links .logout:hover {
-               color: red;
-            text-decoration: none;}
+        .nav-links a:hover { color: #f1c40f; }
+        .nav-links .logout:hover { color: red; }
 
         /* Container */
         .container {
@@ -71,7 +89,7 @@
             padding: 20px;
         }
 
-        /* Book Grid */
+      /* Book Grid */
         .book-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -102,33 +120,46 @@
             color: #555;
             font-size: 0.95rem;
         }
-        .book-card button,
-        .book-card form button {
-            margin-top: auto;
-            padding: 10px 0;
-            background: #f4d162;
-            color: white;
+
+        /* Form container to push button to bottom */
+        .card-content {
+            flex: 1 0 auto;
+        }
+        .card-actions {
+            margin-top: 10px;
+        }
+
+        /* Add to Cart Button */
+        .book-card button {
+            padding: 10px;
+            width: 100%;
+            background-color: #f4d162;
+            color: #fff;
             border: none;
             border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-            width: 100%;
+            transition: background-color 0.3s, transform 0.2s;
         }
-        .book-card button:hover,
-        .book-card form button:hover {
-            background: #f1c41f;
+        .book-card button:hover {
+            background-color: #f1c41f;
+            transform: translateY(-2px);
         }
+        .book-card button:active {
+            background-color: #e0b90f;
+            transform: translateY(0);
+        }
+
+        /* Message */
         .message {
             text-align: center;
             color: #666;
             font-size: 1.2rem;
             padding: 40px 0;
         }
-        
-              /* Footer */
+
+        /* Footer */
         footer {
-            flex-shrink: 0; /* don’t shrink */
             background: #2c3e50;
             color: white;
             text-align: center;
@@ -136,9 +167,7 @@
             position: fixed;
             bottom: 0;
             width: 100%;
-            box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
             font-size: 0.9rem;
-            z-index: 100;
         }
     </style>
 </head>
@@ -147,13 +176,16 @@
 <!-- Navbar -->
 <nav>
     <a class="logo" href="<%= request.getContextPath() %>/customer/dashboard">PahanaBook</a>
+    <!-- Search Form -->
+        <form class="search-form" method="get" action="<%= request.getContextPath() %>/Search">
+            <input type="text" name="query" placeholder="Search books or stationery..." required />
+            <button type="submit">Search</button>
+        </form>
     <div class="nav-links">
         <span>Welcome, <%= user.getUsername() %>!</span>
         <a href="<%= request.getContextPath() %>/customer/dashboard">Home</a>
-                <a href="<%= request.getContextPath() %>/customer/dashboard">Books</a>
-        
-<a href="<%= request.getContextPath() %>/customer/stationery">Stationery</a>
-        
+        <a href="<%= request.getContextPath() %>/customer/dashboard">Books</a>
+        <a href="<%= request.getContextPath() %>/customer/stationery">Stationery</a>
         <a href="<%= request.getContextPath() %>/CartController?action=view&customerId=<%= user.getId() %>">Cart</a>
         <a class="logout" href="<%= request.getContextPath() %>/LogoutController">Logout</a>
     </div>
@@ -161,7 +193,6 @@
 
 <!-- Main Content -->
 <div class="container">
-
     <div class="book-grid">
         <% if (bookList == null) { %>
             <p class="message">Book list is not available.</p>
@@ -169,21 +200,22 @@
             <p class="message">No books available.</p>
         <% } else {
             for (Book book : bookList) { %>
-                <div class="book-card" title="<%= book.getTitle() %> by <%= book.getAuthor() %>">
-                    <img src="${pageContext.request.contextPath}/${book.image}" />
-                    <h3><%= book.getTitle() %></h3>
-                    <p>Author: <%= book.getAuthor() %></p>
-                    <p>Price: Rs. <%= book.getPrice() %></p>
-                    <p>Category: <%= book.getCategory() %></p>
-                    <p>Quantity: <%= book.getQuantity() %></p>
-                    
-                    
-
-                    <form method="post" action="<%= request.getContextPath() %>/CartController">
-                        <input type="hidden" name="action" value="add" />
-                        <input type="hidden" name="bookId" value="<%= book.getId() %>" />
-                        <button type="submit">Add to Cart</button>
-                    </form>
+                <div class="book-card">
+                    <div class="card-content">
+                        <img src="<%= request.getContextPath() + book.getImage() %>" alt="<%= book.getTitle() %>" />
+                        <h3><%= book.getTitle() %></h3>
+                        <p><strong>Author:</strong> <%= book.getAuthor() %></p>
+                        <p><strong>Price:</strong> Rs. <%= book.getPrice() %></p>
+                        <p><strong>Category:</strong> <%= book.getCategory() %></p>
+                        <p><strong>Quantity:</strong> <%= book.getQuantity() %></p>
+                    </div>
+                    <div class="card-actions">
+                        <form method="post" action="<%= request.getContextPath() %>/CartController">
+                            <input type="hidden" name="action" value="add" />
+                            <input type="hidden" name="bookId" value="<%= book.getId() %>" />
+                            <button type="submit">Add to Cart</button>
+                        </form>
+                    </div>
                 </div>
         <%  }
         } %>

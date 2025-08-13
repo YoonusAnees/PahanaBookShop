@@ -109,7 +109,7 @@ public class UserController extends HttpServlet {
             }
 
             request.setAttribute("message", "Registration successful. Please login.");
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         } else {
             request.setAttribute("error", "User registration failed.");
             request.getRequestDispatcher("register.jsp").forward(request, response);
@@ -139,7 +139,7 @@ public class UserController extends HttpServlet {
             }
         } else {
             request.setAttribute("error", "Invalid username or password");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/index.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/login.jsp");
             dispatcher.forward(request, response);
         }
     }

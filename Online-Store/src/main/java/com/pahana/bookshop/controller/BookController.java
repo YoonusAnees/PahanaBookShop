@@ -103,7 +103,7 @@ public class BookController extends HttpServlet {
 
         imagePart.write(uploadPath + File.separator + uniqueFileName);
 
-        String imagePath = "uploads/" + uniqueFileName;
+        String imagePath = "/uploads/" + uniqueFileName;
 
         Book book = new Book(title, author, category, price, quantity, imagePath);
         bookService.addBook(book);
@@ -135,7 +135,7 @@ public class BookController extends HttpServlet {
 
             imagePart.write(uploadPath + File.separator + uniqueFileName);
 
-            imagePath = "uploads/" + uniqueFileName; // fixed: always starts with slash
+            imagePath = "/uploads/" + uniqueFileName; // fixed: always starts with slash
         }
 
         Book book = new Book(id, title, author, category, price, quantity, imagePath);

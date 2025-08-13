@@ -49,11 +49,37 @@
             font-weight: bold;
         }
 
+        /* Search Form */
+        .search-form {
+            display: flex;
+            align-items: center;
+            margin-left: 550px;
+        }
+        .search-form input[type="text"] {
+            padding: 6px 10px;
+            border-radius: 4px;
+            border: none;
+            font-size: 1rem;
+        }
+        .search-form button {
+            padding: 6px 12px;
+            margin-left: 5px;
+            border: none;
+            border-radius: 4px;
+            background-color: #f1c40f;
+            color: #2c3e50;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .search-form button:hover {
+            background-color: #e67e22;
+            color: white;
+        }
+
         /* Hero Section */
         .hero {
             position: relative;
-            height: 400px;
-            background-image: url('<%= request.getContextPath() %>/images/banner.jpg');
+            height: 300px;
             background-size: cover;
             background-position: center;
             color: white;
@@ -147,35 +173,6 @@
             text-decoration: underline;
         }
 
-        /* About & Contact Preview */
-        .info-section {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 40px 30px;
-        }
-        .info-section h2 {
-            margin-bottom: 20px;
-            color: #2c3e50;
-        }
-        .info-section p {
-            margin-bottom: 15px;
-            font-size: 1rem;
-            line-height: 1.5;
-            color: #555;
-        }
-        .info-section a {
-            color: #7b3fe4;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .info-section a:hover {
-            text-decoration: underline;
-        }
-
         /* Footer */
         footer {
             flex-shrink: 0;
@@ -197,6 +194,10 @@
 <!-- Navbar -->
 <nav>
     <a class="logo" href="<%= request.getContextPath() %>/index.jsp">PahanaBook</a>
+    <form class="search-form" method="get" action="<%= request.getContextPath() %>/Search">
+        <input type="text" name="query" placeholder="Search books or stationery..." required />
+        <button type="submit">Search</button>
+    </form>
     <div class="nav-links">
         <a href="<%= request.getContextPath() %>/index.jsp" class="active">Home</a>
         <a href="<%= request.getContextPath() %>/Books">Books</a>
@@ -209,41 +210,37 @@
 </nav>
 
 <!-- Hero Section -->
-<div class="hero">
+<div class="hero" style="background-image: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=1200&q=80');">
     <div class="hero-overlay"></div>
     <div class="hero-content">
         <h1>Welcome to PahanaBook</h1>
         <p>Your one-stop destination for books, stationery, and more.</p>
         <a href="<%= request.getContextPath() %>/Books">Browse Books</a>
         <a href="<%= request.getContextPath() %>/stationery">Browse Stationery</a>
-  <%--       <p style="color:red;">Context Path: <%= request.getContextPath() %></p> --%>
-        
     </div>
 </div>
 
 <!-- Featured Categories -->
 <section class="featured-categories">
     <div class="category-card">
-        <img src="<c:url value='/images/books_category.jpg'/>" alt="Books">
+        <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80" alt="Books">
         <h3>Books</h3>
         <p>Explore our wide range of books from various genres and authors.</p>
         <a href="<c:url value='/Books'/>">Browse Books &rarr;</a>
     </div>
     <div class="category-card">
-        <img src="<c:url value='/images/CT012.jpg'/>" alt="Stationery">
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBYOE_MQG9sb1VTrIV86tZKkniMZaE4mu3qg&s" alt="Stationery">
         <h3>Stationery</h3>
         <p>High quality stationery products to support your daily needs.</p>
         <a href="<c:url value='/stationery'/>">Browse Stationery &rarr;</a>
     </div>
     <div class="category-card">
-        <img src="<c:url value='/images/aboutUS.jpg'/>" alt="About Us">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrLSTpGgbL_ieg8ZP07f35U2QOarInQKZDOg&s" alt="About Us">
         <h3>About Us</h3>
         <p>Learn more about PahanaBook and our mission to bring knowledge closer to you.</p>
         <a href="<c:url value='/AboutUs.jsp'/>">Read More &rarr;</a>
     </div>
 </section>
-
-
 
 <!-- Footer -->
 <footer>

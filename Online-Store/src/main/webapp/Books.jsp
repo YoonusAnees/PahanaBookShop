@@ -55,6 +55,33 @@
     color: #f1c40f;
 }
 
+  /* Search Form */
+        .search-form {
+            display: flex;
+            align-items: center;
+            margin-left: 550px;
+        }
+        .search-form input[type="text"] {
+            padding: 6px 10px;
+            border-radius: 4px;
+            border: none;
+            font-size: 1rem;
+        }
+        .search-form button {
+            padding: 6px 12px;
+            margin-left: 5px;
+            border: none;
+            border-radius: 4px;
+            background-color: #f1c40f;
+            color: #2c3e50;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .search-form button:hover {
+            background-color: #e67e22;
+            color: white;
+        }
+
 .nav-links a.active {
     color: #f1c40f;
     font-weight: bold;
@@ -102,7 +129,7 @@
         .book-card button {
             margin-top: auto;
             padding: 10px 0;
-            background: #7b3fe4;
+            background: #f4d162;
             color: white;
             border: none;
             border-radius: 8px;
@@ -111,7 +138,7 @@
             transition: background-color 0.3s ease;
         }
         .book-card button:hover {
-            background: #5e2db3;
+            background: #f1c41f;
         }
         .message {
             text-align: center;
@@ -142,6 +169,12 @@
 <!-- Navbar -->
 <nav>
     <a class="logo" href="<%= request.getContextPath() %>/home.jsp">PahanaBook</a>
+    
+       <!-- Search Form -->
+        <form class="search-form" method="get" action="<%= request.getContextPath() %>/Search">
+            <input type="text" name="query" placeholder="Search books or stationery..." required />
+            <button type="submit">Search</button>
+        </form>
     <div class="nav-links">
     
     
@@ -168,13 +201,15 @@
         <% } else {
             for (Book book : bookList) { %>
                 <div class="book-card" title="<%= book.getTitle() %> by <%= book.getAuthor() %>">
-<img src="${pageContext.request.contextPath}/${book.imagePath}" alt="Book Image" />
+<img src="<%= request.getContextPath() + book.getImage() %>" class="book-image" />
+
                     <h3><%= book.getTitle() %></h3>
                     <p>Author: <%= book.getAuthor() %></p>
                     <p>Price: Rs. <%= book.getPrice() %></p>
-                    <p>Quantity <%= book.getQuantity() %></p>
+           
                     
                     <p>Category: <%= book.getCategory() %></p>
+                             <p>Quantity <%= book.getQuantity() %></p>
                     <button onclick="window.location.href='<%= request.getContextPath() %>/login.jsp'">Add to Cart</button>
                 </div>
         <%  }

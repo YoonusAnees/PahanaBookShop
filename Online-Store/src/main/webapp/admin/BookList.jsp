@@ -173,12 +173,19 @@
             color: #333;
         }
 
-        .book-image {
-            width: 60px;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-        }
+      .book-image {
+    width: 50px;        /* Small thumbnail width */
+    height: 50px;       /* Small thumbnail height */
+    object-fit: cover;  /* Crop nicely without stretching */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+
+.book-image:hover {
+    transform: scale(1.2); /* Optional: zoom effect on hover */
+}
+
 
         /* Buttons */
         .button {
@@ -284,7 +291,7 @@
     <!-- Main content area -->
     <main class="main-content">
         <div class="container">
-            <h2>Book List</h2>
+            <h2>Management Book </h2>
             <a href="AddBook.jsp" class="button edit-btn" style="margin-bottom: 15px; display: inline-block;">+ Add New Book</a>
             <table>
                 <thead>
@@ -294,7 +301,7 @@
                         <th>Title</th>
                         <th>Author</th>
                         <th>Category</th>
-                        <th>Price ($)</th>
+                        <th>Price</th>
                         <th>Quantity</th>
                         <th>Actions</th>
                     </tr>
@@ -304,7 +311,7 @@
                    <tr>
                       <td data-label="ID">${book.id}</td>
                       <td data-label="Image">
-                    <img src="${pageContext.request.contextPath}/uploads${book.image}" />
+<img src="${pageContext.request.contextPath}/${book.image}" class="book-image" alt="${book.title}" />
                       </td>
                       <td data-label="Title">${book.title}</td>
                       <td data-label="Author">${book.author}</td>

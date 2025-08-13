@@ -32,6 +32,34 @@
             top: 0;
             z-index: 10;
         }
+        
+          
+          /* Search Form */
+        .search-form {
+            display: flex;
+            align-items: center;
+            margin-left: 550px;
+        }
+        .search-form input[type="text"] {
+            padding: 6px 10px;
+            border-radius: 4px;
+            border: none;
+            font-size: 1rem;
+        }
+        .search-form button {
+            padding: 6px 12px;
+            margin-left: 5px;
+            border: none;
+            border-radius: 4px;
+            background-color: #f1c40f;
+            color: #2c3e50;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .search-form button:hover {
+            background-color: #e67e22;
+            color: white;
+        }
         .logo {
             font-size: 1.5rem;
             font-weight: bold;
@@ -85,7 +113,7 @@
         .stationery-card form button {
             margin-top: auto;
             padding: 10px 0;
-            background: #7b3fe4;
+            background: #f4d162;
             color: white;
             border: none;
             border-radius: 8px;
@@ -96,7 +124,7 @@
         }
         .stationery-card button:hover,
         .stationery-card form button:hover {
-            background: #5e2db3;
+            background: #f1c41f;
         }
         .message {
             text-align: center;
@@ -123,11 +151,16 @@
 <!-- Navbar -->
 <nav>
     <a class="logo" href="<%= request.getContextPath() %>/customer/dashboard">PahanaBook</a>
+       <!-- Search Form -->
+        <form class="search-form" method="get" action="<%= request.getContextPath() %>/Search">
+            <input type="text" name="query" placeholder="Search books or stationery..." required />
+            <button type="submit">Search</button>
+        </form>
     <div class="nav-links">
     
      <a href="<%= request.getContextPath() %>/index.jsp" >Home</a>
         <a href="<%= request.getContextPath() %>/Books">Books</a>
-<a href="<%= request.getContextPath() %>/stationery" class="active">Stationery</a>
+<a href="<%= request.getContextPath() %>/stationery"  class="active"  >Stationery</a>
         <a href="<%= request.getContextPath() %>/AboutUs.jsp">About Us</a>
         <a href="<%= request.getContextPath() %>/ContactUs.jsp">Contact Us</a>
         <a href="<%= request.getContextPath() %>/login.jsp">Login</a>
