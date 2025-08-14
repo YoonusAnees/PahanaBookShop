@@ -14,16 +14,23 @@ public class BookDAO {
     private static final String UPDATE_BOOK_SQL = "UPDATE books SET title = ?, author = ?, category = ?, price = ?, quantity = ?, image = ? WHERE id = ?";
     private static final String DELETE_BOOK_SQL = "DELETE FROM books WHERE id = ?";
 
-    public void insertBook(Book book) throws SQLException {
+    public boolean insertBook(Book book) {
         try (Connection conn = DBConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(INSERT_BOOK_SQL)) {
+
             ps.setString(1, book.getTitle());
             ps.setString(2, book.getAuthor());
             ps.setString(3, book.getCategory());
             ps.setDouble(4, book.getPrice());
             ps.setInt(5, book.getQuantity());
             ps.setString(6, book.getImage());
-            ps.executeUpdate();
+
+            int rowsInserted = ps.executeUpdate();
+            return rowsInserted > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 

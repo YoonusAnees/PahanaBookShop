@@ -8,7 +8,23 @@ import java.util.List;
 
 public class BookService {
 
-    private final BookDAO bookDAO = new BookDAO();
+    private static BookService instance;      
+    private final BookDAO bookDAO;             
+
+    private BookService() {
+        this.bookDAO = new BookDAO();
+    }
+
+    public static BookService getInstance() {
+        if (instance == null) {
+            synchronized (BookService.class) {
+                if (instance == null) {
+                    instance = new BookService();
+                }
+            }
+        }
+        return instance;
+    }
 
     public void addBook(Book book) throws SQLException {
         bookDAO.insertBook(book);
@@ -21,8 +37,8 @@ public class BookService {
     public List<Book> getAllBooks() throws SQLException {
         return bookDAO.selectAllBooks();
     }
-    
-    public List<Book> getAllBookss() {
+
+    public List<Book> getAllBooksSafe() {
         try {
             return bookDAO.selectAllBooks();
         } catch (Exception e) {

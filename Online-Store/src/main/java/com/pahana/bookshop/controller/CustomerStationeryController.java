@@ -21,7 +21,7 @@ public class CustomerStationeryController extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        stationeryService = new StationeryService();
+        stationeryService = StationeryService.getInstance();
     }
 
     @Override

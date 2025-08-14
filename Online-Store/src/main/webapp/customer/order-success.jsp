@@ -5,6 +5,8 @@
 <head>
     <meta charset="UTF-8" />
     <title>Order Success</title>
+        <link rel="icon" type="image/png"  href="https://img.freepik.com/free-vector/gradient-p-logo-template_23-2149372725.jpg?w=32&q=80" />
+    
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

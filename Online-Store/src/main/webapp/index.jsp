@@ -1,11 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>PahanaBook - Online Bookstore</title>
+    <title>PahanaBook - Home</title>
+    <link rel="icon" type="image/png"  href="https://img.freepik.com/free-vector/gradient-p-logo-template_23-2149372725.jpg?w=32&q=80" />
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -19,7 +19,7 @@
         nav {
             background-color: #2c3e50;
             color: white;
-            padding: 15px 30px;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -33,6 +33,10 @@
             letter-spacing: 1px;
             color: #f1c40f;
             text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
         }
         .nav-links a {
             color: white;
@@ -49,20 +53,66 @@
             font-weight: bold;
         }
 
+        /* Burger Menu */
+        .burger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+        .burger div {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 4px;
+            transition: all 0.3s ease;
+        }
+
+        /* Mobile Menu (Centered Modal Style) */
+        .nav-links.mobile {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(44,62,80,0.95);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 999;
+        }
+        .nav-links.mobile a {
+            margin: 15px 0;
+            text-align: center;
+            color: white;
+            font-size: 1.3rem;
+        }
+        .nav-links.mobile.show {
+            display: flex;
+        }
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
         /* Search Form */
         .search-form {
             display: flex;
             align-items: center;
-            margin-left: 550px;
+            margin-left: 400px;
         }
         .search-form input[type="text"] {
-            padding: 6px 10px;
+            padding: 8px 10px;
             border-radius: 4px;
             border: none;
             font-size: 1rem;
         }
         .search-form button {
-            padding: 6px 12px;
+            padding: 9px 12px;
             margin-left: 5px;
             border: none;
             border-radius: 4px;
@@ -79,7 +129,7 @@
         /* Hero Section */
         .hero {
             position: relative;
-            height: 300px;
+            height: 350px;
             background-size: cover;
             background-position: center;
             color: white;
@@ -127,15 +177,17 @@
         /* Featured Categories */
         .featured-categories {
             max-width: 1200px;
-            margin: 50px auto;
+            margin: 40px auto;
             display: flex;
             gap: 30px;
             justify-content: center;
             text-align: center;
             padding: 0 20px;
+            flex-wrap: wrap;
         }
         .category-card {
             flex: 1;
+            min-width: 250px;
             background: white;
             padding: 20px;
             border-radius: 12px;
@@ -173,19 +225,53 @@
             text-decoration: underline;
         }
 
+        /* Map Section */
+        .map-section {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .map-section h2 {
+            margin-bottom: 20px;
+            color: #34495e;
+        }
+        .map-container {
+            width: 100%;
+            height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
         /* Footer */
         footer {
-            flex-shrink: 0;
             background: #2c3e50;
             color: white;
             text-align: center;
             padding: 15px 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
             font-size: 0.9rem;
-            z-index: 100;
+            margin-top: 40px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .search-form {
+                display: none;
+            }
+            .nav-links {
+                display: none;
+            }
+            .burger {
+                display: flex;
+            }
         }
     </style>
 </head>
@@ -198,7 +284,7 @@
         <input type="text" name="query" placeholder="Search books or stationery..." required />
         <button type="submit">Search</button>
     </form>
-    <div class="nav-links">
+    <div class="nav-links" id="navLinks">
         <a href="<%= request.getContextPath() %>/index.jsp" class="active">Home</a>
         <a href="<%= request.getContextPath() %>/Books">Books</a>
         <a href="<%= request.getContextPath() %>/stationery">Stationery</a>
@@ -207,7 +293,24 @@
         <a href="<%= request.getContextPath() %>/login.jsp">Login</a>
         <a href="<%= request.getContextPath() %>/register.jsp">Register</a>
     </div>
+    <div class="burger" onclick="openMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
 </nav>
+
+<!-- Mobile Nav -->
+<div class="nav-links mobile" id="mobileMenu">
+    <div class="close-btn" onclick="closeMenu()">✖</div>
+    <a href="<%= request.getContextPath() %>/index.jsp" class="active">Home</a>
+    <a href="<%= request.getContextPath() %>/Books">Books</a>
+    <a href="<%= request.getContextPath() %>/stationery">Stationery</a>
+    <a href="<%= request.getContextPath() %>/AboutUs.jsp">About Us</a>
+    <a href="<%= request.getContextPath() %>/ContactUs.jsp">Contact Us</a>
+    <a href="<%= request.getContextPath() %>/login.jsp">Login</a>
+    <a href="<%= request.getContextPath() %>/register.jsp">Register</a>
+</div>
 
 <!-- Hero Section -->
 <div class="hero" style="background-image: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=1200&q=80');">
@@ -229,7 +332,7 @@
         <a href="<c:url value='/Books'/>">Browse Books &rarr;</a>
     </div>
     <div class="category-card">
-<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBYOE_MQG9sb1VTrIV86tZKkniMZaE4mu3qg&s" alt="Stationery">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBYOE_MQG9sb1VTrIV86tZKkniMZaE4mu3qg&s" alt="Stationery">
         <h3>Stationery</h3>
         <p>High quality stationery products to support your daily needs.</p>
         <a href="<c:url value='/stationery'/>">Browse Stationery &rarr;</a>
@@ -242,10 +345,31 @@
     </div>
 </section>
 
+<!-- Map Section -->
+<section class="map-section">
+    <h2>Find Us in Akurana, Kandy</h2>
+    <div class="map-container">
+        <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3962.506720772391!2d80.61068297499386!3d7.356767314362662!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae3679ac26dff13%3A0x54c2f7a4dfdc0fb6!2sAkurana%2C%20Sri%20Lanka!5e0!3m2!1sen!2slk!4v1693900999999"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+</section>
+
 <!-- Footer -->
 <footer>
-    &copy; <%= java.time.Year.now() %> PahanaBook. All rights reserved Designed and Developed by Yoonus Anees.
+    &copy; <%= java.time.Year.now() %> PahanaBook. All rights reserved | Designed and Developed by Yoonus Anees.
 </footer>
+
+<script>
+    function openMenu() {
+        document.getElementById("mobileMenu").classList.add("show");
+    }
+    function closeMenu() {
+        document.getElementById("mobileMenu").classList.remove("show");
+    }
+</script>
 
 </body>
 </html>

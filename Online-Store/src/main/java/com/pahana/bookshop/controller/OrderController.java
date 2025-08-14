@@ -52,7 +52,7 @@ public class OrderController extends HttpServlet {
             return;
         }
 
-        CartService cartService = new CartService();
+        CartService cartService = CartService.getInstance();
         List<CartItem> cart = cartService.getCartItems(customer.getId());
 
         if (cart == null || cart.isEmpty()) {
@@ -93,8 +93,9 @@ public class OrderController extends HttpServlet {
         Order order = new Order(customer.getId(), fullName, email, address, orderItems);
 
         try (Connection conn = DBConnectionFactory.getConnection()) {
-            OrderService orderService = new OrderService(conn);
-            int orderId = orderService.placeOrder(order);
+        	OrderService orderService = OrderService.getInstance();
+        	int orderId = orderService.placeOrder(order);
+
             cartService.checkout(customer.getId());
             session.removeAttribute("cart");
             request.setAttribute("orderId", orderId);

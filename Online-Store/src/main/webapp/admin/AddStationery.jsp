@@ -216,6 +216,8 @@
             <li><a href="${pageContext.request.contextPath}/User?action=list">Manage Users</a></li>
             <li><a href="AddStationery.jsp" class="active">Add Stationery</a></li>
             <li><a href="Stationery?action=list">Manage Stationery</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/order-history">Orders History</a></li>
+            
         </ul>
     </nav>
 

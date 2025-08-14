@@ -7,12 +7,9 @@ public class Customer {
 	    private String name;
 	    private String address;
 	    private String telephone;
-	    private int userId; // FK to User
+	    private int userId; 
 	    
-	    
-	    
-	    
-	    
+	      
 		public Customer() {
 		
 		}

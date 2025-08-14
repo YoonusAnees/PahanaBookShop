@@ -5,43 +5,107 @@
 <head>
 <meta charset="UTF-8" />
 <title>Register - PahanaBook</title>
+    <link rel="icon" type="image/png"  href="https://img.freepik.com/free-vector/gradient-p-logo-template_23-2149372725.jpg?w=32&q=80" />
+
 <style>
   body {
-    font-family: Arial, sans-serif;
-    background: #f5f5f5;
-    margin: 0;
-    padding: 0;
-    color: #333;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+     font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            color: #333;
   }
 
   /* Navbar */
-  nav {
-    background-color: #2c3e50;
-    color: white;
-    padding: 10px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  }
-  .logo {
-    font-size: 1.5rem;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    color: #f1c40f;
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-  .logo:hover { color: #e67e22; }
-  .nav-links { display: flex; gap: 20px; }
-  .nav-links a { color: white; text-decoration: none; font-weight: bold; }
-  .nav-links a.active { color: #f1c40f; }
+        nav {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #f1c40f;
+            text-decoration: none;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: #f1c40f;
+        }
+        .nav-links a.active {
+            color: #f1c40f;
+            font-weight: bold;
+        }
+
+        /* Burger Menu */
+        .burger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+        .burger div {
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 4px;
+            transition: all 0.3s ease;
+        }
+
+        /* Mobile Menu (Centered Modal Style) */
+        .nav-links.mobile {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(44,62,80,0.95);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 999;
+        }
+        .nav-links.mobile a {
+            margin: 15px 0;
+            text-align: center;
+            color: white;
+            font-size: 1.3rem;
+        }
+        .nav-links.mobile.show {
+            display: flex;
+        }
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+        
+        .nav-links.mobile a {
+            margin: 15px 0;
+            text-align: center;
+            color: white;
+            font-size: 1.3rem;
+        }
 
   /* Register card */
   .main {
@@ -49,11 +113,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px 20px;
+    padding: 10px 20px;
   }
   .container {
     background: white;
-    padding: 30px 25px;
+    padding: 7px 25px;
     border-radius: 10px;
     width: 360px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.15);
@@ -62,7 +126,7 @@
   }
   .container:hover { transform: translateY(-5px); }
 
-  h2 { color: #2c3e50; margin-bottom: 20px; }
+  h2 { color: #2c3e50; margin-bottom: 5px; }
 
   input[type="text"],
   input[type="email"],
@@ -96,7 +160,7 @@
   .error-message { color: red; margin-top: 10px; font-weight: bold; }
 
   a { display: block; margin-top: 15px; color: #f1c40f; text-decoration: none; }
-  a:hover { text-decoration: underline; color: #e67e22; }
+  a:hover {  color: #f1c40f; }
 
   footer {
     background: #2c3e50;
@@ -105,13 +169,47 @@
     padding: 15px;
     font-size: 0.9rem;
   }
+  
+  /* Responsive */
+        @media (max-width: 768px) {
+            .search-form {
+                display: none;
+            }
+            .nav-links {
+                display: none;
+            }
+            .burger {
+                display: flex;
+            }
+        }
 </style>
 </head>
 <body>
 
+
+<!-- Navbar -->
 <nav>
-  <a class="logo" href="<%= request.getContextPath() %>/index.jsp">PahanaBook</a>
-  <div class="nav-links">
+    <a class="logo" href="<%= request.getContextPath() %>/index.jsp">PahanaBook</a>
+   
+    <div class="nav-links" id="navLinks">
+        <a href="<%= request.getContextPath() %>/index.jsp" >Home</a>
+        <a href="<%= request.getContextPath() %>/Books">Books</a>
+        <a href="<%= request.getContextPath() %>/stationery">Stationery</a>
+        <a href="<%= request.getContextPath() %>/AboutUs.jsp">About Us</a>
+        <a href="<%= request.getContextPath() %>/ContactUs.jsp">Contact Us</a>
+        <a href="<%= request.getContextPath() %>/login.jsp">Login</a>
+        <a href="<%= request.getContextPath() %>/register.jsp" class="active">Register</a>
+    </div>
+    <div class="burger" onclick="openMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</nav>
+
+<!-- Mobile Nav -->
+<div class="nav-links mobile" id="mobileMenu">
+    <div class="close-btn" onclick="closeMenu()">✖</div>
     <a href="<%= request.getContextPath() %>/index.jsp">Home</a>
     <a href="<%= request.getContextPath() %>/Books">Books</a>
     <a href="<%= request.getContextPath() %>/stationery">Stationery</a>
@@ -119,8 +217,7 @@
     <a href="<%= request.getContextPath() %>/ContactUs.jsp">Contact Us</a>
     <a href="<%= request.getContextPath() %>/login.jsp">Login</a>
     <a href="<%= request.getContextPath() %>/register.jsp" class="active">Register</a>
-  </div>
-</nav>
+</div>
 
 <div class="main">
   <div class="container">
@@ -166,6 +263,15 @@
     document.getElementById("registerMsg").style.display = "block";
     return true;
   }
+  
+  
+  function openMenu() {
+      document.getElementById("mobileMenu").classList.add("show");
+  }
+  function closeMenu() {
+      document.getElementById("mobileMenu").classList.remove("show");
+  }
+
 </script>
 
 </body>

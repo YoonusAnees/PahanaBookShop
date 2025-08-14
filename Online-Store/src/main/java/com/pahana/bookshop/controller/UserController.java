@@ -27,9 +27,8 @@ public class UserController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-
         if (action == null) {
-            response.sendRedirect("/index.jsp");
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
         }
 
@@ -44,7 +43,7 @@ public class UserController extends HttpServlet {
                 updateUser(request, response);
                 break;
             default:
-                response.sendRedirect("index.jsp");
+                response.sendRedirect(request.getContextPath() + "/index.jsp");
         }
     }
 
@@ -52,9 +51,8 @@ public class UserController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-
         if (action == null) {
-            response.sendRedirect("/index.jsp");
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
             return;
         }
 
@@ -69,69 +67,56 @@ public class UserController extends HttpServlet {
                 showEditForm(request, response);
                 break;
             default:
-                response.sendRedirect("/index.jsp");
+                response.sendRedirect(request.getContextPath() + "/index.jsp");
         }
     }
 
-   
-    
-    
     private void insertUser(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         String username = request.getParameter("username");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String role = request.getParameter("role");
 
-        // Customer-specific fields
         String accountNumber = request.getParameter("accountNumber");
         String name = request.getParameter("name");
         String address = request.getParameter("address");
         String telephone = request.getParameter("telephone");
 
         User user = new User(username, email, password, role == null || role.isEmpty() ? "customer" : role);
-
         int userId = userDAO.insertUserAndReturnId(user);
 
         if (userId > 0) {
-            // If role is customer, insert into customer table
             if (user.getRole().equalsIgnoreCase("customer")) {
                 Customer customer = new Customer(0, accountNumber, name, address, telephone, userId);
                 CustomerDAO customerDAO = new CustomerDAO();
                 boolean inserted = customerDAO.insertCustomer(customer);
-
                 if (!inserted) {
                     request.setAttribute("error", "Customer registration failed.");
-                    request.getRequestDispatcher("register.jsp").forward(request, response);
+                    request.getRequestDispatcher("/register.jsp").forward(request, response);
                     return;
                 }
             }
-
-            request.setAttribute("message", "Registration successful. Please login.");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            HttpSession session = request.getSession();
+            session.setAttribute("message", "Registration successful! Please login.");
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
         } else {
             request.setAttribute("error", "User registration failed.");
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+            request.getRequestDispatcher("/register.jsp").forward(request, response);
         }
     }
 
-    
-    
-    
-    
-    
-
     private void loginUser(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String username = request.getParameter("username");
+        String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        User user = userDAO.getUserByUsername(username);
+        User user = userDAO.getUserByEmail(email);
 
         if (user != null && user.getPassword().equals(password)) {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
+            session.setAttribute("message", "Login successful! Welcome, " + user.getUsername());
             if ("admin".equalsIgnoreCase(user.getRole())) {
                 response.sendRedirect(request.getContextPath() + "/admin/dashboard.jsp");
             } else {
@@ -146,19 +131,17 @@ public class UserController extends HttpServlet {
 
     private void listUsers(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	List<User> userList = userDAO.getAllUsers();  // or your DAO method to fetch users
-    	request.setAttribute("userList", userList);
-    	RequestDispatcher dispatcher = request.getRequestDispatcher("admin/manageUsers.jsp"); // or whatever your JSP is
-    	dispatcher.forward(request, response);
+        List<User> userList = userDAO.getAllUsers();
+        request.setAttribute("userList", userList);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/manageUsers.jsp");
+        dispatcher.forward(request, response);
     }
-
-
 
     private void deleteUser(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         userDAO.deleteUser(id);
-        response.sendRedirect("User?action=list");
+        response.sendRedirect(request.getContextPath() + "/User?action=list");
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response)
@@ -173,10 +156,9 @@ public class UserController extends HttpServlet {
             request.setAttribute("customer", customer);
         }
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher("admin/editUser.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/editUser.jsp");
         dispatcher.forward(request, response);
     }
-
 
     private void updateUser(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
@@ -187,11 +169,9 @@ public class UserController extends HttpServlet {
             String password = request.getParameter("password");
             String role = request.getParameter("role");
 
-            // Create User object and update it
             User user = new User(id, username, email, password, role);
-            userDAO.updateUser(user); // Update user in the users table
+            userDAO.updateUser(user);
 
-            // If the user is a customer, also update the customer-specific data
             if ("customer".equalsIgnoreCase(role)) {
                 String accountNumber = request.getParameter("accountNumber");
                 String address = request.getParameter("address");
@@ -204,26 +184,13 @@ public class UserController extends HttpServlet {
                 customer.setTelephone(telephone);
 
                 CustomerDAO customerDAO = new CustomerDAO();
-                boolean updated = customerDAO.updateCustomerByUserId(customer);
-
-                if (!updated) {
-                    // Optionally, you can set an error message in request scope and redirect
-                    System.err.println("Failed to update customer details.");
-                    // You can also forward to an error page if needed
-                }
+                customerDAO.updateCustomerByUserId(customer);
             }
 
-            // Redirect back to user list page
-            response.sendRedirect("User?action=list");
-
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid user ID");
+            response.sendRedirect(request.getContextPath() + "/User?action=list");
         } catch (Exception e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Something went wrong");
         }
     }
-
-
 }

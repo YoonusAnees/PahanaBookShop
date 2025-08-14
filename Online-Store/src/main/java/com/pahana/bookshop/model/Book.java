@@ -7,7 +7,7 @@ public class Book {
     private String category;
     private double price;
     private int quantity;
-    private String image; // path or filename for the image
+    private String image; 
 
     public Book() {}
 

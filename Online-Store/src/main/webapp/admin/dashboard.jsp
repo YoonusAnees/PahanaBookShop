@@ -14,10 +14,14 @@
     BookDAO bookDAO = new BookDAO();
     UserDAO userDAO = new UserDAO();
     StationeryDAO stationeryDAO = new StationeryDAO();
+    OrderDAO orderDAO = new OrderDAO();
+
     
     int bookCount = bookDAO.selectAllBooks().size();
     int userCount = userDAO.getAllUsers().size();
     int stationeryCount = stationeryDAO.getAllStationery().size();
+    int orderCount = orderDAO.getAllOrders().size(); 
+
     
    
 %>
@@ -130,7 +134,7 @@
             left: 220px;
             top: 0;
             right: 0;
-            height: 60px;
+            height: 80px;
             background: linear-gradient(90deg, #34495e, #2c3e50);
             color: #ecf0f1;
             display: flex;
@@ -264,9 +268,8 @@
             <li><a href="${pageContext.request.contextPath}/User?action=list">Manage Users</a></li>
             <li><a href="AddStationery.jsp">Add Stationery</a></li>
             <li><a href="Stationery?action=list">Manage Stationery</a></li>
-            <li><a href="${pageContext.request.contextPath}/admin/orders?action=view&id=${order.id}">View</a>
 </li>
-            <li><a href="${pageContext.request.contextPath}/admin/orders">Manage Orders</a>
+<li><a href="${pageContext.request.contextPath}/admin/order-history">Orders History</a></li>
             </li>
         </ul>
     </nav>
@@ -296,6 +299,12 @@
                 <div class="number"><%= stationeryCount %></div>
                 <div class="label">Stationery Items</div>
             </a>
+            
+            <a href="${pageContext.request.contextPath}/admin/order-history" class="widget widget-orders">
+             <div class="number"><%= orderCount %></div>
+           <div class="label">Total Orders</div>
+</a>
+            
            
         </div>
     </main>

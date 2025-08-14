@@ -22,7 +22,12 @@ import java.util.UUID;
 public class BookController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private final BookService bookService = new BookService();
+    private BookService bookService;  
+    
+    @Override
+    public void init() throws ServletException {
+        bookService = BookService.getInstance(); 
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

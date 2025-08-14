@@ -14,7 +14,7 @@ import java.util.List;
 
 @WebServlet("/CartController")
 public class CartController extends HttpServlet {
-    private final CartService cartService = new CartService();
+    private final CartService cartService = CartService.getInstance();
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
@@ -42,6 +42,8 @@ public class CartController extends HttpServlet {
         String action = request.getParameter("action");
         if ("add".equals(action)) {
             addToCart(request, response);
+        } else if ("update".equals(action)) {
+            updateQuantity(request, response);
         }
     }
 
@@ -137,6 +139,15 @@ public class CartController extends HttpServlet {
         request.setAttribute("totalPrice", totalPrice);
         request.setAttribute("customerId", customerId);
         request.getRequestDispatcher("customer/checkout.jsp").forward(request, response);
+    }
+    
+    private void updateQuantity(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int cartId = Integer.parseInt(request.getParameter("cartId"));
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
+        int customerId = Integer.parseInt(request.getParameter("customerId"));
+        
+        cartService.updateQuantity(cartId, quantity);
+        response.sendRedirect("CartController?action=view&customerId=" + customerId);
     }
 
 } 

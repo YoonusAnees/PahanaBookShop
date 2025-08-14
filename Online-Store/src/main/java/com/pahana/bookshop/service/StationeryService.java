@@ -8,7 +8,27 @@ import java.util.List;
 
 public class StationeryService {
 
-    private final StationeryDAO stationeryDAO = new StationeryDAO();
+    private static StationeryService instance;
+    private final StationeryDAO stationeryDAO;
+
+    
+    private StationeryService() {
+        this.stationeryDAO = new StationeryDAO();
+    }
+
+    // Public method to get the singleton instance
+    public static StationeryService getInstance() {
+        if (instance == null) {
+            synchronized (StationeryService.class) {
+                if (instance == null) {
+                    instance = new StationeryService();
+                }
+            }
+        }
+        return instance;
+    }
+
+    // Service methods
 
     public void addStationery(Stationery stationery) throws SQLException {
         stationeryDAO.insertStationery(stationery);
@@ -21,8 +41,7 @@ public class StationeryService {
     public List<Stationery> getAllStationery() throws SQLException {
         return stationeryDAO.getAllStationery();
     }
-    
-    // Optional method that catches exceptions and returns null if failure (like in BookService)
+
     public List<Stationery> getAllStationerySafe() {
         try {
             return stationeryDAO.getAllStationery();

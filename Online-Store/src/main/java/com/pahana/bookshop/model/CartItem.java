@@ -6,13 +6,11 @@ public class CartItem {
     private Book book;
     private Stationery stationery;
     private int quantity;
-    private Integer bookId;      // nullable
-    private Integer stationeryId; // nullable
+    private Integer bookId;      
+    private Integer stationeryId; 
 
-    // Constructors
     public CartItem() {}
 
-    // For books
     public CartItem(int id, int customerId, Book book, int quantity) {
         this.id = id;
         this.customerId = customerId;
@@ -21,7 +19,6 @@ public class CartItem {
         this.bookId = book != null ? book.getId() : null;
     }
 
-    // For stationery
     public CartItem(int id, int customerId, Stationery stationery, int quantity) {
         this.id = id;
         this.customerId = customerId;
@@ -30,7 +27,6 @@ public class CartItem {
         this.stationeryId = stationery != null ? stationery.getId() : null;
     }
 
-    // Getters and setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

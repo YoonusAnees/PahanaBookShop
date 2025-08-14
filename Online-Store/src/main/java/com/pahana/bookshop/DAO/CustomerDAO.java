@@ -5,10 +5,18 @@ import java.sql.*;
 
 public class CustomerDAO {
 
+    private static final String INSERT_CUSTOMER_SQL =
+        "INSERT INTO customers (accountNumber, name, address, telephone, userId) VALUES (?, ?, ?, ?, ?)";
+    private static final String SELECT_CUSTOMER_BY_USERID_SQL =
+        "SELECT * FROM customers WHERE userId = ?";
+    private static final String SELECT_CUSTOMER_ID_BY_USERID_SQL =
+        "SELECT id FROM customers WHERE userId = ?";
+    private static final String UPDATE_CUSTOMER_BY_USERID_SQL =
+        "UPDATE customers SET accountNumber = ?, address = ?, telephone = ? WHERE userId = ?";
+
     public boolean insertCustomer(Customer customer) {
-        String sql = "INSERT INTO customers (accountNumber, name, address, telephone, userId) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DBConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(INSERT_CUSTOMER_SQL)) {
 
             stmt.setString(1, customer.getAccountNumber());
             stmt.setString(2, customer.getName());
@@ -24,11 +32,10 @@ public class CustomerDAO {
             return false;
         }
     }
-    
+
     public Customer getCustomerByUserId(int userId) {
-        String sql = "SELECT * FROM customers WHERE userId = ?";
         try (Connection conn = DBConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(SELECT_CUSTOMER_BY_USERID_SQL)) {
 
             stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
@@ -50,28 +57,26 @@ public class CustomerDAO {
 
         return null;
     }
-    
+
     public int getCustomerIdByUserId(int userId) {
-        String sql = "SELECT id FROM customers WHERE userId = ?";
         try (Connection conn = DBConnectionFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, userId);
-            ResultSet rs = ps.executeQuery();
+             PreparedStatement stmt = conn.prepareStatement(SELECT_CUSTOMER_ID_BY_USERID_SQL)) {
+
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return rs.getInt("id");
             }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return -1;  // or throw exception if customer not found
+        return -1; // or throw exception if customer not found
     }
 
-
-    
     public boolean updateCustomerByUserId(Customer customer) {
-        String sql = "UPDATE customers SET accountNumber = ?, address = ?, telephone = ? WHERE userId = ?";
         try (Connection conn = DBConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(UPDATE_CUSTOMER_BY_USERID_SQL)) {
 
             stmt.setString(1, customer.getAccountNumber());
             stmt.setString(2, customer.getAddress());
@@ -86,5 +91,7 @@ public class CustomerDAO {
             return false;
         }
     }
+    
+    
 
 }

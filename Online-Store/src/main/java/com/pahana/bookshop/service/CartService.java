@@ -5,7 +5,24 @@ import com.pahana.bookshop.model.CartItem;
 import java.util.List;
 
 public class CartService {
-    private final CartDAO cartDAO = new CartDAO();
+
+    private static CartService instance;
+    private final CartDAO cartDAO;
+
+    private CartService() {
+        this.cartDAO = new CartDAO();
+    }
+
+    public static CartService getInstance() {
+        if (instance == null) {
+            synchronized (CartService.class) {
+                if (instance == null) {
+                    instance = new CartService();
+                }
+            }
+        }
+        return instance;
+    }
 
     public void addToCart(int customerId, Integer bookId, Integer stationeryId, int quantity) {
         CartItem existingItem = cartDAO.findCartItem(customerId, bookId, stationeryId);
@@ -43,5 +60,8 @@ public class CartService {
             cartDAO.reduceBookStock(item.getBook().getId(), item.getQuantity());
         }
     }
-
+    
+    public void updateQuantity(int cartId, int quantity) {
+        cartDAO.updateQuantity(cartId, quantity);
+    }
 }

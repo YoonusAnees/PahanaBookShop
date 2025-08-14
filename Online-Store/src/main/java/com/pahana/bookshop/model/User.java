@@ -14,7 +14,6 @@ public class User {
 	
 	}
 
-	// Constructor for new user (without id)
     public User(String username, String email, String password, String role) {
         this.username = username;
         this.email = email;
@@ -22,7 +21,6 @@ public class User {
         this.role = role;
     }
 
-    // Constructor with id (for updates)
     public User(int id, String username, String email, String password, String role) {
         this.id = id;
         this.username = username;
@@ -31,7 +29,6 @@ public class User {
         this.role = role;
     }
 
-    // Getters and setters (include email)
 
     public int getId() {
         return id;

@@ -97,7 +97,7 @@
         .top-header {
             position: fixed;
             left: 220px; top: 0; right: 0;
-            height: 60px;
+            height: 80px;
             background-color: #34495e;
             color: #ecf0f1;
             display: flex;
@@ -127,7 +127,7 @@
         /* Main content */
         .main-content {
             margin-left: 220px;
-            padding: 100px 40px 40px;
+            padding: 80px 40px 40px;
             min-height: 100vh;
             background: linear-gradient(135deg, #f7f9fc, #e3eaf2);
             display: flex;
@@ -278,7 +278,9 @@
             <li><a href="Book?action=list" class="active">Manage Books</a></li>
             <li><a href="${pageContext.request.contextPath}/User?action=list">Manage Users</a></li>
             <li><a href="AddStationery.jsp">Add Stationery</a></li>
-            <li><a href="Stationery?action=list">Manage Stationery</a></li>
+            <li><a href="Stationery?action=list">Manage Stationery</a></li> 
+            <li><a href="${pageContext.request.contextPath}/admin/order-history">Orders History</a></li>
+            
         </ul>
     </nav>
 

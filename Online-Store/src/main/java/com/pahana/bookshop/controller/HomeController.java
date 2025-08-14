@@ -22,15 +22,15 @@ public class HomeController extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        bookService = new BookService();
-        stationeryService = new StationeryService();
+        bookService = BookService.getInstance(); 
+        stationeryService = StationeryService.getInstance();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        List<Book> bookList = bookService.getAllBookss(); // Fetch all books safely
+        List<Book> bookList = bookService.getAllBooksSafe(); // Fetch all books safely
         request.setAttribute("bookList", bookList);
 
         List<Stationery> stationeryList = stationeryService.getAllStationerySafe(); // Fetch all stationery safely
