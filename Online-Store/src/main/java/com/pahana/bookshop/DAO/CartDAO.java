@@ -56,14 +56,14 @@ public class CartDAO {
 
 	                    cartItems.add(item);
 
-	                    // Debug output - remove or comment out in production
-	                    System.out.println("CartItem id=" + item.getId() + ", quantity=" + item.getQuantity());
-	                    if (item.getBook() != null) {
-	                        System.out.println("  Book: " + item.getBook().getTitle() + ", price: " + item.getBook().getPrice());
-	                    }
-	                    if (item.getStationery() != null) {
-	                        System.out.println("  Stationery: " + item.getStationery().getName() + ", price: " + item.getStationery().getPrice());
-	                    }
+//	                    // Debug output - remove or comment out in production
+//	                    System.out.println("CartItem id=" + item.getId() + ", quantity=" + item.getQuantity());
+//	                    if (item.getBook() != null) {
+//	                        System.out.println("  Book: " + item.getBook().getTitle() + ", price: " + item.getBook().getPrice());
+//	                    }
+//	                    if (item.getStationery() != null) {
+//	                        System.out.println("  Stationery: " + item.getStationery().getName() + ", price: " + item.getStationery().getPrice());
+//	                    }
 	                }
 	            }
 	        } catch (SQLException e) {
@@ -84,7 +84,6 @@ public class CartDAO {
 		    try (Connection conn = DBConnectionFactory.getConnection();
 		         PreparedStatement ps = conn.prepareStatement(sql)) {
 		        ps.setInt(1, customerId);
-		        // For bookId parameters
 		        if (bookId != null) {
 		            ps.setInt(2, bookId);
 		            ps.setInt(3, bookId);
@@ -92,7 +91,6 @@ public class CartDAO {
 		            ps.setNull(2, Types.INTEGER);
 		            ps.setNull(3, Types.INTEGER);
 		        }
-		        // For stationeryId parameters
 		        if (stationeryId != null) {
 		            ps.setInt(4, stationeryId);
 		            ps.setInt(5, stationeryId);

@@ -44,13 +44,13 @@
             margin-left: 550px;
         }
         .search-form input[type="text"] {
-            padding: 6px 10px;
+            padding: 8px 10px;
             border-radius: 4px;
             border: none;
             font-size: 1rem;
         }
         .search-form button {
-            padding: 6px 12px;
+            padding: 9px 12px;
             margin-left: 5px;
             border: none;
             border-radius: 4px;
@@ -162,7 +162,7 @@
 <nav>
     <a class="logo" href="<%= request.getContextPath() %>/customer/dashboard">PahanaBook</a>
     <!-- Search Form -->
-        <form class="search-form" method="get" action="<%= request.getContextPath() %>/Search">
+         <form class="search-form" method="get" action="<%= request.getContextPath() %>/customer/Search">
             <input type="text" name="query" placeholder="Search books or stationery..." required />
             <button type="submit">Search</button>
         </form>

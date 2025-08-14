@@ -62,13 +62,13 @@
             margin-left: 550px;
         }
         .search-form input[type="text"] {
-            padding: 6px 10px;
+            padding: 8px 10px;
             border-radius: 4px;
             border: none;
             font-size: 1rem;
         }
         .search-form button {
-            padding: 6px 12px;
+            padding: 9px 12px;
             margin-left: 5px;
             border: none;
             border-radius: 4px;

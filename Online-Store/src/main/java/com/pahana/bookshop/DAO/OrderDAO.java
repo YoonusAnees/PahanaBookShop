@@ -109,7 +109,6 @@ public class OrderDAO {
         return items;
     }
     
- // In OrderDAO.java
 
     public void updateOrder(Order order) throws SQLException {
         String updateOrderSql = "UPDATE orders SET fullName=?, email=?, address=? WHERE id=?";
@@ -123,8 +122,7 @@ public class OrderDAO {
 
             stmt.executeUpdate();
 
-            // Optionally: update order items here if needed
-            // For simplicity, you might skip updating order items or delete & re-insert
+      
 
         }
     }

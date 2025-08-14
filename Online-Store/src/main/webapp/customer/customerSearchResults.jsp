@@ -2,6 +2,18 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page import="com.pahana.bookshop.model.User" %>
+<%@ page import="com.pahana.bookshop.model.Book" %>
+
+
+
+<%
+    User user = (User) session.getAttribute("user");
+    if (user == null || !"customer".equalsIgnoreCase(user.getRole())) {
+        response.sendRedirect(request.getContextPath() + "/index.jsp");
+        return;
+    }
+%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -104,21 +116,20 @@
 
 <!-- Navbar -->
 <nav>
-    <a class="logo" href="${pageContext.request.contextPath}/index.jsp">PahanaBook</a>
-    
+    <a href="<%= request.getContextPath() %>/customer/dashboard" class="logo">PahanaBook</a>
       <!-- Search Form -->
-        <form class="search-form" method="get" action="<%= request.getContextPath() %>/Search">
+        <form class="search-form" method="get" action="<%= request.getContextPath() %>/customer/Search">
             <input type="text" name="query" placeholder="Search books or stationery..." required />
             <button type="submit">Search</button>
         </form>
     <div class="nav-links">
-        <a href="${pageContext.request.contextPath}/index.jsp">Home</a>
-        <a href="${pageContext.request.contextPath}/Books">Books</a>
-        <a href="${pageContext.request.contextPath}/stationery">Stationery</a>
-        <a href="${pageContext.request.contextPath}/AboutUs.jsp">About Us</a>
-        <a href="${pageContext.request.contextPath}/ContactUs.jsp">Contact Us</a>
-        <a href="${pageContext.request.contextPath}/login.jsp">Login</a>
-        <a href="${pageContext.request.contextPath}/register.jsp">Register</a>
+        <span>Welcome, <%= user.getUsername() %>!</span>
+                <a href="<%= request.getContextPath() %>/customer/dashboard">Home</a>
+        
+        <a href="<%= request.getContextPath() %>/customer/dashboard">Books</a>
+        <a href="<%= request.getContextPath() %>/customer/stationery">Stationery</a>
+        <a href="<%= request.getContextPath() %>/CartController?action=view&customerId=<%= user.getId() %>">Cart</a>
+        <a class="logout" href="<%= request.getContextPath() %>/LogoutController">Logout</a>
     </div>
 </nav>
 
@@ -141,7 +152,14 @@
                         <p>Price: Rs. <c:out value="${book.price}"/></p>
                         <p>Quantity: <c:out value="${book.quantity}"/></p>
                         <p>Category: <c:out value="${book.category}"/></p>
-                        <button onclick="window.location.href='${pageContext.request.contextPath}/login.jsp'">Add to Cart</button>
+  <div class="card-actions">
+                       <form method="post" action="${pageContext.request.contextPath}/CartController">
+    <input type="hidden" name="action" value="add" />
+    <input type="hidden" name="bookId" value="${book.id}" />
+    <button type="submit">Add to Cart</button>
+</form>
+
+                    </div>
                     </div>
                 </c:forEach>
             </div>
