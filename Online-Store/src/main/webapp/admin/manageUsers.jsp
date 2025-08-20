@@ -9,341 +9,666 @@
     }
 %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="ISO-8859-1" />
-    <title>Manage Users</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users - PahanaBook</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+                <link rel="icon" type="image/png"  href="https://img.freepik.com/free-vector/gradient-p-logo-template_23-2149372725.jpg?w=32&q=80" />
+    
     <style>
-        /* Reset and base */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #f39c12;
+            --danger: #e74c3c;
+            --success: #27ae60;
+            --warning: #f1c40f;
+            --info: #3498db;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --sidebar-width: 250px;
+            --header-height: 80px;
+            --transition: all 0.3s ease;
+        }
+
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
-        body, html {
-            margin: 0;
-            height: 100%;
+
+        body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f7f9fc;
-            color: #333;
+            background: linear-gradient(135deg, #f7f9fc 0%, #e3eaf2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            line-height: 1.6;
         }
-        
-            .logo {
-            font-weight: 500;
-            font-size: 28px;
-            letter-spacing: 2px;
-            color: #f1c40f;
-            margin: 0 0 12px 20px;
-            cursor: default;
-            transition: color 0.3s ease;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-            text-decoration: none;
-            
-         
-        }
-        
-           .logo:hover {
-            color: #e67e22;
-            text-decoration: none;
-                        cursor: pointer;
-            
-      
-    }
 
         /* Sidebar */
         .sidebar {
             position: fixed;
-            top: 0; left: 0;
-            width: 220px;
-            height: 100%;
-            background: linear-gradient(180deg, #34495e, #2c3e50);
-            padding-top: 60px;
-            box-shadow: 3px 0 12px rgba(0,0,0,0.15);
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 20px 0;
+            box-shadow: 3px 0 15px rgba(0,0,0,0.2);
             overflow-y: auto;
-        }
-        .sidebar h2 {
-            color: #ecf0f1;
-            text-align: center;
-            font-weight: 600;
-            font-size: 24px;
-            margin: 0 0 10px;
-            letter-spacing: 1.2px;
-            border-bottom: 1px solid rgba(236, 240, 241, 0.15);
-            padding-bottom: 12px;
-        }
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .sidebar ul li a {
-            display: block;
-            padding: 16px 24px;
-            color: #bdc3c7;
-            font-weight: 500;
-            text-decoration: none;
-            border-left: 5px solid transparent;
-            transition: all 0.3s ease;
-            font-size: 17px;
-        }
-        .sidebar ul li a:hover,
-        .sidebar ul li a.active {
-            color: #ecf0f1;
-            background: rgba(255,255,255,0.1);
-            border-left: 5px solid #f39c12;
-            font-weight: 700;
+            z-index: 1000;
+            transition: var(--transition);
         }
 
-        /* Top Header */
-        .top-header {
-            position: fixed;
-            left: 220px; top: 0; right: 0;
-            height: 60px;
-            background-color: #34495e;
-            color: #ecf0f1;
+        .logo {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 0 30px;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-            font-size: 18px;
-            font-weight: 600;
-            z-index: 1000;
-        }
-        .logout-btn {
-            background-color: #e74c3c;
-            color: white;
-            padding: 10px 18px;
-            border-radius: 8px;
+            justify-content: center;
+            padding: 20px;
+            color: var(--accent);
+            font-size: 28px;
             font-weight: 700;
             text-decoration: none;
-            box-shadow: 0 4px 9px rgba(231, 76, 60, 0.6);
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-        }
-        .logout-btn:hover {
-            background-color: #c0392b;
-            box-shadow: 0 6px 15px rgba(192, 57, 43, 0.7);
+            transition: var(--transition);
         }
 
-        /* Main content */
-        .main-content {
-            margin-left: 220px;
-            padding: 100px 40px 40px;
-            min-height: 100vh;
+        .logo:hover {
+            color: #e67e22;
+            transform: scale(1.05);
+        }
+
+        .logo i {
+            margin-right: 10px;
+            font-size: 32px;
+        }
+
+        .sidebar h2 {
+            color: var(--light);
+            text-align: center;
+            font-size: 1.3rem;
+            margin: 10px 0 20px;
+            padding: 0 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            padding-bottom: 15px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0 15px;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
             display: flex;
-            justify-content: center;
+            align-items: center;
+            padding: 15px 20px;
+            color: #bdc3c7;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: var(--transition);
+            font-weight: 500;
         }
 
-        /* Container for table */
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: linear-gradient(90deg, rgba(243, 156, 18, 0.2) 0%, transparent 100%);
+            color: var(--light);
+            transform: translateX(5px);
+        }
+
+        .sidebar-menu a i {
+            margin-right: 12px;
+            font-size: 18px;
+            width: 25px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 30px;
+            transition: var(--transition);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--light);
+            padding: 20px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .welcome-text h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .welcome-text p {
+            color: #bdc3c7;
+            font-size: 1rem;
+        }
+
+        .logout-btn {
+            background: linear-gradient(45deg, var(--danger), #c0392b);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        /* Page Header */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .page-title i {
+            color: var(--accent);
+            font-size: 2.2rem;
+        }
+
+        .add-btn {
+            background: linear-gradient(45deg, var(--success), #219653);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+        }
+
+        /* Table Container */
         .table-container {
-            width: 100%;
-            max-width: 960px;
-            padding: 30px 40px;
-            transition: box-shadow 0.3s ease;
-        }
-        .table-container:hover {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            overflow-x: auto;
         }
 
-        /* Table styling */
-        table {
+        /* Table Styling */
+        .user-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 15px;
-            background: white;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            border-radius: 12px;
-            overflow: hidden;
+            font-size: 1rem;
+            margin-top: 20px;
         }
 
-        thead {
-            background-color: #2980b9;
-            color: #fff;
-            user-select: none;
-        }
-
-        thead th {
-            padding: 14px 18px;
+        .user-table th {
+            background:  #2980b9;
+            color: white;
+            padding: 18px 15px;
             text-align: left;
-            font-weight: 700;
-            letter-spacing: 0.07em;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: none;
         }
 
-        tbody tr {
-            border-bottom: 1px solid #ddd;
-            transition: background-color 0.3s ease;
+        .user-table th:first-child {
+            border-top-left-radius: 10px;
         }
 
-        tbody tr:hover {
-            background-color: #f0f8ff;
+        .user-table th:last-child {
+            border-top-right-radius: 10px;
         }
 
-        tbody td {
-            padding: 14px 18px;
+        .user-table td {
+            padding: 18px 15px;
+            border-bottom: 1px solid #ecf0f1;
             vertical-align: middle;
-            color: #333;
         }
 
-        /* Buttons */
-        .btn-warning {
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            padding: 7px 14px;
-            border-radius: 6px;
+        .user-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .user-table tr:hover {
+            background-color: #f8f9fa;
+            transform: scale(1.01);
+            transition: var(--transition);
+        }
+
+        /* Role Badges */
+        .role-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
             font-weight: 600;
-            cursor: pointer;
-            user-select: none;
-            transition: background-color 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .btn-warning:hover {
-            background-color: #1e8449;
+
+        .role-admin {
+            background: linear-gradient(45deg, var(--accent), #e67e22);
             color: white;
         }
 
-        .btn-danger {
-            background-color: #e74c3c;
+        .role-customer {
+            background: linear-gradient(45deg, var(--info), #2980b9);
             color: white;
-            border: none;
-            padding: 7px 14px;
-            border-radius: 6px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            text-decoration: none;
             font-weight: 600;
-            cursor: pointer;
-            user-select: none;
-            transition: background-color 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            margin-left: 8px;
-        }
-        .btn-danger:hover {
-            background-color: #b83127;
-            color: white;
-        }
-        
-        
-        /* Buttons */
-        .button {
-            padding: 7px 14px;
-            border-radius: 6px;
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-            user-select: none;
-            display: inline-block;
-            transition: background-color 0.3s ease;
-        }
-
-        .edit-btn {
-            background-color: #27ae60;
-            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
             border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
         }
 
-        .edit-btn:hover {
-            background-color: #1e8449;
+        .btn-edit {
+            background: linear-gradient(45deg, var(--info), #2980b9);
+            color: white;
+            box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
         }
 
-        /* Responsive - make table scroll horizontally on small screens */
+        .btn-edit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-delete {
+            background: linear-gradient(45deg, var(--danger), #c0392b);
+            color: white;
+            box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-delete:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7f8c8d;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #bdc3c7;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        /* Mobile Menu Button */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--accent);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1100;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .user-table {
+                font-size: 0.9rem;
+            }
+            
+            .btn {
+                padding: 8px 15px;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+            
+            .menu-toggle {
+                display: flex;
+            }
+            
+            .table-container {
+                padding: 20px;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+
         @media (max-width: 768px) {
-            table, thead, tbody, th, td, tr {
+            .user-table {
                 display: block;
+                overflow-x: auto;
             }
-            thead tr {
-                position: absolute;
-                top: -9999px;
-                left: -9999px;
+            
+            .user-table th,
+            .user-table td {
+                padding: 12px 8px;
+                font-size: 0.85rem;
             }
-            tbody tr {
-                margin-bottom: 15px;
-                border-bottom: 2px solid #2980b9;
-                padding-bottom: 15px;
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 8px;
             }
-            tbody td {
-                padding-left: 50%;
-                position: relative;
-                text-align: left;
-                border: none;
-                border-bottom: 1px solid #eee;
+            
+            .btn {
+                justify-content: center;
+                padding: 8px 12px;
             }
-            tbody td::before {
-                position: absolute;
-                top: 14px;
-                left: 18px;
-                width: 45%;
-                padding-right: 10px;
-                white-space: nowrap;
-                font-weight: 700;
-                color: #2980b9;
-                content: attr(data-label);
+            
+            .role-badge {
+                font-size: 0.75rem;
+                padding: 4px 8px;
             }
+        }
+
+        @media (max-width: 576px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .welcome-text h1 {
+                font-size: 1.5rem;
+            }
+            
+            .page-title {
+                font-size: 1.5rem;
+            }
+            
+            .add-btn {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .table-container {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .user-table tr {
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        /* Custom scrollbar */
+        .sidebar::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 10px;
+        }
+
+        .table-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .table-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb {
+            background: var(--info);
+            border-radius: 10px;
+        }
+
+        /* Password masking */
+        .password-masked {
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+            color: #7f8c8d;
         }
     </style>
+    <script>
+        function confirmDelete(username, id) {
+            if (confirm('Are you sure you want to delete user "' + username + '"?')) {
+                window.location.href = '${pageContext.request.contextPath}/User?action=delete&id=' + id;
+            }
+        }
+        
+        function maskPassword(password) {
+            return '*'.repeat(password.length);
+        }
+    </script>
 </head>
 <body>
+   
 
     <!-- Sidebar Navigation -->
-    <nav class="sidebar">
-                <a class="logo" href="<%= request.getContextPath() %>/admin/dashboard.jsp" class="logo">PahanaBook</a>
-    
+    <nav class="sidebar" id="sidebar">
+        <a href="<%= request.getContextPath() %>/admin/dashboard.jsp" class="logo">
+            <i class="fas fa-book"></i>PahanaBook
+        </a>
+        
         <h2>Admin Panel</h2>
         
-        <ul>
-            <li><a href="admin/AddBook.jsp">Add Book</a></li>
-            <li><a href="admin/Book?action=list">Manage Books</a></li>
-            <li><a href="User?action=list" class="active">Manage Users</a></li>
-            <li><a href="admin/AddStationery.jsp">Add Stationery</a></li>
-            <li><a href="Stationery?action=list">Manage Stationery</a></li>
+        <ul class="sidebar-menu">
+            <li><a href="AddBook.jsp"><i class="fas fa-plus-circle"></i>Add Book</a></li>
+            <li><a href="Book?action=list"><i class="fas fa-book"></i>Manage Books</a></li>
+            <li><a href="User?action=list" class="active"><i class="fas fa-users"></i>Manage Users</a></li>
+            <li><a href="AddStationery.jsp"><i class="fas fa-pencil-alt"></i>Add Stationery</a></li>
+            <li><a href="Stationery?action=list"><i class="fas fa-pencil-ruler"></i>Manage Stationery</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/order-history"><i class="fas fa-history"></i>Orders History</a></li>
         </ul>
     </nav>
 
-    <!-- Top Header -->
-    <header class="top-header">
-        <div class="welcome">Welcome Admin: <%= user.getUsername() %></div>
-        <a class="logout-btn" href="<%= request.getContextPath() %>/LogoutController">Logout</a>
-    </header>
-
-    <!-- Main content area -->
+    <!-- Main Content -->
     <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="welcome-text">
+                <h1>Welcome Admin: <%= user.getUsername() %></h1>
+                <p>Manage user accounts and permissions</p>
+            </div>
+            <a href="<%= request.getContextPath() %>/LogoutController" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>Logout
+            </a>
+        </header>
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <h2 class="page-title">
+                <i class="fas fa-user-gear"></i>User Management
+            </h2>
+            <a href="#" class="add-btn" onclick="alert('User registration functionality would be implemented here')">
+                <i class="fas fa-user-plus"></i>Add New User
+            </a>
+        </div>
+
+        <!-- Table Container -->
         <div class="table-container">
-        
-            <h2 style="margin-bottom: 20px;">Manage Users</h2>
-                                        <a href="AddBook.jsp" class="button edit-btn" style="margin-bottom: 15px; display: inline-block;">+ Add New User</a>
-            
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Password</th>
-                        <th>Role</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="user" items="${userList}">
-                        <tr>
-                            <td data-label="ID">${user.id}</td>
-                            <td data-label="Username">${user.username}</td>
-                            <td data-label="Email">${user.email}</td>
-                            <td data-label="Password">${user.password}</td>
-                            <td data-label="Role">${user.role}</td>
-                            <td data-label="Actions">
-                                <a href="${pageContext.request.contextPath}/User?action=edit&id=${user.id}" class="btn-warning">Edit</a>
-                                <a href="${pageContext.request.contextPath}/User?action=delete&id=${user.id}" class="btn-danger"
-                                   onclick="return confirm('Are you sure you want to delete this user?');">Delete</a>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    <c:if test="${empty userList}">
-                        <tr>
-                            <td colspan="6" class="text-center">No users found.</td>
-                        </tr>
-                    </c:if>
-                </tbody>
-            </table>
+            <c:choose>
+                <c:when test="${not empty userList}">
+                    <table class="user-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Password</th>
+                                <th>Role</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="user" items="${userList}">
+                                <tr>
+                                    <td>${user.id}</td>
+                                    <td><strong>${user.username}</strong></td>
+                                    <td>${user.email}</td>
+                                    <td class="password-masked">${user.password.replaceAll(".", "•")}</td>
+                                    <td>
+                                        <span class="role-badge ${user.role eq 'admin' ? 'role-admin' : 'role-customer'}">
+                                            ${user.role}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a href="${pageContext.request.contextPath}/User?action=edit&id=${user.id}" class="btn btn-edit">
+                                                <i class="fas fa-edit"></i>Edit
+                                            </a>
+                                            <button onclick="confirmDelete('${user.username}', ${user.id})" 
+                                                    class="btn btn-delete">
+                                                <i class="fas fa-trash"></i>Delete
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </c:when>
+                <c:otherwise>
+                    <div class="empty-state">
+                        <i class="fas fa-users-slash"></i>
+                        <h3>No Users Found</h3>
+                        <p>There are no users registered in the system yet</p>
+                    </div>
+                </c:otherwise>
+            </c:choose>
         </div>
     </main>
 
+    <script>
+        // Toggle sidebar on mobile
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const menuToggle = document.querySelector('.menu-toggle');
+            
+            if (window.innerWidth <= 992 && 
+                !sidebar.contains(event.target) && 
+                !menuToggle.contains(event.target) &&
+                sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        // Add hover effects to table rows
+        document.querySelectorAll('.user-table tr').forEach(row => {
+            row.addEventListener('mouseenter', function() {
+                this.style.backgroundColor = '#f8f9fa';
+                this.style.transform = 'scale(1.01)';
+            });
+            
+            row.addEventListener('mouseleave', function() {
+                this.style.backgroundColor = '';
+                this.style.transform = 'scale(1)';
+            });
+        });
+
+        // Password security - mask all passwords on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.password-masked').forEach(element => {
+                const originalText = element.textContent;
+                element.textContent = '*'.repeat(originalText.length);
+                element.title = 'Password hidden for security';
+            });
+        });
+    </script>
 </body>
 </html>

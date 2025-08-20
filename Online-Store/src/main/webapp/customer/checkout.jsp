@@ -143,7 +143,7 @@
             border-radius: 10px;
             padding: 10px;
             margin-bottom: 20px;
-            color: #4a148c;
+            color: black;
             font-weight: 600;
             font-size: 1.1rem;
             text-align: center;

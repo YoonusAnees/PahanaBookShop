@@ -11,247 +11,679 @@
     }
 %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="ISO-8859-1">
-    <title>Edit User</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User - PahanaBook</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+                    <link rel="icon" type="image/png"  href="https://img.freepik.com/free-vector/gradient-p-logo-template_23-2149372725.jpg?w=32&q=80" />
+    
     <style>
-        /* Sidebar and layout styles */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #f39c12;
+            --danger: #e74c3c;
+            --success: #27ae60;
+            --warning: #f1c40f;
+            --info: #3498db;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --sidebar-width: 250px;
+            --header-height: 80px;
+            --transition: all 0.3s ease;
+        }
+
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
-        body, html {
-            margin: 0;
-            height: 100%;
+
+        body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f2f2f2;
+            background: linear-gradient(135deg, #f7f9fc 0%, #e3eaf2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            line-height: 1.6;
         }
+
+        /* Sidebar */
         .sidebar {
             position: fixed;
             top: 0;
             left: 0;
-            width: 220px;
-            height: 100%;
-            background-color: #2f4f6f;
-            padding-top: 60px;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 20px 0;
+            box-shadow: 3px 0 15px rgba(0,0,0,0.2);
             overflow-y: auto;
+            z-index: 1000;
+            transition: var(--transition);
         }
-        .sidebar h2 {
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-            margin: 0;
-            font-weight: normal;
-            font-size: 22px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .sidebar ul li {
-            margin: 0;
-        }
-        .sidebar ul li a {
-            display: block;
-            padding: 14px 20px;
-            color: white;
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--accent);
+            font-size: 28px;
+            font-weight: 700;
             text-decoration: none;
-            border-left: 4px solid transparent;
-            transition: all 0.3s ease;
-            font-size: 16px;
+            transition: var(--transition);
         }
-        .sidebar ul li a:hover,
-        .sidebar ul li a.active {
-            background-color: #4a90e2;
-            border-left: 4px solid #f39c12;
+
+        .logo:hover {
+            color: #e67e22;
+            transform: scale(1.05);
         }
+
+        .logo i {
+            margin-right: 10px;
+            font-size: 32px;
+        }
+
+        .sidebar h2 {
+            color: var(--light);
+            text-align: center;
+            font-size: 1.3rem;
+            margin: 10px 0 20px;
+            padding: 0 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            padding-bottom: 15px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0 15px;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: #bdc3c7;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: linear-gradient(90deg, rgba(243, 156, 18, 0.2) 0%, transparent 100%);
+            color: var(--light);
+            transform: translateX(5px);
+        }
+
+        .sidebar-menu a i {
+            margin-right: 12px;
+            font-size: 18px;
+            width: 25px;
+        }
+
+        /* Main Content */
         .main-content {
-            margin-left: 220px;
-            padding: 80px 40px;
+            margin-left: var(--sidebar-width);
+            padding: 20px;
+            transition: var(--transition);
             min-height: 100vh;
-            background: linear-gradient(to right, #f2f2f2, #d9e4f5);
             display: flex;
             justify-content: center;
             align-items: flex-start;
         }
-        .top-header {
+
+        /* Header */
+        .header {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--light);
+            padding: 10px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             position: fixed;
-            left: 220px;
-            top: 0;
-            right: 0;
-            height: 60px;
-            background-color: #2f4f6f;
+            top: 30px;
+            left: calc(var(--sidebar-width) + 30px);
+            right: 30px;
+            z-index: 900;
+        }
+
+        .welcome-text h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .welcome-text p {
+            color: #bdc3c7;
+            font-size: 1rem;
+        }
+
+        .logout-btn {
+            background: linear-gradient(45deg, var(--danger), #c0392b);
             color: white;
+            padding: 12px 25px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 0 30px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            z-index: 1000;
+            gap: 8px;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
         }
-        .top-header .welcome {
-            font-size: 18px;
-        }
-        .logout-btn {
-            background-color: #e74c3c;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
+
         .logout-btn:hover {
-            background-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
         }
-        /* Form container styling */
+
+        /* Form Container */
         .form-container {
-            background-color: white;
-            padding: 30px 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            width: 400px;
+            background: white;
+            padding: 28px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+            margin-top: 120px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
         }
-        h2 {
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--accent), var(--info));
+        }
+
+        .form-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        .form-title {
             text-align: center;
-            color: #333;
-            margin-bottom: 20px;
+            margin-bottom: 5px;
+            color: var(--dark);
+            font-size: 2rem;
+            font-weight: 700;
+            position: relative;
         }
-        label {
+
+        .form-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: #555;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        input[type="text"],
-        input[type="email"],
-        select {
+
+        .form-group label i {
+            color: var(--accent);
+            font-size: 18px;
+        }
+
+        .form-control {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            font-size: 14px;
-            transition: border-color 0.3s ease;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: #f8f9fa;
         }
-        input[type="text"]:focus,
-        input[type="email"]:focus,
-        select:focus {
-            border-color: #007BFF;
+
+        .form-control:focus {
             outline: none;
+            border-color: var(--accent);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.1);
+            transform: translateY(-2px);
         }
-        input[type="submit"] {
+
+        .form-select {
             width: 100%;
-            padding: 12px;
-            background-color: #007BFF;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: #f8f9fa;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23f39c12' viewBox='0 0 16 16'%3E%3Cpath d='M8 12L2 6h12L8 12z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 20px center;
+            background-size: 16px;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .customer-fields {
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 4px solid var(--info);
+            margin-top: 20px;
+            transition: var(--transition);
+        }
+
+        .customer-fields h3 {
+            color: var(--info);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(45deg, var(--info), #2980b9);
             color: white;
+            padding: 18px;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: var(--transition);
+            box-shadow: 0 5px 20px rgba(52, 152, 219, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
         }
-        input[type="submit"]:hover {
-            background-color: #0056b3;
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+            background: linear-gradient(45deg, #2980b9, var(--info));
         }
-        #customerFields {
-            display: <%= "customer".equals(user.getRole()) ? "block" : "none" %>;
+
+        .submit-btn:active {
+            transform: translateY(-1px);
         }
-        @media (max-width: 768px) {
+
+        /* Mobile Menu Button */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--accent);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1100;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
             .sidebar {
-                width: 180px;
-                padding-top: 50px;
+                transform: translateX(-100%);
             }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
             .main-content {
-                margin-left: 180px;
-                padding: 30px 20px;
-            }
-            .top-header {
-                left: 180px;
-                height: 50px;
-                padding: 0 20px;
-            }
-            .top-header .welcome {
-                font-size: 16px;
-            }
-            .sidebar ul li a {
-                font-size: 14px;
-                padding: 12px 16px;
-            }
-            .form-container {
-                width: 100%;
+                margin-left: 0;
                 padding: 20px;
             }
+            
+            .header {
+                left: 20px;
+                right: 20px;
+                top: 20px;
+            }
+            
+            .menu-toggle {
+                display: flex;
+            }
+            
+            .form-container {
+                margin-top: 100px;
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+                padding: 15px;
+            }
+            
+            .welcome-text h1 {
+                font-size: 1.5rem;
+            }
+            
+            .form-container {
+                padding: 25px;
+                margin-top: 140px;
+            }
+            
+            .form-title {
+                font-size: 1.7rem;
+            }
+            
+            .customer-fields {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 15px;
+            }
+            
+            .form-container {
+                padding: 20px;
+                margin-top: 160px;
+            }
+            
+            .form-control,
+            .form-select {
+                padding: 12px 15px;
+            }
+            
+            .submit-btn {
+                padding: 15px;
+                font-size: 1rem;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-container {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .customer-fields {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* Custom scrollbar */
+        .sidebar::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 10px;
+        }
+
+        /* Form validation styles */
+        .form-control:invalid,
+        .form-select:invalid {
+            border-color: var(--danger);
+        }
+
+        .form-control:valid,
+        .form-select:valid {
+            border-color: var(--success);
         }
     </style>
 </head>
 <body>
+   
 
     <!-- Sidebar Navigation -->
-    <nav class="sidebar">
+    <nav class="sidebar" id="sidebar">
+        <a href="<%= request.getContextPath() %>/admin/dashboard.jsp" class="logo">
+            <i class="fas fa-book"></i>PahanaBook
+        </a>
+        
         <h2>Admin Panel</h2>
-        <ul>
-            <li><a href="admin/AddBook.jsp">Add Book</a></li>
-            <li><a href="admin/Book?action=list">Manage Books</a></li>
-            <li><a href="User?action=list">Manage Users</a></li>
-            <li><a href="AddStationery.jsp">Add Stationery</a></li>
+        
+        <ul class="sidebar-menu">
+            <li><a href="AddBook.jsp"><i class="fas fa-plus-circle"></i>Add Book</a></li>
+            <li><a href="Book?action=list"><i class="fas fa-book"></i>Manage Books</a></li>
+            <li><a href="User?action=list" class="active"><i class="fas fa-users"></i>Manage Users</a></li>
+            <li><a href="AddStationery.jsp"><i class="fas fa-pencil-alt"></i>Add Stationery</a></li>
+            <li><a href="Stationery?action=list"><i class="fas fa-pencil-ruler"></i>Manage Stationery</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/order-history"><i class="fas fa-history"></i>Orders History</a></li>
         </ul>
     </nav>
 
-    <!-- Top Header -->
-    <header class="top-header">
-        <div class="welcome">Welcome Admin: <%= user.getUsername() %></div>
-        <a class="logout-btn" href="<%= request.getContextPath() %>/LogoutController">Logout</a>
+    <!-- Header -->
+    <header class="header">
+        <div class="welcome-text">
+            <h1>Welcome Admin: <%= user.getUsername() %></h1>
+            <p>Edit user information and permissions</p>
+        </div>
+        <a href="<%= request.getContextPath() %>/LogoutController" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>Logout
+        </a>
     </header>
 
-    <!-- Main content -->
+    <!-- Main Content -->
     <main class="main-content">
         <div class="form-container">
-            <h2>Edit User</h2>
-            <form action="User" method="post">
+            <h2 class="form-title">
+                <i class="fas fa-user-edit"></i>Edit User
+            </h2>
+            
+            <form action="User" method="post" id="userForm">
                 <input type="hidden" name="action" value="update" />
                 <input type="hidden" name="id" value="<%= user.getId() %>" />
 
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" value="<%= user.getUsername() %>" required />
-
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" value="<%= user.getEmail() %>" required />
-
-                <label for="password">Password:</label>
-                <input type="text" id="password" name="password" value="<%= user.getPassword() %>" required />
-
-                <label for="role">Role:</label>
-                <select id="role" name="role" required onchange="toggleCustomerFields(this.value)">
-                    <option value="admin" <%= "admin".equals(user.getRole()) ? "selected" : "" %>>Admin</option>
-                    <option value="customer" <%= "customer".equals(user.getRole()) ? "selected" : "" %>>Customer</option>
-                </select>
-
-                <!-- Customer-specific fields -->
-                <div id="customerFields">
-                    <label for="accountNumber">Account Number:</label>
-                    <input type="text" id="accountNumber" name="accountNumber" value="<%= customer != null ? customer.getAccountNumber() : "" %>" />
-
-                    <label for="address">Address:</label>
-                    <input type="text" id="address" name="address" value="<%= customer != null ? customer.getAddress() : "" %>" />
-
-                    <label for="telephone">Telephone:</label>
-                    <input type="text" id="telephone" name="telephone" value="<%= customer != null ? customer.getTelephone() : "" %>" />
+                <div class="form-group">
+                    <label for="username"><i class="fas fa-user"></i>Username</label>
+                    <input type="text" id="username" name="username" class="form-control" 
+                           value="<%= user.getUsername() %>" required 
+                           pattern="[A-Za-z0-9_]{3,20}" 
+                           title="Username must be 3-20 characters (letters, numbers, underscore only)" />
                 </div>
 
-                <input type="submit" value="Update" />
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i>Email</label>
+                    <input type="email" id="email" name="email" class="form-control" 
+                           value="<%= user.getEmail() %>" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i>Password</label>
+                    <input type="text" id="password" name="password" class="form-control" 
+                           value="<%= user.getPassword() %>" required 
+                           minlength="6" 
+                           title="Password must be at least 6 characters" />
+                </div>
+
+                <div class="form-group">
+                    <label for="role"><i class="fas fa-user-tag"></i>Role</label>
+                    <select id="role" name="role" class="form-select" required onchange="toggleCustomerFields(this.value)">
+                        <option value="admin" <%= "admin".equals(user.getRole()) ? "selected" : "" %>>Admin</option>
+                        <option value="customer" <%= "customer".equals(user.getRole()) ? "selected" : "" %>>Customer</option>
+                    </select>
+                </div>
+
+                <!-- Customer-specific fields -->
+                <div id="customerFields" class="customer-fields" style="display: <%= "customer".equals(user.getRole()) ? "block" : "none" %>">
+                    <h3><i class="fas fa-address-card"></i>Customer Details</h3>
+                    
+                    <div class="form-group">
+                        <label for="accountNumber"><i class="fas fa-credit-card"></i>Account Number</label>
+                        <input type="text" id="accountNumber" name="accountNumber" class="form-control" 
+                               value="<%= customer != null ? customer.getAccountNumber() : "" %>" 
+                               pattern="[A-Za-z0-9]{8,20}" 
+                               title="Account number must be 8-20 alphanumeric characters" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address"><i class="fas fa-map-marker-alt"></i>Address</label>
+                        <input type="text" id="address" name="address" class="form-control" 
+                               value="<%= customer != null ? customer.getAddress() : "" %>" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telephone"><i class="fas fa-phone"></i>Telephone</label>
+                        <input type="text" id="telephone" name="telephone" class="form-control" 
+                               value="<%= customer != null ? customer.getTelephone() : "" %>" 
+                               pattern="[0-9+\-\s]{10,15}" 
+                               title="Please enter a valid telephone number" />
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-save"></i>Update User
+                </button>
             </form>
         </div>
     </main>
 
     <script>
-        function toggleCustomerFields(role) {
-            const fields = document.getElementById("customerFields");
-            fields.style.display = (role === "customer") ? "block" : "none";
+        // Toggle sidebar on mobile
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
         }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const menuToggle = document.querySelector('.menu-toggle');
+            
+            if (window.innerWidth <= 992 && 
+                !sidebar.contains(event.target) && 
+                !menuToggle.contains(event.target) &&
+                sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        // Toggle customer fields based on role selection
+        function toggleCustomerFields(role) {
+            const customerFields = document.getElementById('customerFields');
+            if (role === 'customer') {
+                customerFields.style.display = 'block';
+                customerFields.style.animation = 'fadeIn 0.8s ease-out';
+                
+                // Make customer fields required
+                document.getElementById('accountNumber').required = true;
+                document.getElementById('address').required = true;
+                document.getElementById('telephone').required = true;
+            } else {
+                customerFields.style.display = 'none';
+                
+                // Remove required attribute from customer fields
+                document.getElementById('accountNumber').required = false;
+                document.getElementById('address').required = false;
+                document.getElementById('telephone').required = false;
+            }
+        }
+
+        // Form validation
+        document.getElementById('userForm').addEventListener('submit', function(e) {
+            const role = document.getElementById('role').value;
+            const password = document.getElementById('password').value;
+            
+            // Password validation
+            if (password.length < 6) {
+                e.preventDefault();
+                alert('Password must be at least 6 characters long');
+                return false;
+            }
+            
+            // Customer field validation
+            if (role === 'customer') {
+                const accountNumber = document.getElementById('accountNumber').value;
+                const telephone = document.getElementById('telephone').value;
+                
+                if (accountNumber && !/^[A-Za-z0-9]{8,20}$/.test(accountNumber)) {
+                    e.preventDefault();
+                    alert('Account number must be 8-20 alphanumeric characters');
+                    return false;
+                }
+                
+                if (telephone && !/^[0-9+\-\s]{10,15}$/.test(telephone)) {
+                    e.preventDefault();
+                    alert('Please enter a valid telephone number');
+                    return false;
+                }
+            }
+        });
+
+        // Add hover effects to form elements
+        document.querySelectorAll('.form-control, .form-select').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'translateY(-2px)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Real-time validation
+        document.querySelectorAll('input[pattern]').forEach(input => {
+            input.addEventListener('input', function() {
+                if (this.validity.patternMismatch) {
+                    this.style.borderColor = 'var(--danger)';
+                } else {
+                    this.style.borderColor = 'var(--success)';
+                }
+            });
+        });
     </script>
 </body>
 </html>

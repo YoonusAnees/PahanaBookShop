@@ -25,18 +25,16 @@
         box-sizing: border-box;
     }
     body {
-              font-family: Arial, sans-serif;
-    
+        font-family: Arial, sans-serif;
         background: #f9f8ff;
         margin: 0;
         color: #333;
         min-height: 100vh;
         position: relative;
-        padding-bottom: 70px; /* space for fixed footer */
+        padding-bottom: 70px;
     }
     
-     
-        /* Navbar */
+   /* Navbar */
         nav {
             background-color: #2c3e50;
             color: white;
@@ -94,8 +92,6 @@
             height: 3px;
             background: white;
             margin: 4px;
-            margin-left:450px;
-            margin-bottom:100px
             transition: all 0.3s ease;
         }
 
@@ -169,7 +165,6 @@
         padding: 25px 35px;
         border-radius: 15px;
         box-shadow: 0 10px 20px rgba(123, 63, 228, 0.15);
-        /* No need extra bottom padding here since body has it */
     }
 
     /* Headings */
@@ -238,60 +233,74 @@
         margin: 60px 0;
     }
     
-    /* Quantity Controls */
+    /* Quantity Controls - UPDATED */
     .quantity-controls {
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 8px;
+        padding: 5px 0;
     }
-    
-    .quantity-btn {
-        width: 30px;
-        height: 30px;
+
+    .quantity-btnplus {
+        width: 35px;
+        height: 35px;
         border: none;
-        border-radius: 50%;
-        background-color: #f1c40f;
+        border-radius: 6px;
+        background-color: #f1c41f;
         color: white;
         font-weight: bold;
         cursor: pointer;
+        font-size: 18px;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: background-color 0.3s ease;
+        transition: background-color 0.3s ease, transform 0.1s ease;
     }
     
-    .quantity-btn:hover {
-        background-color: #e67e22;
+      .quantity-btnminus {
+        width: 35px;
+        height: 35px;
+        border: none;
+        border-radius: 6px;
+        background-color: #e53935;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s ease, transform 0.1s ease;
+    }
+
+    .quantity-btnplus:hover {
+        background-color: #f1c41f;
+        transform: scale(1.05);
     }
     
+       .quantity-btnminus:hover {
+        background-color: #b71c1c;
+        transform: scale(1.05);
+    }
+
     .quantity-btn:disabled {
         background-color: #cccccc;
         cursor: not-allowed;
     }
-    
-    .quantity-input {
-        width: 50px;
-        text-align: center;
-        padding: 5px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 14px;
-    }
-    
-    .update-btn {
-        padding: 5px 10px;
-        background-color: #3498db;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 12px;
-        margin-left: 5px;
-    }
-    
-    .update-btn:hover {
-        background-color: #2980b9;
+
+    .quantity-display {
+        width: 45px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8f9fa;
+        border: 2px solid #f1c40f;
+        border-radius: 6px;
+        font-weight: bold;
+        font-size: 16px;
+        color: #2c3e50;
     }
 
     /* Proceed button container */
@@ -300,7 +309,7 @@
         margin-top: 40px;
     }
 
-    /* Footer - FIXED at bottom */
+    /* Footer */
     footer {
         flex-shrink: 0;
         background: #2c3e50;
@@ -332,17 +341,47 @@
             font-size: 0.9rem;
             padding: 8px 18px;
         }
-        
-           @media (max-width: 768px) {
-            .search-form {
-                display: none;
-            }
-            .nav-links {
-                display: none;
-            }
-            .burger {
-                display: flex;
-            }
+        .quantity-controls {
+            flex-direction: column;
+            gap: 5px;
+        }
+        .quantity-btn, .quantity-display {
+            width: 30px;
+            height: 30px;
+            font-size: 14px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .search-form {
+            display: none;
+        }
+        .nav-links {
+            display: none;
+        }
+        .burger {
+            display: flex;
+        }
+    }
+    
+    /* Responsive */
+    @media (max-width: 1024px) {
+        .search-form { margin-left: 100px; }
+    }
+    @media (max-width: 768px) {
+        .search-form { display: none; }
+        .nav-links { display: none; }
+        .burger { display: flex; }
+        table, th, td { font-size: 14px; }
+        .container { margin: 20px 10px; padding: 15px; }
+    }
+    @media (max-width: 480px) {
+        .logo { font-size: 1.4rem; }
+        .btn { font-size: 0.8rem; padding: 7px 14px; }
+        .quantity-controls { flex-direction: column; gap: 5px; }
+        .quantity-display, .quantity-btnplus, .quantity-btnminus {
+            width: 30px; height: 30px; font-size: 14px;
+        }
     }
 </style>
 
@@ -358,7 +397,7 @@
     </form>
     <div class="nav-links" id="navLinks">
        <span>Welcome, <%= user.getUsername() %>!</span>
-        <a href="<%= request.getContextPath() %>/customer/dashboard" >Home</a>
+        <a href="<%= request.getContextPath() %>/customer/dashboard">Home</a>
         <a href="<%= request.getContextPath() %>/customer/dashboard?show=books">Books</a>
         <a href="<%= request.getContextPath() %>/customer/stationery">Stationery</a>
         <a href="<%= request.getContextPath() %>/customer/ContactUs.jsp">Contact Us</a>
@@ -376,11 +415,11 @@
 <div class="nav-links mobile" id="mobileMenu">
     <div class="close-btn" onclick="closeMenu()">✖</div>
         <a>Welcome, <%= user.getUsername() %>!</a>
-        <a href="<%= request.getContextPath() %>/customer/dashboard" class="active">Home</a>
+        <a href="<%= request.getContextPath() %>/customer/dashboard">Home</a>
         <a href="<%= request.getContextPath() %>/customer/dashboard?show=books">Books</a>
         <a href="<%= request.getContextPath() %>/customer/stationery">Stationery</a>
         <a href="<%= request.getContextPath() %>/customer/ContactUs.jsp">Contact Us</a>
-        <a href="<%= request.getContextPath() %>/CartController?action=view&customerId=<%= user.getId() %>" class="active">Cart</a>
+        <a href="<%= request.getContextPath() %>/CartController?action=view&customerId=<%= user.getId() %>">Cart</a>
         <a class="logout" href="<%= request.getContextPath() %>/LogoutController">Logout</a>
 </div>
 
@@ -390,6 +429,11 @@
     <c:choose>
         <c:when test="${empty cartItems}">
             <p class="empty-message">Your cart is empty.</p>
+            <div style="text-align: center; margin-top: 30px;">
+                <a class="btn" href="<%= request.getContextPath() %>/customer/dashboard?show=books">
+                    Start Shopping
+                </a>
+            </div>
         </c:when>
         <c:otherwise>
             <!-- Determine if cart has books or stationery -->
@@ -429,16 +473,16 @@
                                             <input type="hidden" name="action" value="update">
                                             <input type="hidden" name="cartId" value="${item.id}">
                                             <input type="hidden" name="customerId" value="${user.id}">
+                                            <input type="hidden" name="quantity" id="hidden-quantity-${item.id}" value="${item.quantity}">
                                             <div class="quantity-controls">
-                                                <button type="button" class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</button>
-                                                <input type="number" id="quantity-${item.id}" name="quantity" value="${item.quantity}" min="1" class="quantity-input" 
-                                                       onchange="updateQuantity(${item.id})">
-                                                <button type="button" class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button>
+                                                <button type="button" class="quantity-btnminus" onclick="decreaseQuantity(${item.id})">-</button>
+                                                <div class="quantity-display" id="quantity-display-${item.id}">${item.quantity}</div>
+                                                <button type="button" class="quantity-btnplus" onclick="increaseQuantity(${item.id})">+</button>
                                             </div>
                                         </form>
                                     </td>
-                                    <td>Rs.${item.book.price}</td>
-                                    <td>Rs.${item.book.price * item.quantity}</td>
+                                    <td>Rs. ${item.book.price}</td>
+                                    <td>Rs. ${item.book.price * item.quantity}</td>
                                     <td>
                                         <a class="btn btn-danger" href="${pageContext.request.contextPath}/CartController?action=remove&cartId=${item.id}&customerId=${user.id}">
                                             Remove
@@ -474,16 +518,16 @@
                                             <input type="hidden" name="action" value="update">
                                             <input type="hidden" name="cartId" value="${item.id}">
                                             <input type="hidden" name="customerId" value="${user.id}">
+                                            <input type="hidden" name="quantity" id="hidden-quantity-${item.id}" value="${item.quantity}">
                                             <div class="quantity-controls">
                                                 <button type="button" class="quantity-btn" onclick="decreaseQuantity(${item.id})">-</button>
-                                                <input type="number" id="quantity-${item.id}" name="quantity" value="${item.quantity}" min="1" class="quantity-input" 
-                                                       onchange="updateQuantity(${item.id})">
+                                                <div class="quantity-display" id="quantity-display-${item.id}">${item.quantity}</div>
                                                 <button type="button" class="quantity-btn" onclick="increaseQuantity(${item.id})">+</button>
                                             </div>
                                         </form>
                                     </td>
-                                    <td>Rs.${item.stationery.price}</td>
-                                    <td>Rs.${item.stationery.price * item.quantity}</td>
+                                    <td>Rs. ${item.stationery.price}</td>
+                                    <td>Rs. ${item.stationery.price * item.quantity}</td>
                                     <td>
                                         <a class="btn btn-danger" href="${pageContext.request.contextPath}/CartController?action=remove&cartId=${item.id}&customerId=${user.id}">
                                             Remove
@@ -495,6 +539,8 @@
                     </tbody>
                 </table>
             </c:if>
+
+           
 
             <div class="proceed-container">
                 <a class="btn" href="${pageContext.request.contextPath}/CartController?action=checkout&customerId=${user.id}">
@@ -517,36 +563,36 @@ function openMenu() {
 
 function closeMenu() {
     document.getElementById("mobileMenu").classList.remove("show");
-    
-    
- // Quantity control functions
-    function increaseQuantity(cartId) {
-        const input = document.getElementById('quantity-' + cartId);
-        input.value = parseInt(input.value) + 1;
-        updateQuantity(cartId);
-    }
+}
 
-    function decreaseQuantity(cartId) {
-        const input = document.getElementById('quantity-' + cartId);
-        if (parseInt(input.value) > 1) {
-            input.value = parseInt(input.value) - 1;
-            updateQuantity(cartId);
-        }
-    }
+// Quantity control functions
+function increaseQuantity(cartId) {
+    const display = document.getElementById('quantity-display-' + cartId);
+    const hiddenInput = document.getElementById('hidden-quantity-' + cartId);
+    const currentQty = parseInt(display.textContent);
+    
+    display.textContent = currentQty + 1;
+    hiddenInput.value = currentQty + 1;
+    
+    // Submit the form
+    const form = display.closest('form');
+    form.submit();
+}
 
-    function updateQuantity(cartId) {
-        const input = document.getElementById('quantity-' + cartId);
-        const quantity = parseInt(input.value);
-        
-        if (quantity < 1) {
-            input.value = 1;
-            return;
-        }
+function decreaseQuantity(cartId) {
+    const display = document.getElementById('quantity-display-' + cartId);
+    const hiddenInput = document.getElementById('hidden-quantity-' + cartId);
+    const currentQty = parseInt(display.textContent);
+    
+    if (currentQty > 1) {
+        display.textContent = currentQty - 1;
+        hiddenInput.value = currentQty - 1;
         
         // Submit the form
-        const form = input.closest('form');
+        const form = display.closest('form');
         form.submit();
-    
-}</script>
+    }
+}
+</script>
 </body>
 </html>

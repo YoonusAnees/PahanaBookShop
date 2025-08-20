@@ -4,6 +4,8 @@
 <%@ page import="com.pahana.bookshop.DAO.UserDAO" %>
 <%@ page import="com.pahana.bookshop.DAO.StationeryDAO" %>
 <%@ page import="com.pahana.bookshop.DAO.OrderDAO" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.pahana.bookshop.model.Order" %>
 <%
     User user = (User) session.getAttribute("user");
     if (user == null || !"admin".equals(user.getRole())) {
@@ -16,297 +18,701 @@
     StationeryDAO stationeryDAO = new StationeryDAO();
     OrderDAO orderDAO = new OrderDAO();
 
-    
     int bookCount = bookDAO.selectAllBooks().size();
     int userCount = userDAO.getAllUsers().size();
     int stationeryCount = stationeryDAO.getAllStationery().size();
     int orderCount = orderDAO.getAllOrders().size(); 
-
     
-   
+    // Get recent orders for the chart
+    List<Order> recentOrders = orderDAO.getAllOrders();
+    if (recentOrders.size() > 5) {
+        recentOrders = recentOrders.subList(0, 5);
+    }
 %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="ISO-8859-1">
-    <title>Admin Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - PahanaBook</title>
+        <link rel="icon" type="image/png"  href="https://img.freepik.com/free-vector/gradient-p-logo-template_23-2149372725.jpg?w=32&q=80" />
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Reset and base styles as before */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #f39c12;
+            --danger: #e74c3c;
+            --success: #27ae60;
+            --warning: #f1c40f;
+            --info: #3498db;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --sidebar-width: 250px;
+            --header-height: 80px;
+            --transition: all 0.3s ease;
+        }
+
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
-        body, html {
-            margin: 0;
-            height: 100%;
+
+        body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f7f9fc, #e3eaf2);
-            color: #2c3e50;
+            background: linear-gradient(135deg, #f7f9fc 0%, #e3eaf2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            line-height: 1.6;
         }
-        .logo {
-            font-weight: 500;
-            font-size: 28px;
-            letter-spacing: 2px;
-            color: #f1c40f;
-            margin: 0 0 12px 20px;
-            cursor: default;
-            transition: color 0.3s ease;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-            text-decoration: none;
-            
-         
-        }
-        
-           .logo:hover {
-            color: #e67e22;
-            text-decoration: none;
-                        cursor: pointer;
-            
-      
-    }
-        
+
+        /* Sidebar */
         .sidebar {
             position: fixed;
             top: 0;
             left: 0;
-            width: 220px;
-            height: 100%;
-            background: linear-gradient(180deg, #34495e, #2c3e50);
-            padding-top: 60px;
-            box-shadow: 3px 0 12px rgba(0,0,0,0.15);
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 20px 0;
+            box-shadow: 3px 0 15px rgba(0,0,0,0.2);
             overflow-y: auto;
+            z-index: 1000;
+            transition: var(--transition);
         }
-        .sidebar h2 {
-            color: #ecf0f1;
-            text-align: center;
-            font-weight: 600;
-            font-size: 24px;
-            margin: 0 0 10px;
-            letter-spacing: 1.2px;
-            border-bottom: 1px solid rgba(236, 240, 241, 0.15);
-            padding-bottom: 12px;
-        }
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .sidebar ul li a {
-            display: block;
-            padding: 16px 24px;
-            color: #bdc3c7;
-            font-weight: 500;
-            text-decoration: none;
-            border-left: 5px solid transparent;
-            transition: all 0.3s ease;
-            font-size: 17px;
-        }
-        .sidebar ul li a:hover,
-        .sidebar ul li a.active {
-            color: #ecf0f1;
-            background: rgba(255,255,255,0.1);
-            border-left: 5px solid #f39c12;
-            font-weight: 700;
-        }
-        .main-content {
-            margin-left: 220px;
-            padding: 120px 40px 40px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-        h1 {
-            font-weight: 700;
-            font-size: 2.4rem;
-            color: #2c3e50;
-            margin: 0;
-        }
-        p {
-            font-size: 1.1rem;
-            color: #34495e;
-            max-width: 600px;
-            line-height: 1.5;
-        }
-        /* Top header */
-        .top-header {
-            position: fixed;
-            left: 220px;
-            top: 0;
-            right: 0;
-            height: 80px;
-            background: linear-gradient(90deg, #34495e, #2c3e50);
-            color: #ecf0f1;
+
+        .logo {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 0 30px;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-            font-size: 18px;
-            font-weight: 600;
-            z-index: 1000;
-        }
-        .logout-btn {
-            background-color: #e74c3c;
-            color: white;
-            padding: 10px 18px;
-            border-radius: 8px;
+            justify-content: center;
+            padding: 20px;
+            color: var(--accent);
+            font-size: 28px;
             font-weight: 700;
             text-decoration: none;
-            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.6);
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            transition: var(--transition);
         }
-        .logout-btn:hover {
-            background-color: #c0392b;
-            box-shadow: 0 6px 15px rgba(192, 57, 43, 0.7);
+
+        .logo:hover {
+            color: #e67e22;
+            transform: scale(1.05);
         }
-        /* Dashboard widgets container */
-        .widgets {
+
+        .logo i {
+            margin-right: 10px;
+            font-size: 32px;
+        }
+
+        .sidebar h2 {
+            color: var(--light);
+            text-align: center;
+            font-size: 1.3rem;
+            margin: 10px 0 20px;
+            padding: 0 20px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            padding-bottom: 15px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0 15px;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
             display: flex;
-            gap: 24px;
-            flex-wrap: wrap;
+            align-items: center;
+            padding: 15px 20px;
+            color: #bdc3c7;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: var(--transition);
+            font-weight: 500;
         }
-        /* Individual widget card */
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: linear-gradient(90deg, rgba(243, 156, 18, 0.2) 0%, transparent 100%);
+            color: var(--light);
+            transform: translateX(5px);
+        }
+
+        .sidebar-menu a i {
+            margin-right: 12px;
+            font-size: 18px;
+            width: 25px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 30px;
+            transition: var(--transition);
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--light);
+            padding: 20px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .welcome-text h1 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .welcome-text p {
+            color: #bdc3c7;
+            font-size: 1.1rem;
+        }
+
+        .logout-btn {
+            background: linear-gradient(45deg, var(--danger), #c0392b);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        /* Widgets */
         .widget {
             background: white;
             border-radius: 15px;
-            padding: 25px 30px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            flex: 1 1 220px;
-            max-width: 600px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-           text-decoration: none;
-            
-            align-items: center;
-            color: #34495e;
-            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: var(--transition);
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
+
+        .widget::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--accent);
+        }
+
         .widget:hover {
-            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
             transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
         }
-        .widget .number {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-decoration: none;
+
+        .widget-books::before { background: var(--info); }
+        .widget-users::before { background: var(--success); }
+        .widget-stationery::before { background: #8e44ad; }
+        .widget-orders::before { background: var(--warning); }
+
+        .widget-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .widget-books .number {
-            color: #2980b9;
-            
+
+        .widget-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
         }
-        .widget-users .number {
-            color: #27ae60;
-            
+
+        .widget-books .widget-icon { background: var(--info); }
+        .widget-users .widget-icon { background: var(--success); }
+        .widget-stationery .widget-icon { background: #8e44ad; }
+        .widget-orders .widget-icon { background: var(--warning); }
+
+        .widget-info {
+            text-align: right;
         }
-        .widget-stationery .number {
-            color: #8e44ad;
-            
+
+        .widget-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 5px;
         }
-        .widget-orders .number {
-            color: #e67e22;
-            
-        }
-        .widget .label {
-            font-size: 1.2rem;
+
+        .widget-books .widget-number { color: var(--info); }
+        .widget-users .widget-number { color: var(--success); }
+        .widget-stationery .widget-number { color: #8e44ad; }
+        .widget-orders .widget-number { color: var(--warning); }
+
+        .widget-label {
+            color: #7f8c8d;
             font-weight: 600;
-            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        /* Recent Orders */
+        .recent-orders {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .orders-list {
+            list-style: none;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .order-info h4 {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .order-info p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .order-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-completed {
+            background: #e8f5e8;
+            color: var(--success);
+        }
+
+        .status-pending {
+            background: #fef5e7;
+            color: var(--warning);
+        }
+
+       
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
             
-        }
-        /* Responsive */
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 180px;
-                padding-top: 50px;
+            .sidebar.active {
+                transform: translateX(0);
             }
-            .main-content {
-                margin-left: 180px;
-                padding: 80px 20px 20px;
-            }
-            .top-header {
-                left: 180px;
-                height: 50px;
-                padding: 0 20px;
-            }
-            .logout-btn {
-                padding: 8px 14px;
-                font-size: 14px;
-            }
-            .widgets {
-                flex-direction: column;
-                max-width: 320px;
-                margin: 0 auto;
-            }
-        }
-        @media (max-width: 600px) {
-            .sidebar {
-                display: none;
-            }
+            
             .main-content {
                 margin-left: 0;
-                padding: 80px 15px 15px;
+                padding: 20px;
             }
-            .top-header {
-                left: 0;
-                right: 0;
+            
+            .menu-toggle {
+                display: flex;
             }
+            
+            .dashboard-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .welcome-text h1 {
+                font-size: 1.5rem;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .widget-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .widget-info {
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 15px;
+            }
+            
+            .widget {
+                padding: 20px;
+            }
+            
+            .widget-number {
+                font-size: 2rem;
+            }
+            
+            .chart-container,
+            .recent-orders {
+                padding: 20px;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .widget {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .chart-container {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .recent-orders {
+            animation: fadeIn 1s ease-out;
+        }
+
+        /* Custom scrollbar */
+        .sidebar::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
+    <!-- Mobile Menu Toggle -->
+    <div class="menu-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </div>
 
     <!-- Sidebar Navigation -->
-    <nav class="sidebar">
-        <a class="logo" href="<%= request.getContextPath() %>/admin/dashboard.jsp" class="logo">PahanaBook</a>
+    <nav class="sidebar" id="sidebar">
+        <a href="<%= request.getContextPath() %>/admin/dashboard.jsp" class="logo">
+            <i class="fas fa-book"></i>PahanaBook
+        </a>
+        
         <h2>Admin Panel</h2>
-        <ul>
-            <li><a href="AddBook.jsp">Add Book</a></li>
-            <li><a href="Book?action=list">Manage Books</a></li>
-            <li><a href="${pageContext.request.contextPath}/User?action=list">Manage Users</a></li>
-            <li><a href="AddStationery.jsp">Add Stationery</a></li>
-            <li><a href="Stationery?action=list">Manage Stationery</a></li>
-</li>
-<li><a href="${pageContext.request.contextPath}/admin/order-history">Orders History</a></li>
-            </li>
+        
+        <ul class="sidebar-menu">
+            <li><a href="AddBook.jsp"><i class="fas fa-plus-circle"></i>Add Book</a></li>
+            <li><a href="Book?action=list"><i class="fas fa-book"></i>Manage Books</a></li>
+            <li><a href="${pageContext.request.contextPath}/User?action=list"><i class="fas fa-users"></i>Manage Users</a></li>
+            <li><a href="AddStationery.jsp"><i class="fas fa-pencil-alt"></i>Add Stationery</a></li>
+            <li><a href="Stationery?action=list"><i class="fas fa-pencil-ruler"></i>Manage Stationery</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/order-history"><i class="fas fa-history"></i>Orders History</a></li>
         </ul>
     </nav>
 
-    <!-- Top Header -->
-    <header class="top-header">
-        <div class="welcome">Welcome Admin: <%= user.getUsername() %></div>
-        <a class="logout-btn" href="<%= request.getContextPath() %>/LogoutController">Logout</a>
-    </header>
-
-    <!-- Main content area -->
+    <!-- Main Content -->
     <main class="main-content">
-        <h1>Dashboard</h1>
-        <p>Welcome to Admin Panel. Here's an overview of your store.</p>
+        <!-- Header -->
+        <header class="header">
+            <div class="welcome-text">
+                <h1>Welcome Admin: <%= user.getUsername() %></h1>
+                <p>Manage your bookstore efficiently with our admin dashboard</p>
+            </div>
+            <a href="<%= request.getContextPath() %>/LogoutController" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>Logout
+            </a>
+        </header>
 
-        <!-- Widgets -->
-        <div class="widgets">
+        <!-- Dashboard Widgets -->
+        <div class="dashboard-grid">
             <a href="Book?action=list" class="widget widget-books">
-                <div class="number"><%= bookCount %></div>
-                <div class="label">Total Books</div>
+                <div class="widget-content">
+                    <div class="widget-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="widget-info">
+                        <div class="widget-number"><%= bookCount %></div>
+                        <div class="widget-label">Total Books</div>
+                    </div>
+                </div>
             </a>
+
             <a href="${pageContext.request.contextPath}/User?action=list" class="widget widget-users">
-                <div class="number"><%= userCount %></div>
-                <div class="label">Active Users</div>
+                <div class="widget-content">
+                    <div class="widget-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="widget-info">
+                        <div class="widget-number"><%= userCount %></div>
+                        <div class="widget-label">Active Users</div>
+                    </div>
+                </div>
             </a>
+
             <a href="Stationery?action=list" class="widget widget-stationery">
-                <div class="number"><%= stationeryCount %></div>
-                <div class="label">Stationery Items</div>
+                <div class="widget-content">
+                    <div class="widget-icon">
+                        <i class="fas fa-pencil-alt"></i>
+                    </div>
+                    <div class="widget-info">
+                        <div class="widget-number"><%= stationeryCount %></div>
+                        <div class="widget-label">Stationery Items</div>
+                    </div>
+                </div>
             </a>
-            
+
             <a href="${pageContext.request.contextPath}/admin/order-history" class="widget widget-orders">
-             <div class="number"><%= orderCount %></div>
-           <div class="label">Total Orders</div>
-</a>
-            
-           
+                <div class="widget-content">
+                    <div class="widget-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="widget-info">
+                        <div class="widget-number"><%= orderCount %></div>
+                        <div class="widget-label">Total Orders</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+       
+        <!-- Recent Orders -->
+        <div class="recent-orders">
+            <div class="chart-header">
+                <h3 class="chart-title">Recent Orders</h3>
+                <a href="${pageContext.request.contextPath}/admin/order-history" style="color: var(--info); text-decoration: none;">
+                    View All <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <ul class="orders-list">
+                <% for (Order order : recentOrders) { %>
+                <li class="order-item">
+                    <div class="order-info">
+                        <h4>Order #<%= order.getId() %></h4>
+                        <p>Customer: <%= order.getFullName() %></p>
+                        <p><%= order.getOrderDate() %></p>
+                    </div>
+                    <span class="order-status status-completed">Completed</span>
+                </li>
+                <% } %>
+            </ul>
         </div>
     </main>
+
+    <script>
+        // Toggle sidebar on mobile
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const menuToggle = document.querySelector('.menu-toggle');
+            
+            if (window.innerWidth <= 992 && 
+                !sidebar.contains(event.target) && 
+                !menuToggle.contains(event.target) &&
+                sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
+            }
+        });
+
+        // Initialize Charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sales Chart
+            const salesCtx = document.getElementById('salesChart').getContext('2d');
+            const salesChart = new Chart(salesCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Sales (Rs)',
+                        data: [12000, 19000, 15000, 25000, 22000, 30000, 28000],
+                        borderColor: '#3498db',
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Inventory Chart
+            const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
+            const inventoryChart = new Chart(inventoryCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Books', 'Stationery', 'E-books'],
+                    datasets: [{
+                        data: [<%= bookCount %>, <%= stationeryCount %>, 45],
+                        backgroundColor: [
+                            '#3498db',
+                            '#8e44ad',
+                            '#2ecc71'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Store charts for updates
+            window.salesChart = salesChart;
+            window.inventoryChart = inventoryChart;
+        });
+
+        // Update chart based on selection
+        function updateChart() {
+            const range = document.getElementById('chartRange').value;
+            let labels, data;
+
+            switch(range) {
+                case 'week':
+                    labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                    data = [12000, 19000, 15000, 25000, 22000, 30000, 28000];
+                    break;
+                case 'month':
+                    labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+                    data = [85000, 92000, 78000, 105000];
+                    break;
+                case 'year':
+                    labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    data = [320000, 280000, 350000, 420000, 380000, 450000, 520000, 480000, 550000, 600000, 580000, 650000];
+                    break;
+            }
+
+            window.salesChart.data.labels = labels;
+            window.salesChart.data.datasets[0].data = data;
+            window.salesChart.update();
+        }
+
+        // Add hover effects to widgets
+        document.querySelectorAll('.widget').forEach(widget => {
+            widget.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px)';
+                this.style.boxShadow = '0 15px 35px rgba(0,0,0,0.2)';
+            });
+            
+            widget.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(-5px)';
+                this.style.boxShadow = '0 10px 30px rgba(0,0,0,0.15)';
+            });
+        });
+    </script>
 </body>
 </html>
