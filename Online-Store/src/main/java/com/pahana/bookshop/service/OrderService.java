@@ -3,6 +3,7 @@ package com.pahana.bookshop.service;
 import com.pahana.bookshop.DAO.OrderDAO;
 import com.pahana.bookshop.model.Order;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class OrderService {
@@ -10,7 +11,7 @@ public class OrderService {
     private final OrderDAO orderDAO;
 
     private OrderService() {
-        this.orderDAO = new OrderDAO(); 
+        orderDAO = new OrderDAO(); 
     }
 
     public static OrderService getInstance() {
@@ -30,6 +31,10 @@ public class OrderService {
 
     public void updateOrder(Order order) throws Exception {
         orderDAO.updateOrder(order);
+    }
+    
+    public int insertOrder(Order order) throws SQLException {
+        return orderDAO.saveOrder(order);
     }
 
     public void deleteOrder(int orderId) throws Exception {

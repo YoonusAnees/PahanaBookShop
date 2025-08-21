@@ -22,6 +22,16 @@ public class Order {
         this.address = address;
         this.items = items;
     }
+    
+    public double getTotal() {
+        if (items == null) return 0;
+        double total = 0;
+        for (OrderItem item : items) {
+            total += item.getPrice() * item.getQuantity();
+        }
+        return total;
+    }
+
 
     // Getters and setters
     public int getId() { return id; }
