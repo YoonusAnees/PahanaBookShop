@@ -58,6 +58,9 @@ nav {
 .nav-links a:hover {
     color: #f1c40f;
 }
+
+        .nav-links .logout:hover { color: red; }
+
 .nav-links a.active {
     color: #f1c40f;
     font-weight: bold;
