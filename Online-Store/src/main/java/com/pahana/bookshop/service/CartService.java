@@ -64,4 +64,18 @@ public class CartService {
     public void updateQuantity(int cartId, int quantity) {
         cartDAO.updateQuantity(cartId, quantity);
     }
+    
+    public double getTotalPrice(int customerId) {
+        List<CartItem> cartItems = getCartItems(customerId);
+        double total = 0;
+        for (CartItem item : cartItems) {
+            if (item.getBook() != null) {
+                total += item.getBook().getPrice() * item.getQuantity();
+            } else if (item.getStationery() != null) {
+                total += item.getStationery().getPrice() * item.getQuantity();
+            }
+        }
+        return total;
+    }
+
 }
