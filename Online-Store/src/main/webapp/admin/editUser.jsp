@@ -2,11 +2,21 @@
 <%@ page import="com.pahana.bookshop.model.User" %>
 <%@ page import="com.pahana.bookshop.model.Customer" %>
 <%
-    User user = (User) session.getAttribute("user");
+    // Get the admin user from session for authorization
+    User adminUser = (User) session.getAttribute("user");
+    
+    // Get the user being edited from request attributes
+    User userToEdit = (User) request.getAttribute("user");
     Customer customer = (Customer) request.getAttribute("customer"); // Might be null if role != customer
 
-    if (user == null || !"admin".equals(user.getRole())) {
+    if (adminUser == null || !"admin".equals(adminUser.getRole())) {
         response.sendRedirect(request.getContextPath() + "/");
+        return;
+    }
+    
+    // Check if we have a user to edit
+    if (userToEdit == null) {
+        response.sendRedirect(request.getContextPath() + "/User?action=list");
         return;
     }
 %>
@@ -17,9 +27,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit User - PahanaBook</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-                    <link rel="icon" type="image/png"  href="https://img.freepik.com/free-vector/gradient-p-logo-template_23-2149372725.jpg?w=32&q=80" />
+    <link rel="icon" type="image/png"  href="https://img.freepik.com/free-vector/gradient-p-logo-template_23-2149372725.jpg?w=32&q=80" />
     
-    <style>
+     <style>
         :root {
             --primary: #2c3e50;
             --secondary: #34495e;
@@ -486,8 +496,6 @@
     </style>
 </head>
 <body>
-   
-
     <!-- Sidebar Navigation -->
     <nav class="sidebar" id="sidebar">
         <a href="<%= request.getContextPath() %>/admin/dashboard.jsp" class="logo">
@@ -509,7 +517,7 @@
     <!-- Header -->
     <header class="header">
         <div class="welcome-text">
-            <h1>Welcome Admin: <%= user.getUsername() %></h1>
+            <h1>Welcome Admin: <%= adminUser.getUsername() %></h1>
             <p>Edit user information and permissions</p>
         </div>
         <a href="<%= request.getContextPath() %>/LogoutController" class="logout-btn">
@@ -521,31 +529,31 @@
     <main class="main-content">
         <div class="form-container">
             <h2 class="form-title">
-                <i class="fas fa-user-edit"></i>Edit User
+                <i class="fas fa-user-edit"></i>Edit User: <%= userToEdit.getUsername() %>
             </h2>
             
             <form action="User" method="post" id="userForm">
                 <input type="hidden" name="action" value="update" />
-                <input type="hidden" name="id" value="<%= user.getId() %>" />
+                <input type="hidden" name="id" value="<%= userToEdit.getId() %>" />
 
                 <div class="form-group">
                     <label for="username"><i class="fas fa-user"></i>Username</label>
                     <input type="text" id="username" name="username" class="form-control" 
-                           value="<%= user.getUsername() %>" required 
-                           pattern="[A-Za-z0-9_]{3,20}" 
-                           title="Username must be 3-20 characters (letters, numbers, underscore only)" />
+                           value="<%= userToEdit.getUsername() %>" required 
+                         
+                       />
                 </div>
 
                 <div class="form-group">
                     <label for="email"><i class="fas fa-envelope"></i>Email</label>
                     <input type="email" id="email" name="email" class="form-control" 
-                           value="<%= user.getEmail() %>" required />
+                           value="<%= userToEdit.getEmail() %>" required />
                 </div>
 
                 <div class="form-group">
                     <label for="password"><i class="fas fa-lock"></i>Password</label>
                     <input type="text" id="password" name="password" class="form-control" 
-                           value="<%= user.getPassword() %>" required 
+                           value="<%= userToEdit.getPassword() %>" required 
                            minlength="6" 
                            title="Password must be at least 6 characters" />
                 </div>
@@ -553,21 +561,21 @@
                 <div class="form-group">
                     <label for="role"><i class="fas fa-user-tag"></i>Role</label>
                     <select id="role" name="role" class="form-select" required onchange="toggleCustomerFields(this.value)">
-                        <option value="admin" <%= "admin".equals(user.getRole()) ? "selected" : "" %>>Admin</option>
-                        <option value="customer" <%= "customer".equals(user.getRole()) ? "selected" : "" %>>Customer</option>
+                        <option value="admin" <%= "admin".equals(userToEdit.getRole()) ? "selected" : "" %>>Admin</option>
+                        <option value="customer" <%= "customer".equals(userToEdit.getRole()) ? "selected" : "" %>>Customer</option>
                     </select>
                 </div>
 
                 <!-- Customer-specific fields -->
-                <div id="customerFields" class="customer-fields" style="display: <%= "customer".equals(user.getRole()) ? "block" : "none" %>">
+                <div id="customerFields" class="customer-fields" style="display: <%= "customer".equals(userToEdit.getRole()) ? "block" : "none" %>">
                     <h3><i class="fas fa-address-card"></i>Customer Details</h3>
                     
                     <div class="form-group">
                         <label for="accountNumber"><i class="fas fa-credit-card"></i>Account Number</label>
                         <input type="text" id="accountNumber" name="accountNumber" class="form-control" 
                                value="<%= customer != null ? customer.getAccountNumber() : "" %>" 
-                               pattern="[A-Za-z0-9]{8,20}" 
-                               title="Account number must be 8-20 alphanumeric characters" />
+                               
+                              />
                     </div>
 
                     <div class="form-group">
@@ -644,23 +652,7 @@
                 return false;
             }
             
-            // Customer field validation
-            if (role === 'customer') {
-                const accountNumber = document.getElementById('accountNumber').value;
-                const telephone = document.getElementById('telephone').value;
-                
-                if (accountNumber && !/^[A-Za-z0-9]{8,20}$/.test(accountNumber)) {
-                    e.preventDefault();
-                    alert('Account number must be 8-20 alphanumeric characters');
-                    return false;
-                }
-                
-                if (telephone && !/^[0-9+\-\s]{10,15}$/.test(telephone)) {
-                    e.preventDefault();
-                    alert('Please enter a valid telephone number');
-                    return false;
-                }
-            }
+          
         });
 
         // Add hover effects to form elements

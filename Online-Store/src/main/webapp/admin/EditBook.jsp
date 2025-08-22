@@ -9,240 +9,560 @@
     }
 %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="ISO-8859-1">
-    <title>Edit Book</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Book - PahanaBook</title>
+    <link rel="icon" type="image/png"  href="https://img.freepik.com/free-vector/gradient-p-logo-template_23-2149372725.jpg?w=32&q=80" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Sidebar and layout styles */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #f39c12;
+            --danger: #e74c3c;
+            --success: #27ae60;
+            --warning: #f1c40f;
+            --info: #3498db;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --sidebar-width: 250px;
+            --header-height: 80px;
+            --transition: all 0.3s ease;
+        }
+
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
-        body, html {
-            margin: 0;
-            height: 100%;
+
+        body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f2f2f2;
+            background: linear-gradient(135deg, #f7f9fc 0%, #e3eaf2 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            line-height: 1.5;
         }
+
+        /* Sidebar */
         .sidebar {
             position: fixed;
             top: 0;
             left: 0;
-            width: 220px;
-            height: 100%;
-            background-color: #2f4f6f;
-            padding-top: 60px;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 20px 0;
+            box-shadow: 3px 0 15px rgba(0,0,0,0.2);
             overflow-y: auto;
+            z-index: 1000;
+            transition: var(--transition);
         }
-        .sidebar h2 {
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-            margin: 0;
-            font-weight: normal;
-            font-size: 22px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .sidebar ul li {
-            margin: 0;
-        }
-        .sidebar ul li a {
-            display: block;
-            padding: 14px 20px;
-            color: white;
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            color: var(--accent);
+            font-size: 24px;
+            font-weight: 700;
             text-decoration: none;
-            border-left: 4px solid transparent;
-            transition: all 0.3s ease;
+            transition: var(--transition);
+        }
+
+        .logo i {
+            margin-right: 8px;
+            font-size: 28px;
+        }
+
+        .sidebar h2 {
+            color: var(--light);
+            text-align: center;
+            font-size: 1.1rem;
+            margin: 10px 0 15px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0 10px;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: #bdc3c7;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: var(--transition);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: linear-gradient(90deg, rgba(243, 156, 18, 0.2) 0%, transparent 100%);
+            color: var(--light);
+            transform: translateX(5px);
+        }
+
+        .sidebar-menu a i {
+            margin-right: 10px;
             font-size: 16px;
+            width: 22px;
         }
-        .sidebar ul li a:hover,
-        .sidebar ul li a.active {
-            background-color: #4a90e2;
-            border-left: 4px solid #f39c12;
-        }
+
+        /* Main Content */
         .main-content {
-            margin-left: 220px;
-            padding: 80px 40px;
+            margin-left: var(--sidebar-width);
+            padding: 20px;
+            transition: var(--transition);
             min-height: 100vh;
-            background: linear-gradient(to right, #f2f2f2, #d9e4f5);
             display: flex;
             justify-content: center;
             align-items: flex-start;
         }
-        .top-header {
+
+        /* Header */
+        .header {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--light);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             position: fixed;
-            left: 220px;
-            top: 0;
-            right: 0;
-            height: 60px;
-            background-color: #2f4f6f;
+            top: 20px;
+            left: calc(var(--sidebar-width) + 20px);
+            right: 20px;
+            z-index: 900;
+        }
+
+        .welcome-text h1 {
+            font-size: 1.4rem;
+            margin-bottom: 3px;
+            font-weight: 700;
+        }
+
+        .welcome-text p {
+            color: #bdc3c7;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn {
+            background: linear-gradient(45deg, var(--danger), #c0392b);
             color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 0 30px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            z-index: 1000;
+            gap: 6px;
+            transition: var(--transition);
+            box-shadow: 0 3px 12px rgba(231, 76, 60, 0.3);
+            font-size: 0.9rem;
         }
-        .top-header .welcome {
-            font-size: 18px;
-        }
-        .logout-btn {
-            background-color: #e74c3c;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
+
         .logout-btn:hover {
-            background-color: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 16px rgba(231, 76, 60, 0.4);
         }
-        /* Edit form container */
-        .container {
-            max-width: 480px;
-            background: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+
+        /* Form Container */
+        .form-container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 650px;
+            margin-top: 100px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
         }
-        h2 {
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--info));
+        }
+
+        .form-container:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .form-title {
             text-align: center;
+            margin-bottom: 25px;
+            color: var(--dark);
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .form-title i {
+            color: var(--accent);
+        }
+
+        .form-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        /* Form Elements */
+        .form-group {
             margin-bottom: 20px;
-            color: #333;
+            position: relative;
         }
-        label {
+
+        .form-group label {
             display: block;
-            margin-top: 15px;
-            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
         }
-        input[type="text"], input[type="number"], input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            margin-top: 6px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        input[type="submit"] {
-            margin-top: 25px;
-            width: 100%;
-            background: #28a745;
-            color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
+
+        .form-group label i {
+            color: var(--accent);
             font-size: 16px;
+            width: 20px;
         }
-        input[type="submit"]:hover {
-            background: #218838;
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            border: 2px solid #e9ecef;
+            background: #f8f9fa;
+            transition: var(--transition);
         }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.1);
+        }
+
+        .file-input-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            transition: var(--transition);
+        }
+
+        .file-input-container:hover {
+            border-color: var(--accent);
+            background: #e9ecef;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            color: #6c757d;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .file-input-label i {
+            font-size: 22px;
+            margin-bottom: 8px;
+            display: block;
+            color: var(--info);
+        }
+
+        .file-input {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .current-image-container {
+            text-align: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px dashed #dee2e6;
+        }
+
+        .current-image-container p {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .current-image {
+            max-width: 150px;
+            max-height: 200px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border: 1px solid #dee2e6;
+        }
+
+        .file-preview {
+            margin-top: 10px;
+            text-align: center;
+            display: none;
+        }
+
+        .file-preview img {
+            max-width: 150px;
+            max-height: 200px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(45deg, var(--success), #219653);
+            color: white;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(45deg, #219653, var(--success));
+            box-shadow: 0 6px 18px rgba(39, 174, 96, 0.4);
+        }
+
         .back-link {
             display: block;
-            margin-top: 15px;
             text-align: center;
-            color: #007bff;
+            margin-top: 20px;
+            color: var(--info);
             text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
         }
+
         .back-link:hover {
+            color: #2980b9;
             text-decoration: underline;
         }
-        img.book-image {
-            display: block;
-            margin-top: 15px;
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
-        }
+
+        /* Responsive adjustments */
         @media (max-width: 768px) {
-            .sidebar {
-                width: 180px;
-                padding-top: 50px;
-            }
             .main-content {
-                margin-left: 180px;
-                padding: 30px 20px;
+                padding: 15px;
             }
-            .top-header {
-                left: 180px;
-                height: 50px;
-                padding: 0 20px;
-            }
-            .top-header .welcome {
-                font-size: 16px;
-            }
-            .sidebar ul li a {
-                font-size: 14px;
-                padding: 12px 16px;
-            }
-            .container {
-                max-width: 100%;
+
+            .form-container {
+                margin-top: 140px;
                 padding: 20px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+                padding: 15px;
+            }
+            
+            .welcome-text h1 {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .form-container {
+                padding: 18px;
+                margin-top: 160px;
+            }
+            
+            .form-title {
+                font-size: 1.3rem;
+            }
+            
+            .form-control {
+                padding: 10px 12px;
             }
         }
     </style>
 </head>
 <body>
-
     <!-- Sidebar Navigation -->
-    <nav class="sidebar">
+    <nav class="sidebar" id="sidebar">
+        <a href="<%= request.getContextPath() %>/admin/dashboard.jsp" class="logo">
+            <i class="fas fa-book"></i>PahanaBook
+        </a>
+        
         <h2>Admin Panel</h2>
-        <ul>
-            <li><a href="AddBook.jsp">Add Book</a></li>
-            <li><a href="Book?action=list">Manage Books</a></li>
-            <li><a href="User?action=list">Manage Users</a></li>
-            <li><a href="AddStationery.jsp">Add Stationery</a></li>
+        
+        <ul class="sidebar-menu">
+            <li><a href="AddBook.jsp"><i class="fas fa-plus-circle"></i>Add Book</a></li>
+            <li><a href="Book?action=list"><i class="fas fa-book"></i>Manage Books</a></li>
+            <li><a href="${pageContext.request.contextPath}/User?action=list"><i class="fas fa-users"></i>Manage Users</a></li>
+            <li><a href="AddStationery.jsp"><i class="fas fa-pencil-alt"></i>Add Stationery</a></li>
+            <li><a href="Stationery?action=list"><i class="fas fa-pencil-ruler"></i>Manage Stationery</a></li>
+            <li><a href="${pageContext.request.contextPath}/admin/order-history"><i class="fas fa-history"></i>Orders History</a></li>
         </ul>
     </nav>
 
-    <!-- Top Header -->
-    <header class="top-header">
-        <div class="welcome">Welcome Admin: <%= user.getUsername() %></div>
-        <a class="logout-btn" href="<%= request.getContextPath() %>/LogoutController">Logout</a>
+    <!-- Header -->
+    <header class="header">
+        <div class="welcome-text">
+            <h1>Welcome Admin: <%= user.getUsername() %></h1>
+            <p>Edit book details</p>
+        </div>
+        <a href="<%= request.getContextPath() %>/LogoutController" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>Logout
+        </a>
     </header>
 
-    <!-- Main content -->
+    <!-- Main Content -->
     <main class="main-content">
-        <div class="container">
-            <h2>Edit Book</h2>
-            <form action="Book?action=update" method="post" enctype="multipart/form-data">
+        <div class="form-container">
+            <h2 class="form-title">
+                <i class="fas fa-edit"></i>Edit Book
+            </h2>
+            
+            <form action="Book?action=update" method="post" enctype="multipart/form-data" id="bookForm">
                 <input type="hidden" name="id" value="${book.id}" />
                 <input type="hidden" name="existingImage" value="${book.image}" />
 
-                <label for="title">Title:</label>
-                <input type="text" id="title" name="title" value="${book.title}" required>
+                <div class="form-group">
+                    <label for="title"><i class="fas fa-heading"></i>Title</label>
+                    <input type="text" id="title" name="title" class="form-control" value="${book.title}" required />
+                </div>
 
-                <label for="author">Author:</label>
-                <input type="text" id="author" name="author" value="${book.author}" required>
+                <div class="form-group">
+                    <label for="author"><i class="fas fa-user"></i>Author</label>
+                    <input type="text" id="author" name="author" class="form-control" value="${book.author}" required />
+                </div>
 
-                <label for="category">Category:</label>
-                <input type="text" id="category" name="category" value="${book.category}" required>
+                <div class="form-group">
+                    <label for="category"><i class="fas fa-tag"></i>Category</label>
+                    <input type="text" id="category" name="category" class="form-control" value="${book.category}" required />
+                </div>
 
-                <label for="price">Price:</label>
-                <input type="number" step="0.01" id="price" name="price" value="${book.price}" required>
+                <div class="form-group">
+                    <label for="price"><i class="fas fa-dollar-sign"></i>Price (Rs.)</label>
+                    <input type="number" id="price" name="price" step="0.01" class="form-control" value="${book.price}" required />
+                </div>
 
-                <label for="quantity">Quantity:</label>
-                <input type="number" id="quantity" name="quantity" value="${book.quantity}" required>
+                <div class="form-group">
+                    <label for="quantity"><i class="fas fa-cubes"></i>Quantity</label>
+                    <input type="number" id="quantity" name="quantity" class="form-control" value="${book.quantity}" required />
+                </div>
 
-                <label>Current Image:</label>
-                    <img src="${pageContext.request.contextPath}/uploads${book.image}" />
+                <div class="current-image-container">
+                    <p><i class="fas fa-image"></i>Current Book Cover</p>
+                    <img src="${pageContext.request.contextPath}${book.image}" alt="Current book cover" class="current-image" 
+                         onerror="this.src='https://via.placeholder.com/150x200?text=No+Image'">
+                </div>
 
-                <label for="image">Change Image (optional):</label>
-                <input type="file" id="image" name="image" accept="image/*">
+                <div class="form-group">
+                    <label for="image"><i class="fas fa-camera"></i>Change Cover Image (Optional)</label>
+                    <div class="file-input-container">
+                        <label for="image" class="file-input-label">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span>Choose new book cover image</span>
+                        </label>
+                        <input type="file" id="image" name="image" class="file-input" accept="image/*" onchange="previewImage(this)" />
+                    </div>
+                    <div class="file-preview" id="imagePreview">
+                        <img src="" alt="Image preview" id="previewImg" />
+                    </div>
+                </div>
 
-                <input type="submit" value="Update Book">
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-save"></i>Update Book
+                </button>
+                
+            
             </form>
-
         </div>
     </main>
 
+    <script>
+        function previewImage(input) {
+            const preview = document.getElementById('imagePreview');
+            const previewImg = document.getElementById('previewImg');
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                preview.style.display = 'none';
+            }
+        }
+
+        document.getElementById('bookForm').addEventListener('submit', function(e) {
+            const price = document.getElementById('price').value;
+            const quantity = document.getElementById('quantity').value;
+            
+            if (price <= 0) {
+                e.preventDefault();
+                alert('Price must be greater than 0');
+                return false;
+            }
+            
+            if (quantity <= 0) {
+                e.preventDefault();
+                alert('Quantity must be greater than 0');
+                return false;
+            }
+        });
+        
+        // Handle image loading errors
+        document.querySelector('.current-image').addEventListener('error', function() {
+            this.src = 'https://via.placeholder.com/150x200?text=No+Image';
+        });
+    </script>
 </body>
 </html>
