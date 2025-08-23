@@ -111,9 +111,10 @@ public class UserController extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        User user = userDAO.getUserByEmail(email);
+        // Use the new validateLogin method with bcrypt
+        User user = userDAO.validateLogin(email, password);
 
-        if (user != null && user.getPassword().equals(password)) {
+        if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
             session.setAttribute("message", "Login successful! Welcome, " + user.getUsername());

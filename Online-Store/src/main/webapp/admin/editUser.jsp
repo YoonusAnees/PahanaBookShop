@@ -357,6 +357,22 @@
             transform: translateY(-1px);
         }
 
+        /* Password info box */
+        .password-info {
+            background: #e8f4fc;
+            border-left: 4px solid var(--info);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #2c3e50;
+        }
+
+        .password-info i {
+            color: var(--info);
+            margin-right: 8px;
+        }
+
         /* Mobile Menu Button */
         .menu-toggle {
             display: none;
@@ -535,13 +551,13 @@
             <form action="User" method="post" id="userForm">
                 <input type="hidden" name="action" value="update" />
                 <input type="hidden" name="id" value="<%= userToEdit.getId() %>" />
+                <!-- Hidden field to preserve current password if not changed -->
+                <input type="hidden" name="currentPassword" value="<%= userToEdit.getPassword() %>" />
 
                 <div class="form-group">
                     <label for="username"><i class="fas fa-user"></i>Username</label>
                     <input type="text" id="username" name="username" class="form-control" 
-                           value="<%= userToEdit.getUsername() %>" required 
-                         
-                       />
+                           value="<%= userToEdit.getUsername() %>" required />
                 </div>
 
                 <div class="form-group">
@@ -551,11 +567,15 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="password"><i class="fas fa-lock"></i>Password</label>
-                    <input type="text" id="password" name="password" class="form-control" 
-                           value="<%= userToEdit.getPassword() %>" required 
+                    <label for="password"><i class="fas fa-lock"></i>New Password</label>
+                    <input type="password" id="password" name="password" class="form-control" 
+                           placeholder="Enter new password (leave blank to keep current)" 
                            minlength="6" 
                            title="Password must be at least 6 characters" />
+                    <div class="password-info">
+                        <i class="fas fa-info-circle"></i>
+                        Leave blank to keep the current password. Password will be automatically encrypted.
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -573,9 +593,7 @@
                     <div class="form-group">
                         <label for="accountNumber"><i class="fas fa-credit-card"></i>Account Number</label>
                         <input type="text" id="accountNumber" name="accountNumber" class="form-control" 
-                               value="<%= customer != null ? customer.getAccountNumber() : "" %>" 
-                               
-                              />
+                               value="<%= customer != null ? customer.getAccountNumber() : "" %>" />
                     </div>
 
                     <div class="form-group">
@@ -642,17 +660,19 @@
 
         // Form validation
         document.getElementById('userForm').addEventListener('submit', function(e) {
-            const role = document.getElementById('role').value;
             const password = document.getElementById('password').value;
             
-            // Password validation
-            if (password.length < 6) {
+            // Password validation - only if password is being changed
+            if (password.length > 0 && password.length < 6) {
                 e.preventDefault();
                 alert('Password must be at least 6 characters long');
                 return false;
             }
             
-          
+            // If password field is empty, set it to the current password value
+            if (password.length === 0) {
+                document.getElementById('password').value = document.querySelector('input[name="currentPassword"]').value;
+            }
         });
 
         // Add hover effects to form elements
@@ -675,6 +695,11 @@
                     this.style.borderColor = 'var(--success)';
                 }
             });
+        });
+
+        // Clear password field on page load to avoid displaying hash
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('password').value = '';
         });
     </script>
 </body>
