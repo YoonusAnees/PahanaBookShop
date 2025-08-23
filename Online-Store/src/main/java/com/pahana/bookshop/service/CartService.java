@@ -77,5 +77,10 @@ public class CartService {
         }
         return total;
     }
+    
+    public CartItem getCartItemById(int cartId) {
+        return cartDAO.getCartItemById(cartId);
+    }
+
 
 }

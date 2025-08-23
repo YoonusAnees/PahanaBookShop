@@ -120,4 +120,28 @@ public class BookDAO {
             ps.executeUpdate();
         }
     }
+    
+    public List<Book> getLowStockBooks(int threshold) throws SQLException {
+        List<Book> lowStockBooks = new ArrayList<>();
+        String sql = "SELECT * FROM books WHERE quantity <= ?";
+        
+        try (Connection conn = DBConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, threshold);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    lowStockBooks.add(new Book(
+                        rs.getInt("id"),
+                        rs.getString("title"),
+                        rs.getString("author"),
+                        rs.getString("category"),
+                        rs.getDouble("price"),
+                        rs.getInt("quantity"),
+                        rs.getString("image")
+                    ));
+                }
+            }
+        }
+        return lowStockBooks;
+    }
 }

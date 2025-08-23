@@ -145,9 +145,27 @@ public class CartController extends HttpServlet {
         int cartId = Integer.parseInt(request.getParameter("cartId"));
         int quantity = Integer.parseInt(request.getParameter("quantity"));
         int customerId = Integer.parseInt(request.getParameter("customerId"));
-        
-        cartService.updateQuantity(cartId, quantity);
+
+        CartItem item = cartService.getCartItemById(cartId);
+        int stock = 0;
+        if (item.getBook() != null) {
+            stock = item.getBook().getQuantity();
+        } else if (item.getStationery() != null) {
+            stock = item.getStationery().getQuantity();
+        }
+
+        if (stock == 0) {
+            cartService.removeItem(cartId); // auto-remove if no stock
+        } else {
+            if (quantity < 1) {
+                quantity = 1;
+            } else if (quantity > stock) {
+                quantity = stock;
+            }
+            cartService.updateQuantity(cartId, quantity);
+        }
         response.sendRedirect("CartController?action=view&customerId=" + customerId);
     }
+
 
 } 

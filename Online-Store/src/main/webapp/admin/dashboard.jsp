@@ -6,6 +6,8 @@
 <%@ page import="com.pahana.bookshop.DAO.OrderDAO" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.pahana.bookshop.model.Order" %>
+<%@ page import="com.pahana.bookshop.model.Book" %>
+<%@ page import="com.pahana.bookshop.model.Stationery" %>
 <%
     User user = (User) session.getAttribute("user");
     if (user == null || !"admin".equals(user.getRole())) {
@@ -23,6 +25,10 @@
     int stationeryCount = stationeryDAO.getAllStationery().size();
     int orderCount = orderDAO.getAllOrders().size(); 
     
+    // Get low stock items
+    List<Book> lowStockBooks = bookDAO.getLowStockBooks(5);
+    List<Stationery> lowStockStationery = stationeryDAO.getLowStockStationery(5);
+    
     // Get recent orders for the chart
     List<Order> recentOrders = orderDAO.getAllOrders();
     if (recentOrders.size() > 5) {
@@ -35,7 +41,7 @@
     <meta charset="ISO-8859-1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - PahanaBook</title>
-        <link rel="icon" type="image/png"  href="https://img.freepik.com/free-vector/gradient-p-logo-template_23-2149372725.jpg?w=32&q=80" />
+    <link rel="icon" type="image/png"  href="https://img.freepik.com/free-vector/gradient-p-logo-template_23-2149372725.jpg?w=32&q=80" />
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -217,6 +223,7 @@
             cursor: pointer;
             position: relative;
             overflow: hidden;
+            text-decoration: none;
         }
 
         .widget::before {
@@ -283,33 +290,112 @@
             font-size: 0.9rem;
         }
 
-        /* Charts Section */
-        .charts-section {
+        /* Low Stock Alert */
+        .low-stock-alert {
+            position: absolute;
+            top: 10px;
+            right: 4px;
+            background: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Low Stock Section */
+        .low-stock-section {
             display: grid;
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: 1fr 1fr;
             gap: 25px;
             margin-bottom: 30px;
         }
 
-        .chart-container {
+        .low-stock-container {
             background: white;
             border-radius: 15px;
             padding: 25px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.08);
         }
 
-        .chart-header {
+        .low-stock-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ecf0f1;
         }
 
-        .chart-title {
+        .low-stock-title {
             font-size: 1.3rem;
             font-weight: 700;
             color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
+
+        .low-stock-title i {
+            color: var(--danger);
+        }
+
+        .low-stock-list {
+            list-style: none;
+        }
+
+        .low-stock-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .low-stock-item:last-child {
+            border-bottom: none;
+        }
+
+        .low-stock-info h4 {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+
+        .low-stock-info p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .low-stock-quantity {
+            background: #ffe8e8;
+            color: var(--danger);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .no-low-stock {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+   
 
         /* Recent Orders */
         .recent-orders {
@@ -362,11 +448,9 @@
             color: var(--warning);
         }
 
-       
-
         /* Responsive Design */
         @media (max-width: 1200px) {
-            .charts-section {
+            .charts-section, .low-stock-section {
                 grid-template-columns: 1fr;
             }
         }
@@ -405,7 +489,7 @@
                 font-size: 1.5rem;
             }
             
-            .dashboard-grid {
+            .dashboard-grid, .low-stock-section {
                 grid-template-columns: 1fr;
             }
             
@@ -425,7 +509,7 @@
                 padding: 15px;
             }
             
-            .widget {
+            .widget, .low-stock-container {
                 padding: 20px;
             }
             
@@ -447,6 +531,10 @@
 
         .widget {
             animation: fadeIn 0.6s ease-out;
+        }
+
+        .low-stock-container {
+            animation: fadeIn 0.7s ease-out;
         }
 
         .chart-container {
@@ -474,7 +562,7 @@
 </head>
 <body>
     <!-- Mobile Menu Toggle -->
-    <div class="menu-toggle" onclick="toggleSidebar()">
+    <div class="menu-toggle" style="display: none; position: fixed; top: 20px; left: 20px; z-index: 1100; background: var(--primary); color: white; width: 40px; height: 40px; border-radius: 50%; align-items: center; justify-content: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); cursor: pointer;" onclick="toggleSidebar()">
         <i class="fas fa-bars"></i>
     </div>
 
@@ -512,6 +600,9 @@
         <!-- Dashboard Widgets -->
         <div class="dashboard-grid">
             <a href="Book?action=list" class="widget widget-books">
+                <% if (lowStockBooks.size() > 0) { %>
+                    <div class="low-stock-alert"><%= lowStockBooks.size() %></div>
+                <% } %>
                 <div class="widget-content">
                     <div class="widget-icon">
                         <i class="fas fa-book"></i>
@@ -536,6 +627,9 @@
             </a>
 
             <a href="Stationery?action=list" class="widget widget-stationery">
+                <% if (lowStockStationery.size() > 0) { %>
+                    <div class="low-stock-alert"><%= lowStockStationery.size() %></div>
+                <% } %>
                 <div class="widget-content">
                     <div class="widget-icon">
                         <i class="fas fa-pencil-alt"></i>
@@ -560,7 +654,72 @@
             </a>
         </div>
 
-       
+        <!-- Low Stock Alerts Section -->
+        <div class="low-stock-section">
+            <!-- Low Stock Books -->
+            <div class="low-stock-container">
+                <div class="low-stock-header">
+                    <h3 class="low-stock-title">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Low Stock Books
+                    </h3>
+                    <span class="low-stock-count"><%= lowStockBooks.size() %> items</span>
+                </div>
+                
+                <% if (lowStockBooks.size() > 0) { %>
+                    <ul class="low-stock-list">
+                        <% for (Book book : lowStockBooks) { %>
+                        <li class="low-stock-item">
+                            <div class="low-stock-info">
+                                <h4><%= book.getTitle() %></h4>
+                                <p>ID: <%= book.getId() %></p>
+                            </div>
+                            <span class="low-stock-quantity"><%= book.getQuantity() %> left</span>
+                        </li>
+                        <% } %>
+                    </ul>
+                <% } else { %>
+                    <div class="no-low-stock">
+                        <i class="fas fa-check-circle" style="font-size: 2rem; color: var(--success); margin-bottom: 10px;"></i>
+                        <p>All books are sufficiently stocked</p>
+                    </div>
+                <% } %>
+            </div>
+
+            <!-- Low Stock Stationery -->
+            <div class="low-stock-container">
+                <div class="low-stock-header">
+                    <h3 class="low-stock-title">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Low Stock Stationery
+                    </h3>
+                    <span class="low-stock-count"><%= lowStockStationery.size() %> items</span>
+                </div>
+                
+                <% if (lowStockStationery.size() > 0) { %>
+                    <ul class="low-stock-list">
+                        <% for (Stationery stationery : lowStockStationery) { %>
+                        <li class="low-stock-item">
+                            <div class="low-stock-info">
+                                <h4><%= stationery.getName() %></h4>
+                                <p>ID: <%= stationery.getId() %></p>
+                            </div>
+                            <span class="low-stock-quantity"><%= stationery.getQuantity() %> left</span>
+                        </li>
+                        <% } %>
+                    </ul>
+                <% } else { %>
+                    <div class="no-low-stock">
+                        <i class="fas fa-check-circle" style="font-size: 2rem; color: var(--success); margin-bottom: 10px;"></i>
+                        <p>All stationery items are sufficiently stocked</p>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+    
+
         <!-- Recent Orders -->
         <div class="recent-orders">
             <div class="chart-header">

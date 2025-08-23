@@ -109,4 +109,28 @@ public class StationeryDAO {
             return false;
         }
     }
+    
+    public List<Stationery> getLowStockStationery(int threshold) {
+        List<Stationery> lowStockStationery = new ArrayList<>();
+        String sql = "SELECT * FROM stationery WHERE quantity <= ?";
+        
+        try (Connection conn = DBConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, threshold);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    lowStockStationery.add(new Stationery(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("description"),
+                        rs.getDouble("price"),
+                        rs.getInt("quantity")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return lowStockStationery;
+    }
 }

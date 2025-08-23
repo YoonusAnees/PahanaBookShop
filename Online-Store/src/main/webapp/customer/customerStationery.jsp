@@ -287,6 +287,9 @@
                     <h3><%= s.getName() %></h3>
                     <p>Description: <%= s.getDescription() %></p>
                     <p>Price: Rs. <%= s.getPrice() %></p>
+                                        <p>Quantity: Rs. <%= s.getQuantity() %></p>
+                    
+                    
 
                    <form method="post" action="<%= request.getContextPath() %>/CartController">
     <input type="hidden" name="action" value="add" />
