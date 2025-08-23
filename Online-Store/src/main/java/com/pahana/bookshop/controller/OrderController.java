@@ -89,12 +89,11 @@ public class OrderController extends HttpServlet {
             orderItems.add(orderItem);
         }
 
-
         Order order = new Order(customer.getId(), fullName, email, address, orderItems);
 
         try (Connection conn = DBConnectionFactory.getConnection()) {
-        	OrderService orderService = OrderService.getInstance();
-        	int orderId = orderService.placeOrder(order);
+            OrderService orderService = OrderService.getInstance();
+            int orderId = orderService.placeOrder(order);
 
             cartService.checkout(customer.getId());
             session.removeAttribute("cart");

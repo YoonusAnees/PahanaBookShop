@@ -215,9 +215,42 @@
             .burger { display: flex; }
             .container { margin: 25px 15px 90px 15px; padding: 25px 20px; }
         }
+        
+        /* Loading overlay */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #f1c40f;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+</div>
 
 <!-- Navbar -->
 <nav>
@@ -256,7 +289,7 @@
         <p><strong>Total Price:</strong> Rs. ${totalPrice}</p>
     </div>
 
-    <form action="${pageContext.request.contextPath}/OrderController" method="post" novalidate>
+    <form action="${pageContext.request.contextPath}/OrderController" method="post" novalidate id="checkoutForm">
         <input type="hidden" name="action" value="placeOrder" />
         <input type="hidden" name="customerId" value="${user.id}" />
 
@@ -275,7 +308,7 @@
             <input id="address" type="text" name="address" required placeholder="Enter your shipping address" />
         </div>
 
-        <button class="btn" type="submit">Confirm Order</button>
+        <button class="btn" type="submit" id="submitBtn">Confirm Order</button>
     </form>
 </div>
 
@@ -287,6 +320,12 @@
 <script>
 function openMenu() { document.getElementById("mobileMenu").classList.add("show"); }
 function closeMenu() { document.getElementById("mobileMenu").classList.remove("show"); }
+
+// Show loading overlay when form is submitted
+document.getElementById('checkoutForm').addEventListener('submit', function() {
+    document.getElementById('loadingOverlay').style.display = 'flex';
+    document.getElementById('submitBtn').disabled = true;
+});
 </script>
 </body>
 </html>

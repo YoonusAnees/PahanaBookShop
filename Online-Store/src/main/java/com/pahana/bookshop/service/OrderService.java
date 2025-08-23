@@ -9,9 +9,11 @@ import java.util.List;
 public class OrderService {
     private static OrderService instance;
     private final OrderDAO orderDAO;
+    private final EmailService emailService;
 
     private OrderService() {
-        orderDAO = new OrderDAO(); 
+        orderDAO = new OrderDAO();
+        emailService = EmailService.getInstance();
     }
 
     public static OrderService getInstance() {
@@ -26,7 +28,21 @@ public class OrderService {
     }
 
     public int placeOrder(Order order) throws Exception {
-        return orderDAO.saveOrder(order);
+        // Save the order and get the complete order object with ID
+        Order savedOrder = orderDAO.saveOrderAndReturn(order);
+        
+        // Get the complete order with item details for email
+        Order completeOrder = orderDAO.getOrderById(savedOrder.getId());
+        
+        // Send confirmation email
+        try {
+            emailService.sendOrderConfirmation(completeOrder.getEmail(), completeOrder);
+        } catch (Exception e) {
+            // Log the error but don't throw it to avoid disrupting the order process
+            System.err.println("Failed to send confirmation email: " + e.getMessage());
+        }
+        
+        return savedOrder.getId();
     }
 
     public void updateOrder(Order order) throws Exception {

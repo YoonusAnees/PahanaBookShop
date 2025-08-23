@@ -19,8 +19,6 @@ public class OrderDAO {
     private static final String SELECT_ALL_ORDERS =
         "SELECT * FROM orders ORDER BY orderDate DESC";
 
-
-
     private static final String SELECT_ORDER_BY_ID =
         "SELECT * FROM orders WHERE id = ?";
 
@@ -47,7 +45,8 @@ public class OrderDAO {
     	    "LEFT JOIN stationery s ON oi.stationeryId = s.id " +
     	    "ORDER BY o.orderDate DESC";
 
-    public int saveOrder(Order order) throws SQLException {
+    // NEW METHOD: Save order and return the complete Order object
+    public Order saveOrderAndReturn(Order order) throws SQLException {
         try (Connection conn = DBConnectionFactory.getConnection();
              PreparedStatement orderStmt = conn.prepareStatement(INSERT_ORDER, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -62,6 +61,7 @@ public class OrderDAO {
             ResultSet rs = orderStmt.getGeneratedKeys();
             if (rs.next()) {
                 int orderId = rs.getInt(1);
+                order.setId(orderId); // Set the generated ID
 
                 try (PreparedStatement itemStmt = conn.prepareStatement(INSERT_ORDER_ITEM)) {
                     for (OrderItem item : order.getItems()) {
@@ -82,12 +82,18 @@ public class OrderDAO {
                 }
 
                 conn.commit();
-                return orderId;
+                return order; // Return the complete order with ID
             } else {
                 conn.rollback();
                 throw new SQLException("Failed to retrieve order ID.");
             }
         }
+    }
+
+    // UPDATED METHOD: Keep the original for backward compatibility
+    public int saveOrder(Order order) throws SQLException {
+        Order savedOrder = saveOrderAndReturn(order);
+        return savedOrder.getId();
     }
 
     public List<Order> getAllOrders() throws SQLException {
@@ -243,4 +249,52 @@ public class OrderDAO {
 
         return item;
     }
+    
+   
+
+// NEW METHOD: Get order items with product details for email
+public List<OrderItem> getOrderItemsWithDetails(int orderId) throws SQLException {
+    List<OrderItem> items = new ArrayList<>();
+    String query = "SELECT oi.*, " +
+                  "b.title AS book_title, " +
+                  "s.name AS stationery_name " +
+                  "FROM order_items oi " +
+                  "LEFT JOIN books b ON oi.bookId = b.id " +
+                  "LEFT JOIN stationery s ON oi.stationeryId = s.id " +
+                  "WHERE oi.orderId = ?";
+    
+    try (Connection conn = DBConnectionFactory.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(query)) {
+
+        stmt.setInt(1, orderId);
+        try (ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                OrderItem item = new OrderItem();
+                item.setId(rs.getInt("id"));
+                item.setOrderId(orderId);
+                item.setBookId((Integer) rs.getObject("bookId"));
+                item.setStationeryId((Integer) rs.getObject("stationeryId"));
+                item.setQuantity(rs.getInt("quantity"));
+                item.setPrice(rs.getDouble("price"));
+                
+                // Set product details for email
+                if (item.getBookId() != null) {
+                    Book book = new Book();
+                    book.setId(item.getBookId());
+                    book.setTitle(rs.getString("book_title"));
+                    item.setBook(book);
+                }
+                if (item.getStationeryId() != null) {
+                    Stationery stationery = new Stationery();
+                    stationery.setId(item.getStationeryId());
+                    stationery.setName(rs.getString("stationery_name"));
+                    item.setStationery(stationery);
+                }
+                
+                items.add(item);
+            }
+        }
+    }
+    return items;
+}
 }

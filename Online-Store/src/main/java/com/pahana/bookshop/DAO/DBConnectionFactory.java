@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DBConnectionFactory {
 
-    private static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/pahanaDB";
+    private static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/pahana";
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "";
 
@@ -14,7 +14,7 @@ public class DBConnectionFactory {
     static {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            System.out.println("✅ JDBC Driver loaded");
+            System.out.println("DB Connected");
         } catch (ClassNotFoundException e) {
             System.err.println("❌ JDBC Driver not found.");
             e.printStackTrace();
