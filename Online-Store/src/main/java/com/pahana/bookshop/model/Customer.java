@@ -2,90 +2,40 @@ package com.pahana.bookshop.model;
 
 public class Customer {
 
-	   private int id;
-	    private String accountNumber;
-	    private String name;
-	    private String address;
-	    private String telephone;
-	    private int userId; 
-	    
-	      
-		public Customer() {
-		
-		}
+    private int id;
+    private String accountNumber; // auto-generated
+    private String name;
+    private String address;
+    private String telephone;
+    private int userId; 
 
+    public Customer() {
+    }
 
-		public Customer(int id, String accountNumber, String name, String address, String telephone, int userId) {
-			super();
-			this.id = id;
-			this.accountNumber = accountNumber;
-			this.name = name;
-			this.address = address;
-			this.telephone = telephone;
-			this.userId = userId;
-		}
+    public Customer(int id, String name, String address, String telephone, int userId) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.telephone = telephone;
+        this.userId = userId;
+    }
 
+    // Getters and setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-		public int getId() {
-			return id;
-		}
+    public String getAccountNumber() { return accountNumber; }
+    public void setAccountNumber(String accountNumber) { this.accountNumber = accountNumber; }
 
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-		public void setId(int id) {
-			this.id = id;
-		}
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
 
+    public String getTelephone() { return telephone; }
+    public void setTelephone(String telephone) { this.telephone = telephone; }
 
-		public String getAccountNumber() {
-			return accountNumber;
-		}
-
-
-		public void setAccountNumber(String accountNumber) {
-			this.accountNumber = accountNumber;
-		}
-
-
-		public String getName() {
-			return name;
-		}
-
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-
-		public String getAddress() {
-			return address;
-		}
-
-
-		public void setAddress(String address) {
-			this.address = address;
-		}
-
-
-		public String getTelephone() {
-			return telephone;
-		}
-
-
-		public void setTelephone(String telephone) {
-			this.telephone = telephone;
-		}
-
-
-		public int getUserId() {
-			return userId;
-		}
-
-
-		public void setUserId(int userId) {
-			this.userId = userId;
-		}
-		
-		
-	    
-	    
+    public int getUserId() { return userId; }
+    public void setUserId(int userId) { this.userId = userId; }
 }

@@ -18,7 +18,7 @@
 
   /* Navbar */
         nav {
-            background-color: #2c3e50;a
+            background-color: #2c3e50;
             color: white;
             padding: 15px 20px;
             display: flex;
@@ -123,8 +123,10 @@
     box-shadow: 0 8px 20px rgba(0,0,0,0.15);
     text-align: center;
     transition: transform 0.3s ease;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    
   }
-  .container:hover { transform: translateY(-5px); }
 
   h2 { color: #2c3e50; margin-bottom: 5px; }
 
@@ -230,7 +232,6 @@
       <input type="password" id="confirmPassword" placeholder="Confirm Password" required />
 
       <!-- Customer-specific fields -->
-      <input type="text" name="accountNumber" placeholder="Account Number" required />
       <input type="text" name="name" placeholder="Full Name" required />
       <input type="text" name="address" placeholder="Address" required />
       <input type="text" name="telephone" placeholder="Telephone" required />

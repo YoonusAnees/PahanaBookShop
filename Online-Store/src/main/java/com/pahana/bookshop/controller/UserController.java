@@ -71,6 +71,7 @@ public class UserController extends HttpServlet {
         }
     }
 
+    // ---------------- REGISTER ----------------
     private void insertUser(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String username = request.getParameter("username");
@@ -78,20 +79,31 @@ public class UserController extends HttpServlet {
         String password = request.getParameter("password");
         String role = request.getParameter("role");
 
-        String accountNumber = request.getParameter("accountNumber");
         String name = request.getParameter("name");
         String address = request.getParameter("address");
         String telephone = request.getParameter("telephone");
 
-        User user = new User(username, email, password, role == null || role.isEmpty() ? "customer" : role);
+        User user = new User(username, email, password,
+                role == null || role.isEmpty() ? "customer" : role);
         int userId = userDAO.insertUserAndReturnId(user);
 
         if (userId > 0) {
             if (user.getRole().equalsIgnoreCase("customer")) {
-                Customer customer = new Customer(0, accountNumber, name, address, telephone, userId);
-                CustomerDAO customerDAO = new CustomerDAO();
-                boolean inserted = customerDAO.insertCustomer(customer);
-                if (!inserted) {
+                try {
+                    CustomerDAO customerDAO = new CustomerDAO();
+                    Customer customer = new Customer(0, name, address, telephone, userId);
+
+                    // generate sequential account number like 001, 002...
+                    customer.setAccountNumber(customerDAO.generateAccountNumber());
+
+                    boolean inserted = customerDAO.insertCustomer(customer);
+                    if (!inserted) {
+                        request.setAttribute("error", "Customer registration failed.");
+                        request.getRequestDispatcher("/register.jsp").forward(request, response);
+                        return;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                     request.setAttribute("error", "Customer registration failed.");
                     request.getRequestDispatcher("/register.jsp").forward(request, response);
                     return;
@@ -106,12 +118,12 @@ public class UserController extends HttpServlet {
         }
     }
 
+    // ---------------- LOGIN ----------------
     private void loginUser(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        // Use the new validateLogin method with bcrypt
         User user = userDAO.validateLogin(email, password);
 
         if (user != null) {
@@ -130,6 +142,7 @@ public class UserController extends HttpServlet {
         }
     }
 
+    // ---------------- LIST ----------------
     private void listUsers(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         List<User> userList = userDAO.getAllUsers();
@@ -138,6 +151,7 @@ public class UserController extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
+    // ---------------- DELETE ----------------
     private void deleteUser(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         int id = Integer.parseInt(request.getParameter("id"));
@@ -145,6 +159,7 @@ public class UserController extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/User?action=list");
     }
 
+    // ---------------- EDIT FORM ----------------
     private void showEditForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
@@ -161,6 +176,7 @@ public class UserController extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
+    // ---------------- UPDATE ----------------
     private void updateUser(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         try {
@@ -170,6 +186,10 @@ public class UserController extends HttpServlet {
             String password = request.getParameter("password");
             String role = request.getParameter("role");
 
+            if (password == null || password.trim().isEmpty()) {
+                password = request.getParameter("currentPassword");
+            }
+
             User user = new User(id, username, email, password, role);
             userDAO.updateUser(user);
 
@@ -178,17 +198,22 @@ public class UserController extends HttpServlet {
                 String address = request.getParameter("address");
                 String telephone = request.getParameter("telephone");
 
+                CustomerDAO customerDAO = new CustomerDAO();
+                if (accountNumber == null || accountNumber.trim().isEmpty()) {
+                    accountNumber = customerDAO.generateAccountNumber();
+                }
+
                 Customer customer = new Customer();
                 customer.setUserId(id);
                 customer.setAccountNumber(accountNumber);
                 customer.setAddress(address);
                 customer.setTelephone(telephone);
 
-                CustomerDAO customerDAO = new CustomerDAO();
                 customerDAO.updateCustomerByUserId(customer);
             }
 
             response.sendRedirect(request.getContextPath() + "/User?action=list");
+
         } catch (Exception e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Something went wrong");

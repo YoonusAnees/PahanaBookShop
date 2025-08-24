@@ -18,6 +18,8 @@
     if (userToEdit == null) {
         response.sendRedirect(request.getContextPath() + "/User?action=list");
         return;
+        
+        
     }
 %>
 <!DOCTYPE html>
@@ -592,8 +594,9 @@
                     
                     <div class="form-group">
                         <label for="accountNumber"><i class="fas fa-credit-card"></i>Account Number</label>
-                        <input type="text" id="accountNumber" name="accountNumber" class="form-control" 
-                               value="<%= customer != null ? customer.getAccountNumber() : "" %>" />
+                    <input type="text" id="accountNumber" name="accountNumber" class="form-control"
+       value="<%= customer != null ? customer.getAccountNumber() : "" %>" readonly />
+
                     </div>
 
                     <div class="form-group">
