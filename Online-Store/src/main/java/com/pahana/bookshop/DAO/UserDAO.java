@@ -164,7 +164,6 @@ public class UserDAO {
         }
     }
 
-    // Enhanced validateLogin method with comprehensive error handling
     public User validateLogin(String email, String password) {
         User user = null;
 
@@ -180,34 +179,27 @@ public class UserDAO {
                 String username = rs.getString("username");
                 String role = rs.getString("role");
                 
-                System.out.println("Login attempt for: " + email);
-                System.out.println("Stored hash: " + (storedHash != null ? storedHash.substring(0, Math.min(20, storedHash.length())) + "..." : "null"));
                 
                 try {
-                    // Verify the password using bcrypt
                     if (BCrypt.checkpw(password, storedHash)) {
                         user = new User(userId, username, email, storedHash, role);
-                        System.out.println("✓ Login successful using bcrypt");
+                        
                         return user;
                     } else {
-                        System.out.println("✗ Password does not match bcrypt hash");
+                    
                     }
                 } catch (IllegalArgumentException e) {
                     System.out.println("✗ Invalid salt version: " + e.getMessage());
                     
-                    // Fallback: check if password matches plain text (for migration)
                     if (storedHash != null && storedHash.equals(password)) {
                         System.out.println("✓ Password matches plain text, rehashing...");
                         
-                        // Hash with proper bcrypt
                         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
                         
-                        // Update the user with hashed password
                         User updatedUser = new User(userId, username, email, hashedPassword, role);
                         updateUserPasswordOnly(updatedUser);
                         
                         user = new User(userId, username, email, hashedPassword, role);
-                        System.out.println("✓ Password rehashed and login successful");
                     } else {
                         System.out.println("✗ Password does not match plain text either");
                     }
@@ -224,7 +216,6 @@ public class UserDAO {
         return user;
     }
     
-    // Method to update password only
     public void updateUserPasswordOnly(User user) {
         try (Connection connection = DBConnectionFactory.getConnection();
              PreparedStatement stmt = connection.prepareStatement("UPDATE users SET password = ? WHERE id = ?")) {
@@ -242,7 +233,6 @@ public class UserDAO {
         }
     }
     
-    // Debug method to check password formats
     public void debugUserPasswords() {
         List<User> users = getAllUsers();
         System.out.println("=== User Password Debug Information ===");
@@ -262,7 +252,6 @@ public class UserDAO {
         }
     }
     
-    // Method to fix a specific user's password
     public boolean fixUserPassword(String email, String newPassword) {
         try {
             User user = getUserByEmail(email);

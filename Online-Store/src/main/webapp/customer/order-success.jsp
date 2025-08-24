@@ -40,7 +40,7 @@
             margin-bottom: 20px;
             font-weight: 700;
             color: black
-            ; /* green success */
+            ; 
         }
 
         .success-box p {
