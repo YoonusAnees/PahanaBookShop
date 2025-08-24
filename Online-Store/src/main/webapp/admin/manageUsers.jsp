@@ -543,9 +543,10 @@
         <h2>Admin Panel</h2>
         
         <ul class="sidebar-menu">
-            <li><a href="AddBook.jsp"><i class="fas fa-plus-circle"></i>Add Book</a></li>
-            <li><a href="Book?action=list"><i class="fas fa-book"></i>Manage Books</a></li>
-            <li><a href="User?action=list" class="active"><i class="fas fa-users"></i>Manage Users</a></li>
+                    <li><a href="AddBook.jsp"><i class="fas fa-plus-circle"></i>Add Book</a></li>
+            <li><a href="AddUser.jsp"><i class="fas fa-user-plus"></i>Add User</a></li>
+          <li><a href="Book?action=list"><i class="fas fa-book"></i>Manage Books</a></li>
+            <li><a href="${pageContext.request.contextPath}/User?action=list" class="active"><i class="fas fa-users"></i>Manage Users</a></li>
             <li><a href="AddStationery.jsp"><i class="fas fa-pencil-alt"></i>Add Stationery</a></li>
             <li><a href="Stationery?action=list"><i class="fas fa-pencil-ruler"></i>Manage Stationery</a></li>
             <li><a href="${pageContext.request.contextPath}/admin/order-history"><i class="fas fa-history"></i>Orders History</a></li>
@@ -570,7 +571,7 @@
             <h2 class="page-title">
                 <i class="fas fa-user-gear"></i>User Management
             </h2>
-            <a href="#" class="add-btn" onclick="alert('User registration functionality would be implemented here')">
+            <a href="${pageContext.request.contextPath}/admin/AddUser.jsp" class="add-btn">
                 <i class="fas fa-user-plus"></i>Add New User
             </a>
         </div>

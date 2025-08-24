@@ -99,22 +99,50 @@ public class UserController extends HttpServlet {
                     boolean inserted = customerDAO.insertCustomer(customer);
                     if (!inserted) {
                         request.setAttribute("error", "Customer registration failed.");
-                        request.getRequestDispatcher("/register.jsp").forward(request, response);
+                        // Determine which page to forward to based on source
+                        String source = request.getParameter("source");
+                        if ("admin".equals(source)) {
+                            request.getRequestDispatcher("/admin/AddUser.jsp").forward(request, response);
+                        } else {
+                            request.getRequestDispatcher("/register.jsp").forward(request, response);
+                        }
                         return;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                     request.setAttribute("error", "Customer registration failed.");
-                    request.getRequestDispatcher("/register.jsp").forward(request, response);
+                    // Determine which page to forward to based on source
+                    String source = request.getParameter("source");
+                    if ("admin".equals(source)) {
+                        request.getRequestDispatcher("/admin/AddUser.jsp").forward(request, response);
+                    } else {
+                        request.getRequestDispatcher("/register.jsp").forward(request, response);
+                    }
                     return;
                 }
             }
-            HttpSession session = request.getSession();
-            session.setAttribute("message", "Registration successful! Please login.");
-            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            
+            // Determine redirect based on source
+            String source = request.getParameter("source");
+            if ("admin".equals(source)) {
+                // Admin created user - redirect to manage users
+                request.setAttribute("successMessage", "User created successfully!");
+                response.sendRedirect(request.getContextPath() + "/User?action=list");
+            } else {
+                // User self-registration - redirect to login
+                HttpSession session = request.getSession();
+                session.setAttribute("message", "Registration successful! Please login.");
+                response.sendRedirect(request.getContextPath() + "/login.jsp");
+            }
         } else {
             request.setAttribute("error", "User registration failed.");
-            request.getRequestDispatcher("/register.jsp").forward(request, response);
+            // Determine which page to forward to based on source
+            String source = request.getParameter("source");
+            if ("admin".equals(source)) {
+                request.getRequestDispatcher("/admin/AddUser.jsp").forward(request, response);
+            } else {
+                request.getRequestDispatcher("/register.jsp").forward(request, response);
+            }
         }
     }
 

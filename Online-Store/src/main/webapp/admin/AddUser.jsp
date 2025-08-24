@@ -1,36 +1,23 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" isELIgnored="false"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page import="com.pahana.bookshop.model.User" %>
-<%@ page import="com.pahana.bookshop.model.Stationery" %>
 <%
     User user = (User) session.getAttribute("user");
     if (user == null || !"admin".equals(user.getRole())) {
-        response.sendRedirect(request.getContextPath() + "/index.jsp");
+        response.sendRedirect(request.getContextPath() + "/");
         return;
-    }
-    
-    // Get the stationery object from request attribute
-    Stationery stationery = (Stationery) request.getAttribute("stationery");
-    if (stationery == null) {
-        // If not in request, try to get from session or create empty object
-        stationery = new Stationery();
-        stationery.setId(0);
-        stationery.setName("");
-        stationery.setDescription("");
-        stationery.setPrice(0.0);
-        stationery.setQuantity(0);
     }
 %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="ISO-8859-1">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Stationery - PahanaBook</title>
+    <title>Add User - PahanaBook Admin</title>
     <link rel="icon" type="image/png"  href="https://img.freepik.com/free-vector/gradient-p-logo-template_23-2149372725.jpg?w=32&q=80" />
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Your existing CSS styles here */
         :root {
             --primary: #2c3e50;
             --secondary: #34495e;
@@ -50,10 +37,10 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #f7f9fc 0%, #e3eaf2 100%);
             color: var(--dark);
             min-height: 100vh;
@@ -145,7 +132,6 @@
             margin-left: var(--sidebar-width);
             padding: 30px;
             transition: var(--transition);
-            min-height: 100vh;
         }
 
         /* Header */
@@ -162,14 +148,14 @@
         }
 
         .welcome-text h1 {
-            font-size: 1.8rem;
+            font-size: 2rem;
             margin-bottom: 5px;
             font-weight: 700;
         }
 
         .welcome-text p {
             color: #bdc3c7;
-            font-size: 1rem;
+            font-size: 1.1rem;
         }
 
         .logout-btn {
@@ -191,51 +177,6 @@
             box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
         }
 
-        /* Page Header */
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        }
-
-        .page-title {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--dark);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .page-title i {
-            color: var(--accent);
-            font-size: 2.2rem;
-        }
-
-        .back-btn {
-            background: linear-gradient(45deg, var(--info), #2980b9);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: var(--transition);
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
-        }
-
-        .back-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
-        }
-
         /* Form Container */
         .form-container {
             background: white;
@@ -246,86 +187,103 @@
             margin: 0 auto;
         }
 
-        .form-group {
+        .form-title {
+            font-size: 1.8rem;
+            color: var(--primary);
             margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ecf0f1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-title i {
+            color: var(--accent);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-weight: 600;
-            color: var(--dark);
-            font-size: 1.1rem;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .form-control {
+        .form-group label i {
+            color: var(--accent);
+            font-size: 16px;
+        }
+
+        .form-group input,
+        .form-group select {
             width: 100%;
-            padding: 15px;
-            border: 2px solid #e1e5eb;
+            padding: 14px;
+            border: 1px solid #ddd;
             border-radius: 10px;
             font-size: 1rem;
             transition: var(--transition);
         }
 
-        .form-control:focus {
-            border-color: var(--info);
+        .form-group input:focus,
+        .form-group select:focus {
             outline: none;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(243, 156, 18, 0.2);
         }
 
-        .btn {
-            padding: 15px 25px;
+        .btn-submit {
+            background: linear-gradient(45deg, var(--success), #229954);
+            color: white;
+            border: none;
+            padding: 15px 30px;
             border-radius: 10px;
-            text-decoration: none;
+            font-size: 1.1rem;
             font-weight: 600;
-            display: inline-flex;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
             align-items: center;
             gap: 10px;
-            transition: var(--transition;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        .btn-primary {
-            background: linear-gradient(45deg, var(--success), #219653);
-            color: white;
+            margin-top: 20px;
             box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
+        .btn-submit:hover {
+            transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
         }
 
-        .btn-secondary {
-            background: linear-gradient(45deg, #6c757d, #5a6268);
-            color: white;
-            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
-        }
-
-        .btn-secondary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
-        }
-
-        .alert {
+        .message {
             padding: 15px;
             border-radius: 10px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             font-weight: 500;
         }
 
-        .alert-danger {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+        .success-message {
+            background: #e8f5e8;
+            color: var(--success);
+            border: 1px solid #c3e6cb;
         }
 
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+        .error-message {
+            background: #fde8e8;
+            color: var(--danger);
+            border: 1px solid #f5c6cb;
         }
 
         /* Responsive Design */
@@ -340,46 +298,67 @@
             
             .main-content {
                 margin-left: 0;
-                padding: 20px;
             }
             
-            .form-container {
-                padding: 20px;
+            .menu-toggle {
+                display: flex;
             }
         }
 
-        @media (max-width: 576px) {
+        @media (max-width: 768px) {
             .header {
                 flex-direction: column;
                 gap: 15px;
                 text-align: center;
             }
             
-            .page-header {
-                flex-direction: column;
-                gap: 20px;
-                text-align: center;
+            .welcome-text h1 {
+                font-size: 1.5rem;
             }
             
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .button-group {
-                flex-direction: column;
-                gap: 15px;
+            .form-grid {
+                grid-template-columns: 1fr;
             }
         }
 
-        .button-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1100;
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            cursor: pointer;
+        }
+
+        /* Custom scrollbar */
+        .sidebar::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 10px;
         }
     </style>
 </head>
 <body>
+    <!-- Mobile Menu Toggle -->
+    <div class="menu-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </div>
 
     <!-- Sidebar Navigation -->
     <nav class="sidebar" id="sidebar">
@@ -391,7 +370,7 @@
         
         <ul class="sidebar-menu">
             <li><a href="AddBook.jsp"><i class="fas fa-plus-circle"></i>Add Book</a></li>
-            <li><a href="AddUser.jsp"><i class="fas fa-user-plus"></i>Add User</a></li>
+            <li><a href="AddUser.jsp" class="active"><i class="fas fa-user-plus"></i>Add User</a></li>
             <li><a href="Book?action=list"><i class="fas fa-book"></i>Manage Books</a></li>
             <li><a href="${pageContext.request.contextPath}/User?action=list"><i class="fas fa-users"></i>Manage Users</a></li>
             <li><a href="AddStationery.jsp"><i class="fas fa-pencil-alt"></i>Add Stationery</a></li>
@@ -406,66 +385,78 @@
         <header class="header">
             <div class="welcome-text">
                 <h1>Welcome Admin: <%= user.getUsername() %></h1>
-                <p>Edit stationery item details</p>
+                <p>Add new users to the system</p>
             </div>
             <a href="<%= request.getContextPath() %>/LogoutController" class="logout-btn">
                 <i class="fas fa-sign-out-alt"></i>Logout
             </a>
         </header>
 
-        <!-- Page Header -->
-        <div class="page-header">
-            <h2 class="page-title">
-                <i class="fas fa-edit"></i>Edit Stationery
-            </h2>
-            <a href="Stationery?action=list" class="back-btn">
-                <i class="fas fa-arrow-left"></i>Back to List
-            </a>
-        </div>
-
         <!-- Form Container -->
         <div class="form-container">
-            <c:if test="${not empty error}">
-                <div class="alert alert-danger">${error}</div>
-            </c:if>
-            
-            <c:if test="${not empty success}">
-                <div class="alert alert-success">${success}</div>
+            <h2 class="form-title"><i class="fas fa-user-plus"></i> Add New User</h2>
+
+            <c:if test="${not empty successMessage}">
+                <div class="message success-message">${successMessage}</div>
             </c:if>
 
-            <form action="${pageContext.request.contextPath}/admin/Stationery" method="post">
-                <input type="hidden" name="action" value="update" />
-                <input type="hidden" name="id" value="<%= stationery.getId() %>" />
+            <c:if test="${not empty errorMessage}">
+                <div class="message error-message">${errorMessage}</div>
+            </c:if>
 
-                <div class="form-group">
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" value="<%= stationery.getName() %>" required class="form-control" />
+            <form action="${pageContext.request.contextPath}/User?action=register" method="post" onsubmit="return validateForm()">
+                <!-- Hidden field to identify this is from admin -->
+                <input type="hidden" name="source" value="admin">
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="username"><i class="fas fa-user"></i>Username *</label>
+                        <input type="text" id="username" name="username" placeholder="Enter username" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email"><i class="fas fa-envelope"></i>Email Address *</label>
+                        <input type="email" id="email" name="email" placeholder="Enter email address" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password"><i class="fas fa-lock"></i>Password *</label>
+                        <input type="password" id="password" name="password" placeholder="Enter password" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword"><i class="fas fa-lock"></i>Confirm Password *</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name"><i class="fas fa-signature"></i>Full Name *</label>
+                        <input type="text" id="name" name="name" placeholder="Enter full name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telephone"><i class="fas fa-phone"></i>Telephone *</label>
+                        <input type="text" id="telephone" name="telephone" placeholder="Enter telephone number" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address"><i class="fas fa-address-card"></i>Address *</label>
+                        <input type="text" id="address" name="address" placeholder="Enter address" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="role"><i class="fas fa-user-tag"></i>User Role *</label>
+                        <select id="role" name="role" required>
+                            <option value="">Select Role</option>
+                            <option value="customer">Customer</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="description">Description:</label>
-                    <input type="text" id="description" name="description" value="<%= stationery.getDescription() %>" required class="form-control" />
-                </div>
-
-                <div class="form-group">
-                    <label for="price">Price (Rs.):</label>
-                    <input type="number" id="price" name="price" step="0.01" value="<%= stationery.getPrice() %>" required class="form-control" />
-                </div>
-
-                <div class="form-group">
-                    <label for="quantity">Quantity:</label>
-                    <input type="number" id="quantity" name="quantity" min="0" 
-                        value="<%= stationery.getQuantity() %>" required class="form-control" />
-                </div>
-
-                <div class="button-group">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i>Update Stationery
-                    </button>
-                    <a href="${pageContext.request.contextPath}/admin/Stationery?action=list" class="btn btn-secondary">
-                        <i class="fas fa-times"></i>Cancel
-                    </a>
-                </div>
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-user-plus"></i> Create User
+                </button>
             </form>
         </div>
     </main>
@@ -487,6 +478,35 @@
                 sidebar.classList.contains('active')) {
                 sidebar.classList.remove('active');
             }
+        });
+
+        // Form validation
+        function validateForm() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return false;
+            }
+            
+            if (password.length < 6) {
+                alert('Password must be at least 6 characters long!');
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Add hover effects to form inputs
+        document.querySelectorAll('.form-group input, .form-group select').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'translateY(-2px)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'translateY(0)';
+            });
         });
     </script>
 </body>

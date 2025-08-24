@@ -581,8 +581,9 @@
         <h2>Admin Panel</h2>
         
         <ul class="sidebar-menu">
-            <li><a href="AddBook.jsp"><i class="fas fa-plus-circle"></i>Add Book</a></li>
-            <li><a href="Book?action=list"><i class="fas fa-book"></i>Manage Books</a></li>
+          <li><a href="AddBook.jsp"><i class="fas fa-plus-circle"></i>Add Book</a></li>
+            <li><a href="AddUser.jsp"><i class="fas fa-user-plus"></i>Add User</a></li>
+          <li><a href="Book?action=list"><i class="fas fa-book"></i>Manage Books</a></li>
             <li><a href="${pageContext.request.contextPath}/User?action=list"><i class="fas fa-users"></i>Manage Users</a></li>
             <li><a href="AddStationery.jsp"><i class="fas fa-pencil-alt"></i>Add Stationery</a></li>
             <li><a href="Stationery?action=list"><i class="fas fa-pencil-ruler"></i>Manage Stationery</a></li>
